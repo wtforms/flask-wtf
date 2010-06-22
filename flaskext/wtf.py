@@ -61,7 +61,7 @@ class Form(BaseForm):
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
         
-        csrf_token = self._session.get('_csrf_token')
+        csrf_token = session.get('_csrf_token')
         if csrf_token is None:
             csrf_token = _generate_csrf_token()
             session['_csrf_token'] = csrf_token
@@ -78,7 +78,7 @@ class Form(BaseForm):
     def validate_csrf(self, field):
         if not self.csrf_enabled or request.is_xhr:
             return
-        csrf_token = self._session.pop('_csrf_token', None)
+        csrf_token = session.pop('_csrf_token', None)
         if not field.data or field.data != csrf_token:
             raise ValidationError, "Missing or invalid CSRF token"
 
