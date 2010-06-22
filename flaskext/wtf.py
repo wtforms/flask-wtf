@@ -20,6 +20,10 @@ from wtforms.validators import Email, email, EqualTo, equal_to, \
     Optional, optional, Required, required, Regexp, regexp, \
     URL, url, AnyOf, any_of, NoneOf, none_of
 
+from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
+    ListWidget, PasswordInput, RadioInput, Select, SubmitInput, \
+    TableWidget, TextArea, TextInput
+
 try:
     # try to import sqlalchemy-based fields
     # otherwise ignore
@@ -31,15 +35,16 @@ except ImportError:
 
 
 from wtforms import Form as BaseForm
-from wtforms import fields, validators, ValidationError
+from wtforms import fields, widgets, validators, ValidationError
 
 from flask import request, session, current_app
 
 from jinja2 import Markup
 
-__all__  = ['Form', 'ValidationForm', 'fields', 'validators']
+__all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widget']
 __all__ += fields.__all__
 __all__ += validators.__all__
+__all__ += widgets.__all__
 
 if _is_sqlalchemy:
     __all__ += ['QuerySelectField', 'QuerySelectMultipleField',
