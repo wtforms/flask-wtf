@@ -6,10 +6,13 @@
             {% endfor %}
         </ul>
         <form method="POST" action=".">
-            {{ form.errors }}
-            {{ form.csrf }}
-            {{ form.name.label }} {{ form.name }}
-            <input type="submit" value="Go">
+            {{ form.csrf_token }}
+            <p>
+                {{ form.name.label }} {{ form.name }}
+            </p>
+            <p>
+                <input type="submit" value="Go">
+            </p>
         </form>
     </body>
 </html>
