@@ -10,9 +10,25 @@
 """
 import uuid
 
+from wtforms.fields import BooleanField, DecimalField, DateField, \
+    DateTimeField, FieldList, FileField, FloatField, FormField,\
+    HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
+    SelectMultipleField, SubmitField, TextField, TextAreaField
 
-from wtforms.fields import *
-from wtforms.validators import *
+from wtforms.validators import Email, email, EqualTo, equal_to, \
+    IPAddress, ip_address, Length, length, NumberRange, number_range, \
+    Optional, optional, Required, required, Regexp, regexp, \
+    URL, url, AnyOf, any_of, NoneOf, none_of
+
+try:
+    # try to import sqlalchemy-based fields
+    # otherwise ignore
+    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
+        QuerySelectMultipleField, ModelSelectField
+    _is_sqlalchemy = True
+except ImportError:
+    _is_sqlalchemy = False
+
 
 from wtforms import Form as BaseForm
 from wtforms import fields, validators, ValidationError
@@ -24,6 +40,10 @@ from jinja2 import Markup
 __all__  = ['Form', 'ValidationForm', 'fields', 'validators']
 __all__ += fields.__all__
 __all__ += validators.__all__
+
+if _is_sqlalchemy:
+    __all__ += ['QuerySelectField', 'QuerySelectMultipleField',
+                'ModelSelectField']
 
 def _generate_csrf_token():
     return str(uuid.uuid4())
