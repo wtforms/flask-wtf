@@ -54,9 +54,6 @@ class Form(BaseForm):
 
     def __init__(self, formdata=None, *args, **kwargs):
 
-        self._request = kwargs.pop('request', request)
-        self._session = kwargs.pop('session', session)
-
         if formdata is None:
             formdata = request.form
 
@@ -86,5 +83,5 @@ class Form(BaseForm):
             raise ValidationError, "Missing or invalid CSRF token"
 
     def validate_on_POST(self):
-        return self._request.method == "POST" and self.validate()
+        return request.method == "POST" and self.validate()
 
