@@ -1,0 +1,32 @@
+Metadata-Version: 1.0
+Name: Flask-WTF
+Version: 0.1
+Summary: Simple integration of Flask and WTForms
+Home-page: <enter URL here>
+Author: Dan Jacob
+Author-email: danjac354@gmail.com
+License: BSD
+Description: 
+        Flask-WTF
+        ---------
+        
+        Simple integration of Flask and WTForms, including CSRF validation.
+        
+        Links
+        `````
+        
+        * `documentation <http://packages.python.org/Flask-WTF>`_
+        * `development version
+          <http://bitbucket.org/danjac/flask-wtf/get/tip.gz#egg=Flask-WTF-dev`_
+        
+        
+        
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules

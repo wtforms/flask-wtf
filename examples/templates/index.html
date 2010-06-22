@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <ul class="messages">
+            {% for message in get_flashed_messages() %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <form method="POST" action=".">
+            {{ form.errors }}
+            {{ form.csrf }}
+            {{ form.name.label }} {{ form.name }}
+            <input type="submit" value="Go">
+        </form>
+    </body>
+</html>
