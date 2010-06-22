@@ -41,7 +41,7 @@ from flask import request, session, current_app
 
 from jinja2 import Markup
 
-__all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widget']
+__all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widgets']
 __all__ += fields.__all__
 __all__ += validators.__all__
 __all__ += widgets.__all__
