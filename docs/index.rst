@@ -1,14 +1,14 @@
-flask-wtf
+Flask-WTF
 ======================================
 
-.. module:: flask-wtf
+.. module:: Flask-WTF
 
-Flask-WTF offers simple integration with `WTForms <http://wtforms.simplecodes.com/docs/0.6/>`_. This integration
+**Flask-WTF** offers simple integration with `WTForms <http://wtforms.simplecodes.com/docs/0.6/>`_. This integration
 includes optional CSRF handling for greater security.
 
 Source code and issue tracking at `Bitbucket`_.
 
-Installing flask-wtf
+Installing Flask-WTF
 ---------------------
 
 Install with **pip** and **easy_install**::
@@ -21,15 +21,15 @@ or download the latest version from Bitbucket::
 
     cd flask-wtf
 
-    python setup.py install
+    python setup.py develop
 
 If you are using **virtualenv**, it is assumed that you are installing flask-mail
 in the same virtualenv as your Flask application(s).
 
-Configuring flask-wtf
+Configuring Flask-WTF
 ----------------------
 
-The following settings are used with flask-wtf:
+The following settings are used with **Flask-WTF**:
 
     * ``CSRF_ENABLED`` default ``True``
     * ``CSRF_SESSION_KEY`` default ``_csrf_token``
@@ -54,7 +54,7 @@ optional arguments respectively.
 Creating forms
 --------------
 
-Flask-WTF provides you with all the API features of WTForms. For example::
+**Flask-WTF** provides you with all the API features of WTForms. For example::
 
     from flaskext.wtf import Form, TextField, Required
 
@@ -80,7 +80,7 @@ inside a hidden DIV::
 API changes
 -----------
 
-The ``Form`` class provided by Flask-WTF is the same as for WTForms, but with a couple of changes. Aside from CSRF 
+The ``Form`` class provided by **Flask-WTF** is the same as for WTForms, but with a couple of changes. Aside from CSRF 
 validation, a convenience method ``validate_on_submit`` is added::
 
     @app.route("/submit/")
