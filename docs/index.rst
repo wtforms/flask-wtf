@@ -29,11 +29,12 @@ in the same virtualenv as your Flask application(s).
 Configuring flask-wtf
 ----------------------
 
-There is only one setting you need to consider:
+The following settings are used with flask-wtf:
 
-``CSRF_ENABLED`` default ``True``
+    * ``CSRF_ENABLED`` default ``True``
+    * ``CSRF_SESSION_KEY`` default ``_csrf_token``
 
-This enables CSRF. You can disable by passing in the ``csrf_enabled`` parameter to your form::
+``CSRF_ENABLED`` enables CSRF. You can disable by passing in the ``csrf_enabled`` parameter to your form::
 
     form = MyForm(csrf_enabled=False)
 
@@ -42,6 +43,13 @@ unit tests and AJAX forms. In the first case, switching ``CSRF_ENABLED`` to ``Fa
 forms will still work (and the CSRF hidden field will still be printed) but no validation will be done. In the
 second, CSRF validation is skipped if ``request.is_xhr`` is ``True`` (you can't do cross-domain AJAX anyway, 
 so CSRF validation is redundant).
+
+The ``CSRF_SESSION_KEY`` sets the key used in the Flask session for storing the generated token string. Usually
+the default should suffice, in certain cases you might want a custom key (for example, having several forms in a
+single page).
+
+Both these settings can be overriden in the ``Form`` constructor by passing in ``csrf_enabled`` and ``csrf_session_key``
+optional arguments respectively.
 
 Creating forms
 --------------
@@ -61,6 +69,13 @@ In addition, a CSRF token hidden field is created. You can print this in your te
         {{ form.name.label }} {{ form.name(size=20) }}
         <input type="submit" value="Go">
     </form>
+
+However, in order to create valid XHTML/HTML the ``Form`` class has a property, ``csrf_token``, which renders the field
+inside a hidden DIV::
+    
+    <form method="POST" action=".">
+        {{ form.csrf_token }}
+
 
 API changes
 -----------
