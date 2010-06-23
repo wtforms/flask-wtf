@@ -67,6 +67,16 @@ class TestCSRF(TestCase):
     def test_valid_csrf(self):
 
         response = self.client.get("/")
-        pattern = re.compile(r'name="csrf" type="hidden" value="[0-9a-zA-Z-]?"')
-        print "MATCH", pattern.match(response.data)
-        assert False
+        pattern = re.compile(r'name="csrf" type="hidden" value="([0-9a-zA-Z-]*)"')
+        match = pattern.search(response.data)
+        assert match
+
+        csrf_token = match.groups()[0]
+
+        response = self.client.post("/", data={"name" : "danny", 
+                                               "csrf" : csrf_token})
+
+        print csrf_token, response.data
+        assert "DANNY" in response.data
+
+
