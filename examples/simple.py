@@ -11,7 +11,7 @@ app.debug = True
 @app.route("/", methods=("GET", "POST"))
 def index():
     form = MyForm()
-    if form.validate_on_POST():
+    if form.validate_on_submit():
         name = form.name.data
         flash("You entered %s" % name)
         return redirect(url_for("index"))
