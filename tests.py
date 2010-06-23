@@ -1,8 +1,12 @@
 import re
 
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
 from flaskext.testing import TestCase
 from flaskext.wtf import Form, TextField, Required
+
+class TestValidateOnSubmit(TestCase):
+
+    pass
 
 class TestCSRF(TestCase):
 
@@ -44,6 +48,18 @@ class TestCSRF(TestCase):
                 form.name
             ))
 
+        @app.route("/ajax/", methods=("POST",))
+        def ajax_submit():
+            form = MyForm()
+            if form.validate_on_submit():
+                return jsonify(name=form.name.data,
+                               success=True,
+                               errors=None)
+
+            return jsonify(name=None, 
+                           errors=form.errors,
+                           success=False)
+
         return app
 
     def test_csrf_token(self):
@@ -63,7 +79,15 @@ class TestCSRF(TestCase):
 
         response = self.client.post("/", data={"name" : "danny"})
         assert 'DANNY' in response.data
-       
+
+    def test_ajax(self):
+
+        response = self.client.post("/ajax/", 
+                                    data={"name" : "danny"},
+                                    headers={'X-Requested-With' : 'XMLHttpRequest'})
+        
+        self.assertJSON(response, "name", "danny") 
+
     def test_valid_csrf(self):
 
         response = self.client.get("/")
