@@ -66,7 +66,8 @@ class LoginForm(Form):
 @app.route('/')
 def show_entries():
     entries = Entry.query.order_by(Entry.id.desc())
-    return render_template('show_entries.html', entries=entries)
+    form = EntryForm()
+    return render_template('show_entries.html', entries=entries, form=form)
 
 
 @app.route('/add', methods=['POST'])
@@ -80,8 +81,10 @@ def add_entry():
         form.populate_obj(entry)
         db.session.add(entry)
         db.session.commit()
+        flash('New entry was successfully posted')
+    else:
+        flash("Your form contained errors")
 
-    flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
 
