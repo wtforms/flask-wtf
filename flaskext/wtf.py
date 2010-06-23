@@ -66,13 +66,6 @@ class Form(BaseForm):
         self.csrf_enabled = kwargs.pop('csrf_enabled', True)
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
-        
-        # problem here is that old session csrf is created
-
-        # token is created as no session
-        # validate_csrf pops token
-        # new session created
-        # however old session generated
 
         csrf_token = session.get('_csrf_token', None)
 
