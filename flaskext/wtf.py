@@ -47,7 +47,8 @@ __all__ += validators.__all__
 __all__ += widgets.__all__
 
 if _is_sqlalchemy:
-    __all__ += ['QuerySelectField', 'QuerySelectMultipleField',
+    __all__ += ['QuerySelectField', 
+                'QuerySelectMultipleField',
                 'ModelSelectField']
 
 def _generate_csrf_token():
@@ -66,10 +67,7 @@ class Form(BaseForm):
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
         
-        csrf_token = session.get('_csrf_token')
-        if csrf_token is None:
-            csrf_token = _generate_csrf_token()
-            session['_csrf_token'] = csrf_token
+        csrf_token = session.get('_csrf_token', self.reset_csrf())
 
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
     
@@ -80,6 +78,17 @@ class Form(BaseForm):
         """
         return Markup('<div style="display:none;">%s</div>' % self.csrf)
 
+    def reset_csrf(self):
+        """
+        Resets the CSRF token in the session. If you are reusing the form
+        in the same view (i.e. you are not redirecting somewhere else)
+        it's recommended you call this before rendering the form.
+        """
+        
+        csrf_token = _generate_csrf_token()
+        session['_csrf_token'] = csrf_token
+        return csrf_token
+
     def validate_csrf(self, field):
         if not self.csrf_enabled or request.is_xhr:
             return
@@ -87,6 +96,7 @@ class Form(BaseForm):
         if not field.data or field.data != csrf_token:
             raise ValidationError, "Missing or invalid CSRF token"
 
-    def validate_on_POST(self):
-        return request.method == "POST" and self.validate()
+    def validate_on_submit(self):
+        return request.method in ("POST", "PUT") and self.validate()
+    
 

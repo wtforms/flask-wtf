@@ -66,13 +66,13 @@ API changes
 -----------
 
 The ``Form`` class provided by Flask-WTF is the same as for WTForms, but with a couple of changes. Aside from CSRF 
-validation, a convenience method ``validate_on_POST`` is added::
+validation, a convenience method ``validate_on_submit`` is added::
 
     @app.route("/submit/")
     def submit():
         
         form = MyForm()
-        if form.validate_on_POST():
+        if form.validate_on_submit():
             flash("Success")
             redirect(url_for("index"))
         return render_template("index.html", form=form)
@@ -87,6 +87,8 @@ Note the difference from a pure WTForms solution::
             flash("Success")
             redirect(url_for("index"))
         return render_template("index.html", form=form)
+
+``validate_on_submit`` will automatically check if the request method is PUT or POST.
 
 You don't need to pass ``request.form`` into your form instance, as the ``Form`` automatically populates from ``request.form`` unless
 specified. Other arguments are as with ``wtforms.Form``.
