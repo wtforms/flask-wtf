@@ -76,7 +76,6 @@ class TestCSRF(TestCase):
         response = self.client.post("/", data={"name" : "danny", 
                                                "csrf" : csrf_token})
 
-        print csrf_token, response.data
         assert "DANNY" in response.data
 
 

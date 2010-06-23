@@ -67,7 +67,9 @@ class Form(BaseForm):
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
         
-        csrf_token = session.get('_csrf_token', self.reset_csrf())
+        csrf_token = session.get('_csrf_token', None)
+        if csrf_token is None:
+            csrf_token = self.reset_csrf()
 
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
     
