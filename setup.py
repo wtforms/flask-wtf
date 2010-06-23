@@ -19,7 +19,7 @@ from setuptools import setup
 setup(
     name='Flask-WTF',
     version='0.1',
-    url='<enter URL here>',
+    url='http://bitbucket.org/danjac/flask-wtf',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
