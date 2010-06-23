@@ -1,32 +1,72 @@
-import unittest
+import re
 
-from flask import Flask
+from flask import Flask, Response
+from flaskext.testing import TestCase
+from flaskext.wtf import Form, TextField, Required
 
-class TestCase(unittest.TestCase):
-
-    TESTING = True
-    CSRF_ENABLED = False
+class TestCSRF(TestCase):
 
     def create_app(self):
         
+        class MyForm(Form):
+            name = TextField("Name", validators=[Required()])
+
         app = Flask(__name__)
-        app.config.from_object(self)
+        app.secret_key = "secret"
+        
+        @app.route("/", methods=("GET", "POST"))
+        def index():
+            
+            form = MyForm()
+            if form.validate_on_submit():
+                name = form.name.data
+            else:
+                name = ''
+            
+            return Response("""
+            <html>
+                <body>
+                    %s
+                    %s
+                    <form method="POST" action=".">
+                        %s
+                        <p>
+                           %s %s
+                        </p>
+                    </form>
+                </body>
+            </html>
+            """ %(
+                name.upper(),
+                form.errors,
+                form.csrf_token,
+                form.name.label,
+                form.name
+            ))
+
         return app
 
-    def __call__(self, result=None):
-        self._pre_setup()
-        super(TestCase, self).__call__(result)
-        self._post_tearDown()
+    def test_csrf_token(self):
 
-    def _pre_setup(self):
+        response = self.client.get("/")
+        assert '<div style="display:none;"><input id="csrf" name="csrf" type="hidden" value' in response.data
+    
+    def test_invalid_csrf(self):
 
-        self.app = self.create_app()
-        self.client = self.app.test_client()
-        self._ctx = self.app.test_request_context()
-        self._ctx.push()
+        response = self.client.post("/", data={"name" : "danny"})
+        assert 'DANNY' not in response.data
+        assert "Missing or invalid CSRF token" in response.data
 
-    def _post_teardown(self):
+    def test_csrf_disabled(self):
+        
+        self.app.config['CSRF_ENABLED'] = False
 
-        self._ctx.pop()
+        response = self.client.post("/", data={"name" : "danny"})
+        assert 'DANNY' in response.data
+       
+    def test_valid_csrf(self):
 
-
+        response = self.client.get("/")
+        pattern = re.compile(r'name="csrf" type="hidden" value="[0-9a-zA-Z-]?"')
+        print "MATCH", pattern.match(response.data)
+        assert False
