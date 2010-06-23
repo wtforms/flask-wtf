@@ -67,7 +67,9 @@ class Form(BaseForm):
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
 
-        csrf_token = session.get('_csrf_token', None)
+        self.csrf_session_key = kwargs.pop('csrf_session_key', '_csrf_token')
+
+        csrf_token = session.get(self.csrf_session_key, None)
 
         if csrf_token is None:
             csrf_token = self.reset_csrf()
@@ -89,14 +91,14 @@ class Form(BaseForm):
         """
         
         csrf_token = _generate_csrf_token()
-        session['_csrf_token'] = csrf_token
+        session[self.csrf_session_key] = csrf_token
         return csrf_token
 
     def validate_csrf(self, field):
         if not self.csrf_enabled or request.is_xhr:
             return
 
-        csrf_token = session.pop('_csrf_token', None)
+        csrf_token = session.pop(self.csrf_session_key, None)
         is_valid =  field.data and field.data == csrf_token
 
         # reset this field, otherwise stale token is displayed
