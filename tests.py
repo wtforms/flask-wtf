@@ -4,11 +4,8 @@ from flask import Flask, Response, jsonify
 from flaskext.testing import TestCase
 from flaskext.wtf import Form, TextField, Required
 
-class TestValidateOnSubmit(TestCase):
 
-    pass
-
-class TestCSRF(TestCase):
+class TestForms(TestCase):
 
     def create_app(self):
         
@@ -61,6 +58,32 @@ class TestCSRF(TestCase):
                            success=False)
 
         return app
+
+class TestValidateOnSubmit(TestForms):
+
+    def test_not_submitted(self):
+
+        response = self.client.get("/")
+        assert 'DANNY' not in response.data
+
+    def test_submitted_not_valid(self):
+
+        self.app.config['CSRF_ENABLED'] = False
+
+        response = self.client.post("/", data={})
+
+        assert 'DANNY' not in response.data
+
+    def test_submitted_and_valid(self):
+        
+        self.app.config['CSRF_ENABLED'] = False
+
+        response = self.client.post("/", data={"name" : "danny"})
+
+        assert 'DANNY' in response.data
+
+
+class TestCSRF(TestForms):
 
     def test_csrf_token(self):
 
