@@ -67,7 +67,15 @@ class Form(BaseForm):
         self.csrf_enabled = self.csrf_enabled and \
             current_app.config.get('CSRF_ENABLED', True)
         
+        # problem here is that old session csrf is created
+
+        # token is created as no session
+        # validate_csrf pops token
+        # new session created
+        # however old session generated
+
         csrf_token = session.get('_csrf_token', None)
+
         if csrf_token is None:
             csrf_token = self.reset_csrf()
 
@@ -94,8 +102,14 @@ class Form(BaseForm):
     def validate_csrf(self, field):
         if not self.csrf_enabled or request.is_xhr:
             return
+
         csrf_token = session.pop('_csrf_token', None)
-        if not field.data or field.data != csrf_token:
+        is_valid =  field.data and field.data == csrf_token
+
+        # reset this field, otherwise stale token is displayed
+        field.data = self.reset_csrf()
+
+        if not is_valid:
             raise ValidationError, "Missing or invalid CSRF token"
 
     def validate_on_submit(self):
