@@ -41,10 +41,13 @@ from flask import request, session, current_app
 
 from jinja2 import Markup
 
+import recaptcha
+
 __all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widgets']
 __all__ += fields.__all__
 __all__ += validators.__all__
 __all__ += widgets.__all__
+__all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
     __all__ += ['QuerySelectField', 

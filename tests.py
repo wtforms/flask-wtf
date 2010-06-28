@@ -109,7 +109,7 @@ class TestCSRF(TestForms):
                                     data={"name" : "danny"},
                                     headers={'X-Requested-With' : 'XMLHttpRequest'})
         
-        self.assertJSON(response, "name", "danny") 
+        self.assertJSONEquals(response, "name", "danny") 
 
     def test_valid_csrf(self):
 

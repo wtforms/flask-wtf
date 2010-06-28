@@ -2,7 +2,7 @@ Metadata-Version: 1.0
 Name: Flask-WTF
 Version: 0.1
 Summary: Simple integration of Flask and WTForms
-Home-page: <enter URL here>
+Home-page: http://bitbucket.org/danjac/flask-wtf
 Author: Dan Jacob
 Author-email: danjac354@gmail.com
 License: BSD
@@ -17,7 +17,7 @@ Description:
         
         * `documentation <http://packages.python.org/Flask-WTF>`_
         * `development version
-          <http://bitbucket.org/danjac/flask-wtf/get/tip.gz#egg=Flask-WTF-dev`_
+          <http://bitbucket.org/danjac/flask-wtf/get/tip.gz#egg=Flask-WTF`_
         
         
         
