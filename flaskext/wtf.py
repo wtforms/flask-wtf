@@ -43,6 +43,10 @@ from jinja2 import Markup
 
 import recaptcha
 
+from recaptcha.fields import RecaptchaField
+from recaptcha.widgets import RecaptchaWidget
+from recaptcha.validators import Recaptcha
+
 __all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widgets']
 __all__ += fields.__all__
 __all__ += validators.__all__

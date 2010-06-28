@@ -58,6 +58,7 @@ class RecaptchaWidget(object):
 
         query = url_encode(query_options)
 
+        print query
         options = {
            'theme': 'clean',
             'custom_translations': {
@@ -74,4 +75,4 @@ class RecaptchaWidget(object):
         }
         options.update(current_app.config.get('RECAPTCHA_OPTIONS', {}))
 
-        return self.recaptcha_html()
+        return self.recaptcha_html(server, query, options)

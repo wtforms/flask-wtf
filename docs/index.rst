@@ -98,7 +98,7 @@ are required in order to use Recaptcha:
     * ``RECAPTCHA_OPTIONS`` 
 
 ``RECAPTCHA_OPTIONS`` is an optional dict of configuration options. The public and private keys are required in
-order to authenticate your request with Recaptcha - see documentation for details on how to obtain your keys.
+order to authenticate your request with Recaptcha - see `documentation <https://www.google.com/recaptcha/admin/create>`_ for details on how to obtain your keys.
 
 API changes
 -----------
