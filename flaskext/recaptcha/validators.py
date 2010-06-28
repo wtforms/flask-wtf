@@ -52,11 +52,8 @@ class Recaptcha(object):
             'response':   response
         })
 
-        recaptcha_verify_server = \
-            current_app.config.get('RECAPTCHA_VERIFY_SERVER',
-                                   RECAPTCHA_VERIFY_SERVER)
 
-        response = urllib2.urlopen(recaptcha_verify_server, data)
+        response = urllib2.urlopen(RECAPTCHA_VERIFY_SERVER, data)
 
         if response.status_code != 200:
             return False

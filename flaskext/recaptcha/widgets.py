@@ -41,13 +41,11 @@ class RecaptchaWidget(object):
         
         if current_app.config.get('RECAPTCHA_USE_SSL', False):
 
-            server = current_app.config.get('RECAPTCHA_API_SERVER', 
-                                            RECAPTCHA_API_SERVER)
+            server = RECAPTCHA_SSL_API_SERVER
 
         else:
 
-            server = current_app.config.get('RECAPTCHA_SSL_API_SERVER',
-                                             RECAPTCHA_SSL_API_SERVER)
+            server = RECAPTCHA_API_SERVER
         
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']

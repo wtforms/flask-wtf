@@ -51,6 +51,8 @@ single page).
 Both these settings can be overriden in the ``Form`` constructor by passing in ``csrf_enabled`` and ``csrf_session_key``
 optional arguments respectively.
 
+In addition, there are additional configuration settings required for Recaptcha integration : see below.
+
 Creating forms
 --------------
 
@@ -76,6 +78,27 @@ inside a hidden DIV::
     <form method="POST" action=".">
         {{ form.csrf_token }}
 
+Recaptcha
+---------
+
+**Flask-WTF** also provides Recaptcha support through a ``RecaptchaField``::
+    
+    from flaskext.wtf import Form, TextField, RecaptchaField
+
+    class SignupForm(Form):
+        username = TextField("Username")
+        recaptcha = RecaptchaField()
+
+This field handles all the nitty-gritty details of Recaptcha validation and output. The following settings 
+are required in order to use Recaptcha:
+
+    * ``RECAPTCHA_USE_SSL`` : default ``False``
+    * ``RECAPTCHA_PUBLIC_KEY``
+    * ``RECAPTCHA_PRIVATE_KEY``
+    * ``RECAPTCHA_OPTIONS`` 
+
+``RECAPTCHA_OPTIONS`` is an optional dict of configuration options. The public and private keys are required in
+order to authenticate your request with Recaptcha - see documentation for details on how to obtain your keys.
 
 API changes
 -----------
