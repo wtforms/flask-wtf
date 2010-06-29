@@ -108,6 +108,16 @@ API changes
 The ``Form`` class provided by **Flask-WTF** is the same as for WTForms, but with a couple of changes. Aside from CSRF 
 validation, a convenience method ``validate_on_submit`` is added::
 
+    from flask import Flask, request, flash, redirect, url_for, \
+        render_template
+    
+    from flaskext.wtf import Form, TextField
+
+    app = Flask(__name__)
+
+    class MyForm(Form):
+        name = TextField("Name")
+
     @app.route("/submit/")
     def submit():
         
@@ -118,6 +128,16 @@ validation, a convenience method ``validate_on_submit`` is added::
         return render_template("index.html", form=form)
 
 Note the difference from a pure WTForms solution::
+
+    from flask import Flask, request, flash, redirect, url_for, \
+        render_template
+
+    from flaskext.wtf import Form, TextField
+
+    app = Flask(__name__)
+
+    class MyForm(Form):
+        name = TextField("Name")
 
     @app.route("/submit/")
     def submit():
