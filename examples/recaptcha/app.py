@@ -1,18 +1,18 @@
 from flask import Flask, render_template, flash, session, redirect, url_for
-from flaskext.wtf import Form, TextAreaField, RecaptchaField
+from flaskext.wtf import Form, TextAreaField, RecaptchaField, Required
 
 DEBUG = True
 SECRET_KEY = 'secret'
 
-RECAPTCHA_PUBLIC_KEY = '6LeSIrsSAAAAAHDr5cU_6i1JWVpmlMo6dCruY6gp'
-RECAPTCHA_PRIVATE_KEY = '6LeSIrsSAAAAANXeS29Eet5NfzNWhVFCrtJu9M4g'
+RECAPTCHA_PUBLIC_KEY = '6LeeJ7sSAAAAAG3Ph-byH2Ur-HVTWRzwYtIplg4h'
+RECAPTCHA_PRIVATE_KEY = '6LeeJ7sSAAAAAGC-qXBYj_m0fHvP0VzFyIj0VJZf'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 class CommentForm(Form):
     
-    comment = TextAreaField("Comment")
+    comment = TextAreaField("Comment", validators=[Required()])
     recaptcha = RecaptchaField()
 
 @app.route("/")

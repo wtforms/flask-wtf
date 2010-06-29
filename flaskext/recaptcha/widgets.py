@@ -50,15 +50,14 @@ class RecaptchaWidget(object):
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
-            raise ValueError, "RECAPTCHA_PUBLIC_KEY config not set"
-        query_options = dict(public_key=public_key)
+            raise RuntimeError, "RECAPTCHA_PUBLIC_KEY config not set"
+        query_options = dict(k=public_key)
 
         if field.recaptcha_error is not None:
             query_options['error'] = unicode(field.recaptcha_error)
 
         query = url_encode(query_options)
 
-        print query
         options = {
            'theme': 'clean',
             'custom_translations': {
@@ -73,6 +72,7 @@ class RecaptchaWidget(object):
                 'incorrect_try_again': _('Incorrect. Try again.'),
             }
         }
+
         options.update(current_app.config.get('RECAPTCHA_OPTIONS', {}))
 
         return self.recaptcha_html(server, query, options)

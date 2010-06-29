@@ -23,7 +23,6 @@ class Recaptcha(object):
 
     def __init__(self, message=u'Invalid word. Please try again.'):
         self.message = message
-        
 
     def __call__(self, form, field):
         challenge = request.form.get('recaptcha_challenge_field', '')
@@ -55,17 +54,18 @@ class Recaptcha(object):
 
         response = urllib2.urlopen(RECAPTCHA_VERIFY_SERVER, data)
 
-        if response.status_code != 200:
+        if response.code != 200:
             return False
 
-        rv = [l.strip() for l in response.content.splitlines()]
+        rv = [l.strip() for l in response.readlines()]
 
+        print rv
         if rv and rv[0] == 'true':
             return True
 
         if len(rv) > 1:
             error = rv[1]
             if error in self._error_codes:
-                raise ValidationError(self._error_codes[error])
+                raise RuntimeError(self._error_codes[error])
 
         return False
