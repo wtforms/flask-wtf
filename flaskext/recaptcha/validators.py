@@ -59,7 +59,6 @@ class Recaptcha(object):
 
         rv = [l.strip() for l in response.readlines()]
 
-        print rv
         if rv and rv[0] == 'true':
             return True
 

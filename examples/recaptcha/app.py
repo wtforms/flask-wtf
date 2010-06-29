@@ -4,8 +4,10 @@ from flaskext.wtf import Form, TextAreaField, RecaptchaField, Required
 DEBUG = True
 SECRET_KEY = 'secret'
 
-RECAPTCHA_PUBLIC_KEY = '6LeeJ7sSAAAAAG3Ph-byH2Ur-HVTWRzwYtIplg4h'
-RECAPTCHA_PRIVATE_KEY = '6LeeJ7sSAAAAAGC-qXBYj_m0fHvP0VzFyIj0VJZf'
+# keys for localhost. Change as appropriate.
+
+RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
+RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
 app = Flask(__name__)
 app.config.from_object(__name__)

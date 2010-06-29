@@ -9,7 +9,7 @@ from werkzeug import url_encode
 # use flaskext.babel for translations, if available
 
 try:
-    from flaskext.babel import ugettext as _
+    from flaskext.babel import gettext as _
 except ImportError:
     _ = lambda(s) : s
 
