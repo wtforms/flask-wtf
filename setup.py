@@ -9,7 +9,7 @@ Links
 
 * `documentation <http://packages.python.org/Flask-WTF>`_
 * `development version
-  <http://bitbucket.org/danjac/flask-wtf/get/tip.gz#egg=Flask-WTF`_
+  <http://bitbucket.org/danjac/flask-wtf/get/tip.gz#egg=Flask-WTF>`_
 
 
 """
