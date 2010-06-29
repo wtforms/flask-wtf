@@ -23,7 +23,7 @@ or download the latest version from Bitbucket::
 
     python setup.py develop
 
-If you are using **virtualenv**, it is assumed that you are installing flask-mail
+If you are using **virtualenv**, it is assumed that you are installing Flask-WTF
 in the same virtualenv as your Flask application(s).
 
 Configuring Flask-WTF
