@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Flask-WTF
-Version: 0.1
+Version: 0.1.2
 Summary: Simple integration of Flask and WTForms
 Home-page: http://bitbucket.org/danjac/flask-wtf
 Author: Dan Jacob
