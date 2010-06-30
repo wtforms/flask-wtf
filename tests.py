@@ -1,12 +1,11 @@
 import re
+import unittest
 
 from flask import Flask, Response, jsonify
-from flaskext.testing import TestCase
 from flaskext.wtf import Form, TextField, Required
 
-
-class TestForms(TestCase):
-
+class TestCase(unittest.TestCase):
+    
     def create_app(self):
         
         class MyForm(Form):
@@ -59,7 +58,29 @@ class TestForms(TestCase):
 
         return app
 
-class TestValidateOnSubmit(TestForms):
+    def __call__(self, result=None):
+        """
+        Does the required setup, doing it here
+        means you don't have to call super.setUp
+        in subclasses.
+        """
+        self._pre_setup()
+        super(TestCase, self).__call__(result)
+        self._post_tearDown()
+
+    def _pre_setup(self):
+        self.app = self.create_app()
+        self.client = self.app.test_client()
+       
+        # now you can use flask thread locals
+
+        self._ctx = self.app.test_request_context()
+        self._ctx.push()
+
+    def _post_tearDown(self):
+        self._ctx.pop()
+
+class TestValidateOnSubmit(TestCase):
 
     def test_not_submitted(self):
 
@@ -83,7 +104,7 @@ class TestValidateOnSubmit(TestForms):
         assert 'DANNY' in response.data
 
 
-class TestCSRF(TestForms):
+class TestCSRF(TestCase):
 
     def test_csrf_token(self):
 
@@ -109,7 +130,7 @@ class TestCSRF(TestForms):
                                     data={"name" : "danny"},
                                     headers={'X-Requested-With' : 'XMLHttpRequest'})
         
-        self.assertJSONEquals(response, "name", "danny") 
+        assert response.status_code == 200
 
     def test_valid_csrf(self):
 
@@ -124,5 +145,4 @@ class TestCSRF(TestForms):
                                                "csrf" : csrf_token})
 
         assert "DANNY" in response.data
-
 
