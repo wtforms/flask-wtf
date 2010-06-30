@@ -18,14 +18,14 @@ from setuptools import setup
 
 setup(
     name='Flask-WTF',
-    version='0.1',
+    version='0.1.2',
     url='http://bitbucket.org/danjac/flask-wtf',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
     description='Simple integration of Flask and WTForms',
     long_description=__doc__,
-    packages=['flaskext'],
+    packages=['flaskext', 'flaskext.recaptcha'],
     namespace_packages=['flaskext'],
     zip_safe=False,
     platforms='any',

@@ -9,3 +9,7 @@ Flask_WTF.egg-info/requires.txt
 Flask_WTF.egg-info/top_level.txt
 flaskext/__init__.py
 flaskext/wtf.py
+flaskext/recaptcha/__init__.py
+flaskext/recaptcha/fields.py
+flaskext/recaptcha/validators.py
+flaskext/recaptcha/widgets.py
