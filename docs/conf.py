@@ -37,7 +37,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'flask-wtf'
+project = u'Flask-WTF'
 copyright = u'2010, Dan Jacob'
 
 # The version info for the project you're documenting, acts as replacement for
