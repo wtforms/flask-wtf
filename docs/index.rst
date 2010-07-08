@@ -78,6 +78,31 @@ inside a hidden DIV::
     <form method="POST" action=".">
         {{ form.csrf_token }}
 
+File uploads
+------------
+
+The ``Form`` instance automatically appends a ``file`` attribute to any ``FileField`` field instances if the form is posted.
+
+This ``file`` attribute is an instance of `Werkzeug FileStorage <http://werkzeug.pocoo.org/documentation/0.5.1/datastructures.html#werkzeug.FileStorage>`_ instance from ``request.files``.
+
+For example::
+
+    class PhotoForm(Form):
+
+        photo = FileField("Your photo")
+
+    @app.route("/upload/")
+    def upload():
+        form = PhotoForm()
+        if form.validate_on_submit():
+            filename = form.photo.file.filename
+        else:
+            filename = None
+
+        return render_template("upload.html",
+                               form=form,
+                               filename=filename)
+
 Recaptcha
 ---------
 
