@@ -68,10 +68,12 @@ class Form(BaseForm):
 
     def __init__(self, formdata=None, *args, **kwargs):
 
-        self.csrf_enabled = kwargs.pop('csrf_enabled', True)
+        csrf_enabled = kwargs.pop('csrf_enabled', None)
 
-        self.csrf_enabled = self.csrf_enabled and \
-            current_app.config.get('CSRF_ENABLED', True)
+        if csrf_enabled is None:
+            csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+        
+        self.csrf_enabled = csrf_enabled
 
         self.csrf_session_key = kwargs.pop('csrf_session_key', None)
 
