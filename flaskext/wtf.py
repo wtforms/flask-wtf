@@ -105,7 +105,6 @@ class Form(BaseForm):
 
         super(Form, self).process(formdata, obj, **kwargs)
 
-
     @property
     def csrf_token(self):
         """
