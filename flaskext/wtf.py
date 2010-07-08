@@ -85,18 +85,23 @@ class Form(BaseForm):
             csrf_token = self.reset_csrf()
 
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
-    
+
+    def is_submitted(self):
+
+        return request and request.method in ("PUT", "POST")
+
     def process(self, formdata=None, obj=None, **kwargs):
 
+        if self.is_submitted():
+        
+            if formdata is None:
+                formdata = request.form
 
-        if formdata is None and request.form:
-            formdata = request.form
+            if request.files:
 
-        if request.files:
-
-            for name, field in self._fields.iteritems():
-                if isinstance(field, FileField) and name in request.files:
-                    field.file = request.files[name]
+                for name, field in self._fields.iteritems():
+                    if isinstance(field, FileField) and name in request.files:
+                        field.file = request.files[name]
 
         super(Form, self).process(formdata, obj, **kwargs)
 
@@ -133,6 +138,6 @@ class Form(BaseForm):
             raise ValidationError, "Missing or invalid CSRF token"
 
     def validate_on_submit(self):
-        return request.method in ("POST", "PUT") and self.validate()
+        return self.is_submitted() and self.validate()
     
 
