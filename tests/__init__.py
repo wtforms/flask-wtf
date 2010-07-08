@@ -48,32 +48,40 @@ class TestFileUpload(TestCase):
 
     def create_app(self):
 
-
         class FileUploadForm(Form):
 
             upload = FileField("Upload file")
 
         app = super(TestFileUpload, self).create_app()
 
-        @app.route("/upload/")
+        @app.route("/upload/", methods=("POST",))
         def upload():
             form = FileUploadForm()
             if form.validate_on_submit():
 
                 filedata = form.upload.file
+                print "DATA", filedata
             
             else:
-
+                
+                print form.errors
                 filedata = None
 
-            return render_template("upload.html")
+            return render_template("upload.html",
+                                   filedata=filedata,
+                                   form=form)
         
         return app
 
     def test_valid_file(self):
+        
+        with self.app.open_resource("flask.png") as fp:
+            response = self.client.post("/upload/", 
+                data={'upload' : fp})
+        
+            print response.data
 
-        pass
-
+        assert "flask.png" in response.data
 
 class TestValidateOnSubmit(TestCase):
 
