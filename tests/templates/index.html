@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+
+<html>
+    <body>
+        {% if name %}
+        <p>{{ name }}</p>
+        {% endif %}
+
+        {{ form.errors }}
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <p>
+                {{ form.name.label }}
+                {{ form.name }}
+            </p>
+            <p>
+                <input type="submit" value="Submit">
+            </p>
+        </form>
+    </body>
+</html>

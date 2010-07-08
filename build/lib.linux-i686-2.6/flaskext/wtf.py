@@ -11,7 +11,7 @@
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FloatField, FormField,\
+    DateTimeField, FieldList, FileField, FloatField, FormField,\
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
     SelectMultipleField, SubmitField, TextField, TextAreaField
 
@@ -60,18 +60,6 @@ if _is_sqlalchemy:
 
 def _generate_csrf_token():
     return str(uuid.uuid4())
-
-from wtforms.fields import FileField as _FileField
-
-class FileField(_FileField):
-
-    def process_data(self, value):
-        super(FileField, self).process_data(value)
-
-        if request and self.name in request.files:
-            self.file = request.files[self.name]
-        else:
-            self.file = None
 
 class Form(BaseForm):
 

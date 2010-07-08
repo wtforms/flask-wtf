@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+    <body>
+        {% if filedata %}
+        <h3>{{ filedata.filename }}</h3>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <p>
+                {{ form.file_upload.label }}
+                {{ form.file_upload }}
+            </p>
+            <p>
+                <input type="submit" value="Submit">
+            </p>
+        </form>
+    </body>
+</html>

@@ -1,10 +1,10 @@
 import re
-import unittest
 
-from flask import Flask, Response, jsonify
-from flaskext.wtf import Form, TextField, Required
+from flask import Flask, render_template, jsonify
+from flaskext.testing import TestCase as _TestCase
+from flaskext.wtf import Form, TextField, FileField, Required
 
-class TestCase(unittest.TestCase):
+class TestCase(_TestCase):
     
     def create_app(self):
         
@@ -19,30 +19,15 @@ class TestCase(unittest.TestCase):
             
             form = MyForm()
             if form.validate_on_submit():
-                name = form.name.data
+                name = form.name.data.upper()
             else:
                 name = ''
             
-            return Response("""
-            <html>
-                <body>
-                    %s
-                    %s
-                    <form method="POST" action=".">
-                        %s
-                        <p>
-                           %s %s
-                        </p>
-                    </form>
-                </body>
-            </html>
-            """ %(
-                name.upper(),
-                form.errors,
-                form.csrf_token,
-                form.name.label,
-                form.name
-            ))
+            return render_template("index.html", 
+                                   form=form,
+                                   name=name)
+
+            
 
         @app.route("/ajax/", methods=("POST",))
         def ajax_submit():
@@ -56,29 +41,39 @@ class TestCase(unittest.TestCase):
                            errors=form.errors,
                            success=False)
 
+        
         return app
 
-    def __call__(self, result=None):
-        """
-        Does the required setup, doing it here
-        means you don't have to call super.setUp
-        in subclasses.
-        """
-        self._pre_setup()
-        super(TestCase, self).__call__(result)
-        self._post_tearDown()
+class TestFileUpload(TestCase):
 
-    def _pre_setup(self):
-        self.app = self.create_app()
-        self.client = self.app.test_client()
-       
-        # now you can use flask thread locals
+    def create_app(self):
 
-        self._ctx = self.app.test_request_context()
-        self._ctx.push()
 
-    def _post_tearDown(self):
-        self._ctx.pop()
+        class FileUploadForm(Form):
+
+            upload = FileField("Upload file")
+
+        app = super(TestFileUpload, self).create_app()
+
+        @app.route("/upload/")
+        def upload():
+            form = FileUploadForm()
+            if form.validate_on_submit():
+
+                filedata = form.upload.file
+            
+            else:
+
+                filedata = None
+
+            return render_template("upload.html")
+        
+        return app
+
+    def test_valid_file(self):
+
+        pass
+
 
 class TestValidateOnSubmit(TestCase):
 
@@ -100,6 +95,7 @@ class TestValidateOnSubmit(TestCase):
         self.app.config['CSRF_ENABLED'] = False
 
         response = self.client.post("/", data={"name" : "danny"})
+        print response.data
 
         assert 'DANNY' in response.data
 
