@@ -11,7 +11,7 @@
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FloatField, FormField,\
+    DateTimeField, FieldList, FloatField, FileField, FormField,\
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
     SelectMultipleField, SubmitField, TextField, TextAreaField
 
@@ -61,26 +61,12 @@ if _is_sqlalchemy:
 def _generate_csrf_token():
     return str(uuid.uuid4())
 
-from wtforms.fields import FileField as _FileField
-
-class FileField(_FileField):
-
-    def process_data(self, value):
-        super(FileField, self).process_data(value)
-
-        if request and self.name in request.files:
-            self.file = request.files[self.name]
-        else:
-            self.file = None
 
 class Form(BaseForm):
 
     csrf = fields.HiddenField()
 
     def __init__(self, formdata=None, *args, **kwargs):
-
-        if formdata is None:
-            formdata = request.form
 
         self.csrf_enabled = kwargs.pop('csrf_enabled', True)
 
@@ -100,6 +86,21 @@ class Form(BaseForm):
 
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
     
+    def process(self, formdata=None, obj=None, **kwargs):
+
+
+        if formdata is None and request.form:
+            formdata = request.form
+
+        if request.files:
+
+            for name, field in self._fields.iteritems():
+                if isinstance(field, FileField) and name in request.files:
+                    field.file = request.files[name]
+
+        super(Form, self).process(formdata, obj, **kwargs)
+
+
     @property
     def csrf_token(self):
         """
