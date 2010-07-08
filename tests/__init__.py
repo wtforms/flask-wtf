@@ -53,6 +53,7 @@ class TestFileUpload(TestCase):
             upload = FileField("Upload file")
 
         app = super(TestFileUpload, self).create_app()
+        app.config['CSRF_ENABLED'] = False
 
         @app.route("/upload/", methods=("POST",))
         def upload():
@@ -60,11 +61,10 @@ class TestFileUpload(TestCase):
             if form.validate_on_submit():
 
                 filedata = form.upload.file
-                print "DATA", filedata
+                print filedata
             
             else:
                 
-                print form.errors
                 filedata = None
 
             return render_template("upload.html",
@@ -78,10 +78,15 @@ class TestFileUpload(TestCase):
         with self.app.open_resource("flask.png") as fp:
             response = self.client.post("/upload/", 
                 data={'upload' : fp})
-        
-            print response.data
 
-        assert "flask.png" in response.data
+        assert "flask.png</h3>" in response.data
+
+    def test_invalid_file(self):
+        
+        response = self.client.post("/upload/", 
+                data={'upload' : 'flask.png'})
+
+        assert "flask.png</h3>" not in response.data
 
 class TestValidateOnSubmit(TestCase):
 
