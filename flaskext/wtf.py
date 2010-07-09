@@ -102,8 +102,8 @@ class Form(BaseForm):
             if request.files:
 
                 for name, field in self._fields.iteritems():
-                    if isinstance(field, FileField):
-                        field.file = request.files.get(name)
+                    if isinstance(field, FileField) and name in request.files:
+                        field.file = request.files[name]
 
         super(Form, self).process(formdata, obj, **kwargs)
 
