@@ -25,10 +25,7 @@ from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
     TableWidget, TextArea, TextInput
 
 try:
-    # try to import sqlalchemy-based fields
-    # otherwise ignore
-    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
-        QuerySelectMultipleField, ModelSelectField
+    import sqlalchemy
     _is_sqlalchemy = True
 except ImportError:
     _is_sqlalchemy = False
@@ -47,19 +44,54 @@ from recaptcha.fields import RecaptchaField
 from recaptcha.widgets import RecaptchaWidget
 from recaptcha.validators import Recaptcha
 
-__all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widgets']
+__all__  = ['Form', 'ValidationForm', 'IsFile', 'is_file',
+            'fields', 'validators', 'widgets']
+
 __all__ += fields.__all__
 __all__ += validators.__all__
 __all__ += widgets.__all__
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
+    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
+        QuerySelectMultipleField, ModelSelectField
+
     __all__ += ['QuerySelectField', 
                 'QuerySelectMultipleField',
                 'ModelSelectField']
 
 def _generate_csrf_token():
     return str(uuid.uuid4())
+
+
+class IsFile(object):
+    """
+    Validator. Checks if field contains a file upload.
+    """
+
+    def __init__(self, allowed_types=None, forbidden_types=None):
+        """
+        :param allowed_types: will pass only if content-type in this list
+        :param forbidden_types: will pass only if content-type not in this list
+        """
+        self.allowed_types = allowed_types or []
+        self.forbidden_types = forbidden_types or []
+
+    def __call__(self, field):
+
+        file = getattr(field, "file", None)
+
+        if file is None:
+            return False
+
+        if self.allowed_types:
+            return file.content_type in self.allowed_types
+
+        if self.forbidden_types:
+            return file.content_type not in self.forbidden_types
+
+
+is_file = IsFile
 
 
 class Form(BaseForm):

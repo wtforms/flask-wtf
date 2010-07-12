@@ -155,3 +155,17 @@ class TestCSRF(TestCase):
 
         assert "DANNY" in response.data
 
+class TestIsFile(TestCase):
+
+    def test_is_file(self):
+
+        raise NotImplementedError
+
+    def test_is_allowed(self):
+
+        raise NotImplementedError
+
+    def test_is_forbidden(self):
+
+        raise NotImplementedError
+
