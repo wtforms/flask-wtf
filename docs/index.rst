@@ -103,6 +103,12 @@ For example::
                                form=form,
                                filename=filename)
 
+Remember to set the ``enctype`` of your HTML form to ``multipart/form-data`` to enable file uploads::
+
+    <form action="." method="POST" enctype="multipart/form-data">
+        ....
+    </form>
+
 Recaptcha
 ---------
 

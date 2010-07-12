@@ -11,7 +11,7 @@
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FloatField, FileField, FormField,\
+    DateTimeField, FieldList, FloatField, FileField, FormField, \
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
     SelectMultipleField, SubmitField, TextField, TextAreaField
 
