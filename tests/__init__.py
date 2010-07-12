@@ -2,7 +2,7 @@ import re
 
 from flask import Flask, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
-from flaskext.wtf import Form, TextField, FileField, Required
+from flaskext.wtf import Form, TextField, FileField, Required, IsFile
 
 class TestCase(_TestCase):
     
@@ -155,17 +155,57 @@ class TestCSRF(TestCase):
 
         assert "DANNY" in response.data
 
+class MockFileField(object):
+
+    def __init__(self, file=None):
+
+        self.file = file
+
+class MockFileStorage(object):
+
+    def __init__(self, content_type):
+        self.content_type = content_type
+
 class TestIsFile(TestCase):
 
+    def test_is_not_file(self):
+ 
+        assert not IsFile()(MockFileField())
+    
     def test_is_file(self):
 
-        raise NotImplementedError
+        assert IsFile(MockFileField(MockFileStorage('image/jpeg')))
 
     def test_is_allowed(self):
 
-        raise NotImplementedError
+        is_file = IsFile(allowed_types=["image/jpeg",
+                                        "image/gif"])
+
+
+        assert is_file(MockFileField(MockFileStorage("image/jpeg")))
 
     def test_is_forbidden(self):
 
-        raise NotImplementedError
+        is_file = IsFile(forbidden_types=["image/jpeg",
+                                          "image/gif"])
 
+
+        assert not is_file(MockFileField(MockFileStorage("image/jpeg")))
+
+    def test_is_not_allowed(self):
+
+
+        is_file = IsFile(allowed_types=["image/jpeg",
+                                        "image/gif"])
+
+
+        assert not is_file(MockFileField(MockFileStorage("image/png")))
+    
+    def test_is_not_forbidden(self):
+
+
+        is_file = IsFile(forbidden_types=["image/jpeg",
+                                          "image/gif"])
+
+
+        assert is_file(MockFileField(MockFileStorage("image/png")))
