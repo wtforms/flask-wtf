@@ -155,6 +155,9 @@ class TestCSRF(TestCase):
 
         assert "DANNY" in response.data
 
+class MockForm(object):
+    pass
+
 class MockFileField(object):
 
     def __init__(self, file=None):
@@ -170,11 +173,12 @@ class TestIsFile(TestCase):
 
     def test_is_not_file(self):
  
-        assert not IsFile()(MockFileField())
+        assert not IsFile()(MockForm(), MockFileField())
     
     def test_is_file(self):
 
-        assert IsFile(MockFileField(MockFileStorage('image/jpeg')))
+        assert IsFile()(MockForm(), 
+                        MockFileField(MockFileStorage('image/jpeg')))
 
     def test_is_allowed(self):
 
@@ -182,7 +186,8 @@ class TestIsFile(TestCase):
                                         "image/gif"])
 
 
-        assert is_file(MockFileField(MockFileStorage("image/jpeg")))
+        assert is_file(MockForm(), 
+                       MockFileField(MockFileStorage("image/jpeg")))
 
     def test_is_forbidden(self):
 
@@ -190,7 +195,8 @@ class TestIsFile(TestCase):
                                           "image/gif"])
 
 
-        assert not is_file(MockFileField(MockFileStorage("image/jpeg")))
+        assert not is_file(MockForm(),
+                           MockFileField(MockFileStorage("image/jpeg")))
 
     def test_is_not_allowed(self):
 
@@ -199,7 +205,8 @@ class TestIsFile(TestCase):
                                         "image/gif"])
 
 
-        assert not is_file(MockFileField(MockFileStorage("image/png")))
+        assert not is_file(MockForm(),
+                           MockFileField(MockFileStorage("image/png")))
     
     def test_is_not_forbidden(self):
 
@@ -208,4 +215,5 @@ class TestIsFile(TestCase):
                                           "image/gif"])
 
 
-        assert is_file(MockFileField(MockFileStorage("image/png")))
+        assert is_file(MockForm(),
+                       MockFileField(MockFileStorage("image/png")))

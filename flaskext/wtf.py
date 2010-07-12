@@ -77,7 +77,7 @@ class IsFile(object):
         self.allowed_types = allowed_types or []
         self.forbidden_types = forbidden_types or []
 
-    def __call__(self, field):
+    def __call__(self, form, field):
 
         file = getattr(field, "file", None)
 
@@ -90,6 +90,7 @@ class IsFile(object):
         if self.forbidden_types:
             return file.content_type not in self.forbidden_types
 
+        return True
 
 is_file = IsFile
 
