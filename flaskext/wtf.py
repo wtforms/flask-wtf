@@ -69,13 +69,13 @@ class IsFile(object):
     Validator. Checks if field contains a file upload.
     """
 
-    def __init__(self, allowed_types=None, forbidden_types=None):
+    def __init__(self, allow=None, deny=None):
         """
-        :param allowed_types: will pass only if content-type in this list
-        :param forbidden_types: will pass only if content-type not in this list
+        :param allow: will pass only if content-type in this list
+        :param deny: will pass only if content-type not in this list
         """
-        self.allowed_types = allowed_types or []
-        self.forbidden_types = forbidden_types or []
+        self.allow = allow or []
+        self.deny = deny or []
 
     def __call__(self, form, field):
 
@@ -84,11 +84,11 @@ class IsFile(object):
         if file is None:
             return False
 
-        if self.allowed_types:
-            return file.content_type in self.allowed_types
+        if self.allow:
+            return file.content_type in self.allow
 
-        if self.forbidden_types:
-            return file.content_type not in self.forbidden_types
+        if self.deny:
+            return file.content_type not in self.deny
 
         return True
 

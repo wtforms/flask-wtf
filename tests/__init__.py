@@ -182,18 +182,14 @@ class TestIsFile(TestCase):
 
     def test_is_allowed(self):
 
-        is_file = IsFile(allowed_types=["image/jpeg",
-                                        "image/gif"])
-
+        is_file = IsFile(allow=["image/jpeg", "image/gif"])
 
         assert is_file(MockForm(), 
                        MockFileField(MockFileStorage("image/jpeg")))
 
     def test_is_forbidden(self):
 
-        is_file = IsFile(forbidden_types=["image/jpeg",
-                                          "image/gif"])
-
+        is_file = IsFile(deny=["image/jpeg", "image/gif"])
 
         assert not is_file(MockForm(),
                            MockFileField(MockFileStorage("image/jpeg")))
@@ -201,9 +197,7 @@ class TestIsFile(TestCase):
     def test_is_not_allowed(self):
 
 
-        is_file = IsFile(allowed_types=["image/jpeg",
-                                        "image/gif"])
-
+        is_file = IsFile(allow=["image/jpeg", "image/gif"])
 
         assert not is_file(MockForm(),
                            MockFileField(MockFileStorage("image/png")))
@@ -211,9 +205,7 @@ class TestIsFile(TestCase):
     def test_is_not_forbidden(self):
 
 
-        is_file = IsFile(forbidden_types=["image/jpeg",
-                                          "image/gif"])
-
+        is_file = IsFile(deny=["image/jpeg", "image/gif"])
 
         assert is_file(MockForm(),
                        MockFileField(MockFileStorage("image/png")))
