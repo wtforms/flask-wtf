@@ -38,13 +38,17 @@ from flask import request, session, current_app
 
 from jinja2 import Markup
 
-import recaptcha
+from flaskext.wtf import recaptcha
 
-from recaptcha.fields import RecaptchaField
-from recaptcha.widgets import RecaptchaWidget
-from recaptcha.validators import Recaptcha
+from flaskext.wtf.recaptcha.fields import RecaptchaField
+from flaskext.wtf.recaptcha.widgets import RecaptchaWidget
+from flaskext.wtf.recaptcha.validators import Recaptcha
 
-__all__  = ['Form', 'ValidationForm', 'IsFile', 'is_file',
+fields.RecaptchaField = RecaptchaField
+fields.RecaptchaWidget = RecaptchaWidget
+fields.Recaptcha = Recaptcha
+
+__all__  = ['Form', 'ValidationForm',
             'fields', 'validators', 'widgets']
 
 __all__ += fields.__all__
@@ -60,39 +64,15 @@ if _is_sqlalchemy:
                 'QuerySelectMultipleField',
                 'ModelSelectField']
 
+    for field in (QuerySelectField, 
+                  QuerySelectMultipleField,
+                  ModelSelectField):
+
+        setattr(fields, field.__name__, field)
+
+
 def _generate_csrf_token():
     return str(uuid.uuid4())
-
-
-class IsFile(object):
-    """
-    Validator. Checks if field contains a file upload.
-    """
-
-    def __init__(self, allow=None, deny=None):
-        """
-        :param allow: will pass only if content-type in this list
-        :param deny: will pass only if content-type not in this list
-        """
-        self.allow = allow or []
-        self.deny = deny or []
-
-    def __call__(self, form, field):
-
-        file = getattr(field, "file", None)
-
-        if file is None:
-            return False
-
-        if self.allow:
-            return file.content_type in self.allow
-
-        if self.deny:
-            return file.content_type not in self.deny
-
-        return True
-
-is_file = IsFile
 
 
 class Form(BaseForm):
