@@ -11,7 +11,7 @@
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FileField, FloatField, FormField,\
+    DateTimeField, FieldList, FloatField, FileField, FormField, \
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
     SelectMultipleField, SubmitField, TextField, TextAreaField
 
@@ -25,10 +25,7 @@ from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
     TableWidget, TextArea, TextInput
 
 try:
-    # try to import sqlalchemy-based fields
-    # otherwise ignore
-    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
-        QuerySelectMultipleField, ModelSelectField
+    import sqlalchemy
     _is_sqlalchemy = True
 except ImportError:
     _is_sqlalchemy = False
@@ -47,13 +44,18 @@ from recaptcha.fields import RecaptchaField
 from recaptcha.widgets import RecaptchaWidget
 from recaptcha.validators import Recaptcha
 
-__all__  = ['Form', 'ValidationForm', 'fields', 'validators', 'widgets']
+__all__  = ['Form', 'ValidationForm', 'IsFile', 'is_file',
+            'fields', 'validators', 'widgets']
+
 __all__ += fields.__all__
 __all__ += validators.__all__
 __all__ += widgets.__all__
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
+    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
+        QuerySelectMultipleField, ModelSelectField
+
     __all__ += ['QuerySelectField', 
                 'QuerySelectMultipleField',
                 'ModelSelectField']
@@ -61,19 +63,50 @@ if _is_sqlalchemy:
 def _generate_csrf_token():
     return str(uuid.uuid4())
 
+
+class IsFile(object):
+    """
+    Validator. Checks if field contains a file upload.
+    """
+
+    def __init__(self, allow=None, deny=None):
+        """
+        :param allow: will pass only if content-type in this list
+        :param deny: will pass only if content-type not in this list
+        """
+        self.allow = allow or []
+        self.deny = deny or []
+
+    def __call__(self, form, field):
+
+        file = getattr(field, "file", None)
+
+        if file is None:
+            return False
+
+        if self.allow:
+            return file.content_type in self.allow
+
+        if self.deny:
+            return file.content_type not in self.deny
+
+        return True
+
+is_file = IsFile
+
+
 class Form(BaseForm):
 
     csrf = fields.HiddenField()
 
     def __init__(self, formdata=None, *args, **kwargs):
 
-        if formdata is None:
-            formdata = request.form
+        csrf_enabled = kwargs.pop('csrf_enabled', None)
 
-        self.csrf_enabled = kwargs.pop('csrf_enabled', True)
-
-        self.csrf_enabled = self.csrf_enabled and \
-            current_app.config.get('CSRF_ENABLED', True)
+        if csrf_enabled is None:
+            csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+        
+        self.csrf_enabled = csrf_enabled
 
         self.csrf_session_key = kwargs.pop('csrf_session_key', None)
 
@@ -87,7 +120,26 @@ class Form(BaseForm):
             csrf_token = self.reset_csrf()
 
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
-    
+
+    def is_submitted(self):
+
+        return request and request.method in ("PUT", "POST")
+
+    def process(self, formdata=None, obj=None, **kwargs):
+
+        if self.is_submitted():
+        
+            if formdata is None:
+                formdata = request.form
+
+            if request.files:
+
+                for name, field in self._fields.iteritems():
+                    if isinstance(field, FileField) and name in request.files:
+                        field.file = request.files[name]
+
+        super(Form, self).process(formdata, obj, **kwargs)
+
     @property
     def csrf_token(self):
         """
@@ -120,6 +172,6 @@ class Form(BaseForm):
             raise ValidationError, "Missing or invalid CSRF token"
 
     def validate_on_submit(self):
-        return request.method in ("POST", "PUT") and self.validate()
+        return self.is_submitted() and self.validate()
     
 

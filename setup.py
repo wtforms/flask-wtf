@@ -25,7 +25,7 @@ setup(
     author_email='danjac354@gmail.com',
     description='Simple integration of Flask and WTForms',
     long_description=__doc__,
-    packages=['flaskext', 'flaskext.recaptcha'],
+    packages=['flaskext', 'flaskext.wtf', 'flaskext.wtf.recaptcha'],
     namespace_packages=['flaskext'],
     zip_safe=False,
     platforms='any',
