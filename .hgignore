@@ -7,7 +7,9 @@ syntax: glob
 *.zip
 *~
 
+build
 dist
+*.egg-info
 docs/output
 
 
