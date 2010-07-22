@@ -27,7 +27,6 @@ setup(
     long_description=__doc__,
     packages=['flaskext', 
               'flaskext.wtf', 
-              'flaskext.wtf.uploads', 
               'flaskext.wtf.recaptcha'],
     namespace_packages=['flaskext'],
     zip_safe=False,

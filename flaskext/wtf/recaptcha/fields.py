@@ -1,8 +1,9 @@
-import widgets
+from __future__ import absolute_import
 
 from wtforms.fields import Field
 
-from validators import Recaptcha
+from flaskext.wtf.recaptcha import widgets
+from flaskext.wtf.recaptcha.validators import Recaptcha
 
 __all__ = ["RecaptchaField"]
 

@@ -1,6 +1,8 @@
 """
 Custom widgets
 """
+from __future__ import absolute_import
+
 import simplejson
 
 from flask import current_app
