@@ -2,7 +2,8 @@
 Flask-WTF
 ---------
 
-Simple integration of Flask and WTForms, including CSRF validation.
+Simple integration of Flask and WTForms, including CSRF, file upload
+and Recaptcha integration.
 
 Links
 `````
