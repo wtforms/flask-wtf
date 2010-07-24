@@ -29,11 +29,16 @@ setup(
               'flaskext.wtf', 
               'flaskext.wtf.recaptcha'],
     namespace_packages=['flaskext'],
+    test_suite='nose.collector',
     zip_safe=False,
     platforms='any',
     install_requires=[
         'Flask',
         'WTForms'
+    ],
+    tests_require=[
+        'nose',
+        'Flask-Testing',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

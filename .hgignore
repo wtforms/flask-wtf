@@ -1,15 +1,17 @@
 syntax: glob
 
+*.egg-info
 *.pyc
 *.db
 *.swp
 *.swo
 *.zip
+*.egg
+*.orig
 *~
 
-build
 dist
-*.egg-info
+build
 docs/output
 
 
