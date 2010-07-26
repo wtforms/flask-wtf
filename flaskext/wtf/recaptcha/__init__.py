@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from flaskext.wtf.recaptcha import fields
 from flaskext.wtf.recaptcha import  validators 
 from flaskext.wtf.recaptcha import  widgets

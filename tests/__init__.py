@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 import re
 
 from flask import Flask, render_template, jsonify

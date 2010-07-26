@@ -8,8 +8,6 @@
     :copyright: (c) 2010 by Dan Jacob.
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
-from __futute__ import with_statement
 
 import uuid
 
