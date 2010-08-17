@@ -91,7 +91,7 @@ For example::
 
         photo = FileField("Your photo")
 
-    @app.route("/upload/")
+    @app.route("/upload/", methods=("GET", "POST"))
     def upload():
         form = PhotoForm()
         if form.validate_on_submit():
@@ -149,7 +149,7 @@ validation, a convenience method ``validate_on_submit`` is added::
     class MyForm(Form):
         name = TextField("Name")
 
-    @app.route("/submit/")
+    @app.route("/submit/", methods=("GET", "POST"))
     def submit():
         
         form = MyForm()
@@ -170,7 +170,7 @@ Note the difference from a pure WTForms solution::
     class MyForm(Form):
         name = TextField("Name")
 
-    @app.route("/submit/")
+    @app.route("/submit/", methods=("GET", "POST"))
     def submit():
         
         form = MyForm(request.form)
