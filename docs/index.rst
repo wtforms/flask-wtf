@@ -78,6 +78,17 @@ inside a hidden DIV::
     <form method="POST" action=".">
         {{ form.csrf_token }}
 
+Using the 'safe' filter
+-----------------------
+
+The **safe** filter used to be required with WTForms in Jinja2 templates, otherwise your markup would be escaped. For example:
+
+    {{ form.name|safe }}
+
+However widgets in the latest version of WTForms return a `HTML safe string <http://jinja.pocoo.org/2/documentation/api#jinja2.Markup>`_ so you shouldn't need to use **safe**.
+
+Ensure you are running the latest stable version of WTForms so that you don't need to use this filter everywhere.
+
 File uploads
 ------------
 
@@ -87,6 +98,8 @@ This ``file`` attribute is an instance of `Werkzeug FileStorage <http://werkzeug
 
 For example::
 
+    from werkzeug import secure_filename
+
     class PhotoForm(Form):
 
         photo = FileField("Your photo")
@@ -95,7 +108,7 @@ For example::
     def upload():
         form = PhotoForm()
         if form.validate_on_submit():
-            filename = form.photo.file.filename
+            filename = secure_filename(form.photo.file.filename)
         else:
             filename = None
 
@@ -155,7 +168,7 @@ validation, a convenience method ``validate_on_submit`` is added::
         form = MyForm()
         if form.validate_on_submit():
             flash("Success")
-            redirect(url_for("index"))
+            return redirect(url_for("index"))
         return render_template("index.html", form=form)
 
 Note the difference from a pure WTForms solution::
@@ -176,7 +189,7 @@ Note the difference from a pure WTForms solution::
         form = MyForm(request.form)
         if request.method == "POST" and form.validate():
             flash("Success")
-            redirect(url_for("index"))
+            return redirect(url_for("index"))
         return render_template("index.html", form=form)
 
 ``validate_on_submit`` will automatically check if the request method is PUT or POST.
