@@ -126,7 +126,7 @@ class Form(BaseForm):
         """
         Renders CSRF field inside a hidden DIV.
         """
-        return self.wrap_hidden('csrf')
+        return self.hidden_tag('csrf')
 
     def reset_csrf(self):
         """
@@ -152,13 +152,17 @@ class Form(BaseForm):
         if not is_valid:
             raise ValidationError, "Missing or invalid CSRF token"
 
-    def wrap_hidden(self, *fields):
+    def hidden_tag(self, *fields):
         """
         Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
         compliance.
 
-        param: fields: list of hidden field names.
+        param: fields: list of hidden field names. If not provided will render
+                       all hidden fields.
         """
+
+        if not fields:
+            fields = [f.name for f in self if isinstance(f, HiddenField)]
 
         rv = [u'<div style="display:none;">']
         rv += [unicode(getattr(self, field)) for field in fields]

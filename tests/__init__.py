@@ -4,7 +4,8 @@ import re
 
 from flask import Flask, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
-from flaskext.wtf import Form, TextField, FileField, Required
+from flaskext.wtf import Form, TextField, FileField, HiddenField, \
+    SubmitField, Required
 
 class TestCase(_TestCase):
     
@@ -12,6 +13,13 @@ class TestCase(_TestCase):
         
         class MyForm(Form):
             name = TextField("Name", validators=[Required()])
+            submit = SubmitField("Submit")
+
+        class HiddenFieldsForm(Form):
+            name = HiddenField()
+            url = HiddenField()
+            secret = HiddenField()
+            submit = SubmitField("Submit")
 
         app = Flask(__name__)
         app.secret_key = "secret"
@@ -30,6 +38,11 @@ class TestCase(_TestCase):
                                    name=name)
 
             
+        @app.route("/hidden/")
+        def hidden():
+
+            form = HiddenFieldsForm()
+            return render_template("hidden.html", form=form)
 
         @app.route("/ajax/", methods=("POST",))
         def ajax_submit():
@@ -63,7 +76,6 @@ class TestFileUpload(TestCase):
             if form.validate_on_submit():
 
                 filedata = form.upload.file
-                print filedata
             
             else:
                 
@@ -114,6 +126,13 @@ class TestValidateOnSubmit(TestCase):
 
         assert 'DANNY' in response.data
 
+
+class TestHiddenTag(TestCase):
+
+    def test_hidden_tag(self):
+
+        response = self.client.get("/hidden/")
+        assert response.data.count('type="hidden"') == 4
 
 class TestCSRF(TestCase):
 
