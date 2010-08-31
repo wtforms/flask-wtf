@@ -73,7 +73,7 @@ In addition, a CSRF token hidden field is created. You can print this in your te
     </form>
 
 However, in order to create valid XHTML/HTML the ``Form`` class has a method ``hidden_tag`` which renders any
-hidden fields, including the CSRF field::
+hidden fields, including the CSRF field, inside a hidden DIV tag::
     
     <form method="POST" action=".">
         {{ form.hidden_tag() }}
