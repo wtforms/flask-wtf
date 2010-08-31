@@ -3,12 +3,13 @@
     flaskext.wtf
     ~~~~~~~~~~~~
 
-    Description of the module goes here...
+    Flask-WTF extension
 
     :copyright: (c) 2010 by Dan Jacob.
     :license: BSD, see LICENSE for more details.
 """
 
+import warnings
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
@@ -78,6 +79,14 @@ def _generate_csrf_token():
 
 class Form(BaseForm):
 
+    """
+    Subclass of WTForms **Form** class. The main difference is that
+    **request.form** is passed as `formdata` argument to constructor
+    so can handle request data implicitly. 
+
+    In addition this **Form** implementation has automatic CSRF handling.
+    """
+
     csrf = fields.HiddenField()
 
     def __init__(self, formdata=None, *args, **kwargs):
@@ -103,6 +112,10 @@ class Form(BaseForm):
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
 
     def is_submitted(self):
+        """
+        Checks if form has been submitted. The default case is if the HTTP 
+        method is **PUT** or **POST**.
+        """
 
         return request and request.method in ("PUT", "POST")
 
@@ -125,7 +138,11 @@ class Form(BaseForm):
     def csrf_token(self):
         """
         Renders CSRF field inside a hidden DIV.
+
+        :deprecated: Use **hidden_tag** instead.
         """
+        warnings.warn("deprecated", DeprecationWarning)
+
         return self.hidden_tag('csrf')
 
     def reset_csrf(self):
@@ -157,8 +174,10 @@ class Form(BaseForm):
         Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
         compliance.
 
-        param: fields: list of hidden field names. If not provided will render
-                       all hidden fields.
+        :versionadded: 0.3
+
+        :param fields: list of hidden field names. If not provided will render
+                       all hidden fields, including the CSRF field.
         """
 
         if not fields:
@@ -171,6 +190,10 @@ class Form(BaseForm):
         return Markup(u"".join(rv))
         
     def validate_on_submit(self):
+        """
+        Checks if form has been submitted and if so runs validate. This is 
+        a shortcut, equivalent to ``form.is_submitted() and form.validate()``
+        """
         return self.is_submitted() and self.validate()
     
 

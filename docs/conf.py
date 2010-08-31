@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# flask-mail documentation build configuration file, created by
+# flask-wtf documentation build configuration file, created by
 # sphinx-quickstart on Fri May 28 11:39:14 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.

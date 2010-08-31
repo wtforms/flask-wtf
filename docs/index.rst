@@ -72,11 +72,11 @@ In addition, a CSRF token hidden field is created. You can print this in your te
         <input type="submit" value="Go">
     </form>
 
-However, in order to create valid XHTML/HTML the ``Form`` class has a property, ``csrf_token``, which renders the field
-inside a hidden DIV::
+However, in order to create valid XHTML/HTML the ``Form`` class has a method ``hidden_tag`` which renders any
+hidden fields, including the CSRF field::
     
     <form method="POST" action=".">
-        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
 
 Using the 'safe' filter
 -----------------------
@@ -196,6 +196,20 @@ Note the difference from a pure WTForms solution::
 
 You don't need to pass ``request.form`` into your form instance, as the ``Form`` automatically populates from ``request.form`` unless
 specified. Other arguments are as with ``wtforms.Form``.
+
+API
+---
+
+.. module:: flaskext.wtf
+
+.. autoclass:: Form
+   :members:
+    
+.. autoclass:: RecaptchaField
+
+.. autoclass:: Recaptcha
+
+.. autoclass:: RecaptchaWidget
 
 .. _Flask: http://flask.pocoo.org
 .. _Bitbucket: http://bitbucket.org/danjac/flask-wtf
