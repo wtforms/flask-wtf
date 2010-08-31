@@ -46,8 +46,8 @@ from flaskext.wtf.recaptcha.widgets import RecaptchaWidget
 from flaskext.wtf.recaptcha.validators import Recaptcha
 
 fields.RecaptchaField = RecaptchaField
-fields.RecaptchaWidget = RecaptchaWidget
-fields.Recaptcha = Recaptcha
+widgets.RecaptchaWidget = RecaptchaWidget
+validators.Recaptcha = Recaptcha
 
 __all__  = ['Form', 'ValidationForm',
             'fields', 'validators', 'widgets']
@@ -126,7 +126,7 @@ class Form(BaseForm):
         """
         Renders CSRF field inside a hidden DIV.
         """
-        return Markup('<div style="display:none;">%s</div>' % self.csrf)
+        return self.wrap_hidden('csrf')
 
     def reset_csrf(self):
         """
@@ -152,6 +152,20 @@ class Form(BaseForm):
         if not is_valid:
             raise ValidationError, "Missing or invalid CSRF token"
 
+    def wrap_hidden(self, *fields):
+        """
+        Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
+        compliance.
+
+        param: fields: list of hidden field names.
+        """
+
+        rv = [u'<div style="display:none;">']
+        rv += [unicode(getattr(self, field)) for field in fields]
+        rv.append(u"</div>")
+
+        return Markup(u"".join(rv))
+        
     def validate_on_submit(self):
         return self.is_submitted() and self.validate()
     
