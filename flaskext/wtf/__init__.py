@@ -141,7 +141,8 @@ class Form(BaseForm):
 
         :deprecated: Use **hidden_tag** instead.
         """
-        warnings.warn("deprecated", DeprecationWarning)
+        warnings.warn("csrf_token is deprecated. Use hidden_tag instead", 
+                      DeprecationWarning)
 
         return self.hidden_tag('csrf')
 

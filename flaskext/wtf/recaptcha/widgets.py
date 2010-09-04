@@ -1,7 +1,10 @@
 """
 Custom widgets
 """
-import simplejson
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from flask import current_app
 from werkzeug import url_encode
@@ -33,7 +36,7 @@ class RecaptchaWidget(object):
         return RECAPTCHA_HTML % dict(
             script_url='%schallenge?%s' % (server, query),
             frame_url='%snoscript?%s' % (server, query),
-            options=simplejson.dumps(options)
+            options=json.dumps(options)
         )
         
     def __call__(self, field, error=None, **kwargs):
