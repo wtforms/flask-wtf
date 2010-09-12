@@ -109,8 +109,6 @@ class Form(BaseForm):
         if csrf_token is None:
             csrf_token = self.reset_csrf()
 
-        self.csrf_is_valid = None
-
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
 
     def is_submitted(self):
@@ -127,6 +125,14 @@ class Form(BaseForm):
         
             if formdata is None:
                 formdata = request.form
+
+            # ensure csrf validation occurs ONLY when formdata is passed
+            # in case "csrf" is the only field in the form
+
+            if not formdata:
+                self.csrf_is_valid = False
+            else:
+                self.csrf_is_valid = None
 
             if request.files:
 
@@ -167,6 +173,8 @@ class Form(BaseForm):
         is_valid = field.data and \
                    field.data == csrf_token and \
                    self.csrf_is_valid is not False
+
+        print "DATA", is_valid, field.data, csrf_token, self.csrf_is_valid, request.form
 
         # reset this field, otherwise stale token is displayed
         field.data = self.reset_csrf()

@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import re
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, Response, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
     SubmitField, Required
@@ -21,6 +21,9 @@ class TestCase(_TestCase):
             secret = HiddenField()
             submit = SubmitField("Submit")
 
+        class SimpleForm(Form):
+            pass
+
         app = Flask(__name__)
         app.secret_key = "secret"
         
@@ -37,7 +40,15 @@ class TestCase(_TestCase):
                                    form=form,
                                    name=name)
 
-            
+        @app.route("/simple/", methods=("POST",))
+        def simple():
+            form = SimpleForm()
+            form.validate()
+            assert form.csrf_enabled
+            assert not form.validate()
+            assert not form.validate()
+            return Response("OK")
+
         @app.route("/hidden/")
         def hidden():
 
@@ -153,6 +164,11 @@ class TestCSRF(TestCase):
 
         response = self.client.post("/", data={"name" : "danny"})
         assert 'DANNY' in response.data
+
+    def test_validate_twice(self):
+
+        response = self.client.post("/simple/", data={})
+        self.assert_200(response)
 
     def test_ajax(self):
 
