@@ -174,8 +174,6 @@ class Form(BaseForm):
                    field.data == csrf_token and \
                    self.csrf_is_valid is not False
 
-        print "DATA", is_valid, field.data, csrf_token, self.csrf_is_valid, request.form
-
         # reset this field, otherwise stale token is displayed
         field.data = self.reset_csrf()
 
