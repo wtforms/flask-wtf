@@ -109,6 +109,8 @@ class Form(BaseForm):
         if csrf_token is None:
             csrf_token = self.reset_csrf()
 
+        self.csrf_is_valid = None
+
         super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
 
     def is_submitted(self):
@@ -162,10 +164,17 @@ class Form(BaseForm):
             return
 
         csrf_token = session.pop(self.csrf_session_key, None)
-        is_valid = field.data and field.data == csrf_token
+        is_valid = field.data and \
+                   field.data == csrf_token and \
+                   self.csrf_is_valid is not False
 
         # reset this field, otherwise stale token is displayed
         field.data = self.reset_csrf()
+
+        # we set this flag to ensure consistent behaviour when
+        # calling validate() more than once
+
+        self.csrf_is_valid = bool(is_valid)
 
         if not is_valid:
             raise ValidationError, "Missing or invalid CSRF token"
