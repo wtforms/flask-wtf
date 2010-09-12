@@ -17,7 +17,7 @@ from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from flaskext.wtf import Form, TextField, TextAreaField, \
-    PasswordField, Required, ValidationError
+    PasswordField, SubmitField, Required, ValidationError
 from flaskext.sqlalchemy import SQLAlchemy
 
 # configuration
@@ -49,11 +49,13 @@ class EntryForm(Form):
 
     title = TextField("Title", validators=[Required()])
     text = TextAreaField("Text")
+    submit = SubmitField("Share")
 
 class LoginForm(Form):
 
     username = TextField("Username")
     password = PasswordField("Password")
+    submit = SubmitField("Login")
     
     def validate_username(self, field):
         if field.data != USERNAME:

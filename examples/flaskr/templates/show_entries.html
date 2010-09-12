@@ -2,13 +2,13 @@
 {% block body %}
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
       <dl>
           <dt>{{ form.title.label }}:
           <dd>{{ form.title }}
           <dt>{{ form.text.label }}:
         <dd>{{ form.text(rows=5, cols=40) }}
-        <dd><input type=submit value=Share>
+        <dd>{{ form.submit }}
       </dl>
     </form>
   {% endif %}
