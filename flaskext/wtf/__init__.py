@@ -50,7 +50,7 @@ fields.RecaptchaField = RecaptchaField
 widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
-__all__  = ['Form', 'ValidationForm',
+__all__  = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets']
 
 __all__ += fields.__all__
