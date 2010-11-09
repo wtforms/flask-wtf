@@ -44,6 +44,34 @@ forms will still work (and the CSRF hidden field will still be printed) but no v
 second, CSRF validation is skipped if ``request.is_xhr`` is ``True`` (you can't do cross-domain AJAX anyway, 
 so CSRF validation is redundant).
 
+One common pattern in wtforms is `enclosed forms <http://wtforms.simplecodes.com/docs/0.6.1/fields.html#field-enclosures>`_. For example::
+
+    class TelephoneForm(Form):
+        country_code = IntegerField('Country Code', [validators.required()])
+        area_code    = IntegerField('Area Code/Exchange', [validators.required()])
+        number       = TextField('Number')
+
+    class ContactForm(Form):
+        first_name   = TextField()
+        last_name    = TextField()
+        mobile_phone = FormField(TelephoneForm)
+        office_phone = FormField(TelephoneForm)
+
+The problem with using the ``Form`` class provided by Flask-WTF is that the class will automatically include the CSRF validation. You don't need this for every single form - just the enclosing "master" form.  
+
+The easiest way to do this is to just override the enclosed form constructor::
+
+    class TelephoneForm(Form):
+        country_code = IntegerField('Country Code', [validators.required()])
+        area_code    = IntegerField('Area Code/Exchange', [validators.required()])
+        number       = TextField('Number')
+
+        def __init__(self, *args, **kwargs):
+            kwargs['csrf_enabled'] = False
+            super(TelephoneForm, self).__init__(self, *args, **kwargs)
+
+This will disable CSRF validation for all ``TelephoneForm`` instances.
+
 The ``CSRF_SESSION_KEY`` sets the key used in the Flask session for storing the generated token string. Usually
 the default should suffice, in certain cases you might want a custom key (for example, having several forms in a
 single page).
