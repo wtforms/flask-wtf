@@ -172,6 +172,8 @@ are required in order to use Recaptcha:
 ``RECAPTCHA_OPTIONS`` is an optional dict of configuration options. The public and private keys are required in
 order to authenticate your request with Recaptcha - see `documentation <https://www.google.com/recaptcha/admin/create>`_ for details on how to obtain your keys.
 
+Under test conditions (i.e. Flask app ``testing`` is ``True`` then Recaptcha will always validate - this is because it's hard to know the correct Recaptcha image when running tests.
+
 If `flaskext-babel <http://packages.python.org/Flask-Babel/>`_ is installed then Recaptcha message strings can be localized.
 
 API changes
