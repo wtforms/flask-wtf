@@ -197,10 +197,10 @@ class Form(BaseForm):
         """
 
         if not fields:
-            fields = [f.name for f in self if isinstance(f, HiddenField)]
+            fields = [f for f in self if isinstance(f, HiddenField)]
 
         rv = [u'<div style="display:none;">']
-        rv += [unicode(getattr(self, field)) for field in fields]
+        rv += [unicode(field) for field in fields]
         rv.append(u"</div>")
 
         return Markup(u"".join(rv))
