@@ -18,8 +18,13 @@ class TestCase(_TestCase):
         class HiddenFieldsForm(Form):
             name = HiddenField()
             url = HiddenField()
+            method = HiddenField()
             secret = HiddenField()
             submit = SubmitField("Submit")
+
+            def __init__(self, *args, **kwargs):
+                super(HiddenFieldsForm, self).__init__(*args, **kwargs)
+                self.method.name = '_method'
 
         class SimpleForm(Form):
             pass
@@ -143,7 +148,9 @@ class TestHiddenTag(TestCase):
     def test_hidden_tag(self):
 
         response = self.client.get("/hidden/")
-        assert response.data.count('type="hidden"') == 4
+        assert response.data.count('type="hidden"') == 5
+        assert 'name="_method"' in response.data
+
 
 class TestCSRF(TestCase):
 

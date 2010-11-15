@@ -200,7 +200,10 @@ class Form(BaseForm):
             fields = [f for f in self if isinstance(f, HiddenField)]
 
         rv = [u'<div style="display:none;">']
-        rv += [unicode(field) for field in fields]
+        for field in fields:
+            if isinstance(field, basestring):
+                field = getattr(self, field)
+            rv.append(unicode(field))
         rv.append(u"</div>")
 
         return Markup(u"".join(rv))
