@@ -129,7 +129,7 @@ class Form(BaseForm):
             # ensure csrf validation occurs ONLY when formdata is passed
             # in case "csrf" is the only field in the form
 
-            if not formdata:
+            if not formdata and not request.files:
                 self.csrf_is_valid = False
             else:
                 self.csrf_is_valid = None

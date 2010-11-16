@@ -6,7 +6,7 @@
         <h3>{{ filedata.filename }}</h3>
         {% endif %}
         <form method="POST" enctype="multipart/form-data">
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
             <p>
                 {{ form.file_upload.label }}
                 {{ form.file_upload }}
