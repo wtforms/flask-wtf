@@ -68,7 +68,7 @@ The easiest way to do this is to just override the enclosed form constructor::
 
         def __init__(self, *args, **kwargs):
             kwargs['csrf_enabled'] = False
-            super(TelephoneForm, self).__init__(self, *args, **kwargs)
+            super(TelephoneForm, self).__init__(*args, **kwargs)
 
 This will disable CSRF validation for all ``TelephoneForm`` instances.
 

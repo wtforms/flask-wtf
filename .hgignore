@@ -1,17 +1,27 @@
 syntax: glob
 
+*.coverage
 *.egg-info
+*.log
 *.pyc
 *.db
 *.swp
 *.swo
 *.zip
-*.egg
 *.orig
+*.cfg
+*.tox
+
+
 *~
 
+fab_settings.py
+production_settings.py
+
 dist
-build
 docs/output
 
+_uploads
 
+.git
+.gitignore

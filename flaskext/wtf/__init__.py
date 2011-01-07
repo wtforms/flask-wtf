@@ -123,6 +123,7 @@ class Form(BaseForm):
 
         if self.is_submitted():
         
+            print formdata
             if formdata is None:
                 formdata = request.form
 
