@@ -150,6 +150,19 @@ Remember to set the ``enctype`` of your HTML form to ``multipart/form-data`` to 
         ....
     </form>
 
+**Note:** nested file fields, for example in a ``FieldList``, are not yet handled in the same way. You'll need to get the **FileStorage** instance manually from **request.files**::
+
+    class PhotoForm(Form):
+
+        photos = FieldList(FileField("photo"))
+
+    @app.route("/upload/", methods=("GET", "POST"))
+    def upload():
+
+        for photo in form.photos.entries:
+            file_storage = request.files[photo.name]
+
+
 Recaptcha
 ---------
 
