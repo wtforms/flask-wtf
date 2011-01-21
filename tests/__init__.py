@@ -5,7 +5,7 @@ import re
 from flask import Flask, Response, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-    SubmitField, Required
+    SubmitField, Required, FieldList
 
 class TestCase(_TestCase):
     
@@ -83,8 +83,23 @@ class TestFileUpload(TestCase):
 
             upload = FileField("Upload file")
 
+        class MultipleFileUploadForm(Form):
+
+            uploads = FieldList(FileField("upload"), min_entries=3)
+
+
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
+
+        @app.route("/upload-multiple/", methods=("POST",))
+        def upload_multiple():
+            form = MultipleFileUploadForm()
+            if form.validate_on_submit():
+                for upload in form.uploads.entries:
+                    assert upload.file is not None
+
+            return Response("OK")
+
 
         @app.route("/upload/", methods=("POST",))
         def upload():
@@ -102,6 +117,14 @@ class TestFileUpload(TestCase):
                                    form=form)
         
         return app
+
+
+    def test_multiple_files(self):
+
+        fps = [self.app.open_resource("flask.png") for i in xrange(3)]
+        data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)] 
+        response = self.client.post("/upload-multiple/", data=dict(data))
+        assert response.status_code == 200
 
     def test_valid_file(self):
         

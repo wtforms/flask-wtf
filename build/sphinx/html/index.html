@@ -1,0 +1,351 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flask-WTF &mdash; Flask-WTF v0.4 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-WTF v0.4 documentation" href="#" /> 
+  </head>
+  <body>
+  
+  
+  <div class=indexwrapper>
+  
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-Flask-WTF">
+<span id="flask-wtf"></span><h1>Flask-WTF<a class="headerlink" href="#module-Flask-WTF" title="Permalink to this headline">¶</a></h1>
+<p><strong>Flask-WTF</strong> offers simple integration with <a class="reference external" href="http://wtforms.simplecodes.com/docs/0.6/">WTForms</a>. This integration
+includes optional CSRF handling for greater security.</p>
+<p>Source code and issue tracking at <a class="reference external" href="http://bitbucket.org/danjac/flask-wtf">Bitbucket</a>.</p>
+<div class="section" id="installing-flask-wtf">
+<h2>Installing Flask-WTF<a class="headerlink" href="#installing-flask-wtf" title="Permalink to this headline">¶</a></h2>
+<p>Install with <strong>pip</strong> and <strong>easy_install</strong>:</p>
+<div class="highlight-python"><pre>pip install Flask-WTF</pre>
+</div>
+<p>or download the latest version from Bitbucket:</p>
+<div class="highlight-python"><pre>hg clone http://bitbucket.org/danjac/flask-wtf
+
+cd flask-wtf
+
+python setup.py develop</pre>
+</div>
+<p>If you are using <strong>virtualenv</strong>, it is assumed that you are installing Flask-WTF
+in the same virtualenv as your Flask application(s).</p>
+</div>
+<div class="section" id="configuring-flask-wtf">
+<h2>Configuring Flask-WTF<a class="headerlink" href="#configuring-flask-wtf" title="Permalink to this headline">¶</a></h2>
+<p>The following settings are used with <strong>Flask-WTF</strong>:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">CSRF_ENABLED</span></tt> default <tt class="xref docutils literal"><span class="pre">True</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">CSRF_SESSION_KEY</span></tt> default <tt class="docutils literal"><span class="pre">_csrf_token</span></tt></li>
+</ul>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">CSRF_ENABLED</span></tt> enables CSRF. You can disable by passing in the <tt class="docutils literal"><span class="pre">csrf_enabled</span></tt> parameter to your form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">(</span><span class="n">csrf_enabled</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Generally speaking it&#8217;s a good idea to enable CSRF. There are two situations where you might not want to:
+unit tests and AJAX forms. In the first case, switching <tt class="docutils literal"><span class="pre">CSRF_ENABLED</span></tt> to <tt class="xref docutils literal"><span class="pre">False</span></tt> means that your
+forms will still work (and the CSRF hidden field will still be printed) but no validation will be done. In the
+second, CSRF validation is skipped if <tt class="docutils literal"><span class="pre">request.is_xhr</span></tt> is <tt class="xref docutils literal"><span class="pre">True</span></tt> (you can&#8217;t do cross-domain AJAX anyway,
+so CSRF validation is redundant).</p>
+<p>One common pattern in wtforms is <a class="reference external" href="http://wtforms.simplecodes.com/docs/0.6.1/fields.html#field-enclosures">enclosed forms</a>. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">TelephoneForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">country_code</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s">&#39;Country Code&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">required</span><span class="p">()])</span>
+    <span class="n">area_code</span>    <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s">&#39;Area Code/Exchange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">required</span><span class="p">()])</span>
+    <span class="n">number</span>       <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="s">&#39;Number&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ContactForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">first_name</span>   <span class="o">=</span> <span class="n">TextField</span><span class="p">()</span>
+    <span class="n">last_name</span>    <span class="o">=</span> <span class="n">TextField</span><span class="p">()</span>
+    <span class="n">mobile_phone</span> <span class="o">=</span> <span class="n">FormField</span><span class="p">(</span><span class="n">TelephoneForm</span><span class="p">)</span>
+    <span class="n">office_phone</span> <span class="o">=</span> <span class="n">FormField</span><span class="p">(</span><span class="n">TelephoneForm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The problem with using the <tt class="docutils literal"><span class="pre">Form</span></tt> class provided by Flask-WTF is that the class will automatically include the CSRF validation. You don&#8217;t need this for every single form - just the enclosing &#8220;master&#8221; form.</p>
+<p>The easiest way to do this is to just override the enclosed form constructor:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">TelephoneForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">country_code</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s">&#39;Country Code&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">required</span><span class="p">()])</span>
+    <span class="n">area_code</span>    <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s">&#39;Area Code/Exchange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">required</span><span class="p">()])</span>
+    <span class="n">number</span>       <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="s">&#39;Number&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;csrf_enabled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TelephoneForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will disable CSRF validation for all <tt class="docutils literal"><span class="pre">TelephoneForm</span></tt> instances.</p>
+<p>The <tt class="docutils literal"><span class="pre">CSRF_SESSION_KEY</span></tt> sets the key used in the Flask session for storing the generated token string. Usually
+the default should suffice, in certain cases you might want a custom key (for example, having several forms in a
+single page).</p>
+<p>Both these settings can be overriden in the <tt class="docutils literal"><span class="pre">Form</span></tt> constructor by passing in <tt class="docutils literal"><span class="pre">csrf_enabled</span></tt> and <tt class="docutils literal"><span class="pre">csrf_session_key</span></tt>
+optional arguments respectively.</p>
+<p>In addition, there are additional configuration settings required for Recaptcha integration : see below.</p>
+</div>
+<div class="section" id="creating-forms">
+<h2>Creating forms<a class="headerlink" href="#creating-forms" title="Permalink to this headline">¶</a></h2>
+<p><strong>Flask-WTF</strong> provides you with all the API features of WTForms. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flaskext.wtf</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">TextField</span><span class="p">,</span> <span class="n">Required</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">Required</span><span class="p">()])</span>
+</pre></div>
+</div>
+<p>In addition, a CSRF token hidden field is created. You can print this in your template as any other field:</p>
+<div class="highlight-python"><pre>&lt;form method="POST" action="."&gt;
+    {{ form.csrf }}
+    {{ form.name.label }} {{ form.name(size=20) }}
+    &lt;input type="submit" value="Go"&gt;
+&lt;/form&gt;</pre>
+</div>
+<p>However, in order to create valid XHTML/HTML the <tt class="docutils literal"><span class="pre">Form</span></tt> class has a method <tt class="docutils literal"><span class="pre">hidden_tag</span></tt> which renders any
+hidden fields, including the CSRF field, inside a hidden DIV tag:</p>
+<div class="highlight-python"><pre>&lt;form method="POST" action="."&gt;
+    {{ form.hidden_tag() }}</pre>
+</div>
+</div>
+<div class="section" id="using-the-safe-filter">
+<h2>Using the &#8216;safe&#8217; filter<a class="headerlink" href="#using-the-safe-filter" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>safe</strong> filter used to be required with WTForms in Jinja2 templates, otherwise your markup would be escaped. For example:</p>
+<blockquote>
+{{ form.name|safe }}</blockquote>
+<p>However widgets in the latest version of WTForms return a <a class="reference external" href="http://jinja.pocoo.org/2/documentation/api#jinja2.Markup">HTML safe string</a> so you shouldn&#8217;t need to use <strong>safe</strong>.</p>
+<p>Ensure you are running the latest stable version of WTForms so that you don&#8217;t need to use this filter everywhere.</p>
+</div>
+<div class="section" id="file-uploads">
+<h2>File uploads<a class="headerlink" href="#file-uploads" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">Form</span></tt> instance automatically appends a <tt class="docutils literal"><span class="pre">file</span></tt> attribute to any <tt class="docutils literal"><span class="pre">FileField</span></tt> field instances if the form is posted.</p>
+<p>This <tt class="docutils literal"><span class="pre">file</span></tt> attribute is an instance of <a class="reference external" href="http://werkzeug.pocoo.org/documentation/0.5.1/datastructures.html#werkzeug.FileStorage">Werkzeug FileStorage</a> instance from <tt class="docutils literal"><span class="pre">request.files</span></tt>.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">werkzeug</span> <span class="kn">import</span> <span class="n">secure_filename</span>
+
+<span class="k">class</span> <span class="nc">PhotoForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+
+    <span class="n">photo</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s">&quot;Your photo&quot;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/upload/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">upload</span><span class="p">():</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">PhotoForm</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">secure_filename</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">photo</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;upload.html&quot;</span><span class="p">,</span>
+                           <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
+                           <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Remember to set the <tt class="docutils literal"><span class="pre">enctype</span></tt> of your HTML form to <tt class="docutils literal"><span class="pre">multipart/form-data</span></tt> to enable file uploads:</p>
+<div class="highlight-python"><pre>&lt;form action="." method="POST" enctype="multipart/form-data"&gt;
+    ....
+&lt;/form&gt;</pre>
+</div>
+<p><strong>Note:</strong>  as of version <strong>0.4</strong> all <strong>FileField</strong> instances have access to the corresponding <strong>FileStorage</strong> object
+in <strong>request.files</strong>, including those embedded in <strong>FieldList</strong> instances.</p>
+</div>
+<div class="section" id="recaptcha">
+<h2>Recaptcha<a class="headerlink" href="#recaptcha" title="Permalink to this headline">¶</a></h2>
+<p><strong>Flask-WTF</strong> also provides Recaptcha support through a <tt class="docutils literal"><span class="pre">RecaptchaField</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flaskext.wtf</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">TextField</span><span class="p">,</span> <span class="n">RecaptchaField</span>
+
+<span class="k">class</span> <span class="nc">SignupForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">)</span>
+    <span class="n">recaptcha</span> <span class="o">=</span> <span class="n">RecaptchaField</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This field handles all the nitty-gritty details of Recaptcha validation and output. The following settings
+are required in order to use Recaptcha:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">RECAPTCHA_USE_SSL</span></tt> : default <tt class="xref docutils literal"><span class="pre">False</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">RECAPTCHA_PUBLIC_KEY</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">RECAPTCHA_PRIVATE_KEY</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">RECAPTCHA_OPTIONS</span></tt></li>
+</ul>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">RECAPTCHA_OPTIONS</span></tt> is an optional dict of configuration options. The public and private keys are required in
+order to authenticate your request with Recaptcha - see <a class="reference external" href="https://www.google.com/recaptcha/admin/create">documentation</a> for details on how to obtain your keys.</p>
+<p>Under test conditions (i.e. Flask app <tt class="docutils literal"><span class="pre">testing</span></tt> is <tt class="xref docutils literal"><span class="pre">True</span></tt>) Recaptcha will always validate - this is because it&#8217;s hard to know the correct Recaptcha image when running tests. Bear in mind that you need to pass the data to <cite>recaptcha_challenge_field</cite> and <cite>recaptcha_response_field</cite>, not <cite>recaptcha</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&quot;/someurl/&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s">&#39;recaptcha_challenge_field&#39;</span> <span class="p">:</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;recaptcha_response_field&#39;</span> <span class="p">:</span> <span class="s">&#39;test&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>If <a class="reference external" href="http://packages.python.org/Flask-Babel/">flaskext-babel</a> is installed then Recaptcha message strings can be localized.</p>
+</div>
+<div class="section" id="api-changes">
+<h2>API changes<a class="headerlink" href="#api-changes" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">Form</span></tt> class provided by <strong>Flask-WTF</strong> is the same as for WTForms, but with a couple of changes. Aside from CSRF
+validation, a convenience method <tt class="docutils literal"><span class="pre">validate_on_submit</span></tt> is added:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> \
+    <span class="n">render_template</span>
+
+<span class="kn">from</span> <span class="nn">flaskext.wtf</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">TextField</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/submit/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
+        <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Success&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&quot;index&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;index.html&quot;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note the difference from a pure WTForms solution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> \
+    <span class="n">render_template</span>
+
+<span class="kn">from</span> <span class="nn">flaskext.wtf</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">TextField</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/submit/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
+        <span class="n">flash</span><span class="p">(</span><span class="s">&quot;Success&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&quot;index&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&quot;index.html&quot;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">validate_on_submit</span></tt> will automatically check if the request method is PUT or POST.</p>
+<p>You don&#8217;t need to pass <tt class="docutils literal"><span class="pre">request.form</span></tt> into your form instance, as the <tt class="docutils literal"><span class="pre">Form</span></tt> automatically populates from <tt class="docutils literal"><span class="pre">request.form</span></tt> unless
+specified. Other arguments are as with <tt class="docutils literal"><span class="pre">wtforms.Form</span></tt>.</p>
+</div>
+<div class="section" id="module-flaskext.wtf">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-flaskext.wtf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="flaskext.wtf.Form">
+<em class="property">class </em><tt class="descclassname">flaskext.wtf.</tt><tt class="descname">Form</tt><big>(</big><em>formdata=None</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#flaskext.wtf.Form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of WTForms <strong>Form</strong> class. The main difference is that
+<strong>request.form</strong> is passed as <cite>formdata</cite> argument to constructor
+so can handle request data implicitly.</p>
+<p>In addition this <strong>Form</strong> implementation has automatic CSRF handling.</p>
+<dl class="attribute">
+<dt id="flaskext.wtf.Form.csrf_token">
+<tt class="descname">csrf_token</tt><a class="headerlink" href="#flaskext.wtf.Form.csrf_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders CSRF field inside a hidden DIV.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Deprecated :</th><td class="field-body">Use <strong>hidden_tag</strong> instead.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flaskext.wtf.Form.hidden_tag">
+<tt class="descname">hidden_tag</tt><big>(</big><em>*fields</em><big>)</big><a class="headerlink" href="#flaskext.wtf.Form.hidden_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
+compliance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Versionadded :</th><td class="field-body"><p class="first">0.3</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fields</strong> &#8211; list of hidden field names. If not provided will render
+all hidden fields, including the CSRF field.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flaskext.wtf.Form.is_submitted">
+<tt class="descname">is_submitted</tt><big>(</big><big>)</big><a class="headerlink" href="#flaskext.wtf.Form.is_submitted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if form has been submitted. The default case is if the HTTP 
+method is <strong>PUT</strong> or <strong>POST</strong>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="flaskext.wtf.Form.reset_csrf">
+<tt class="descname">reset_csrf</tt><big>(</big><big>)</big><a class="headerlink" href="#flaskext.wtf.Form.reset_csrf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the CSRF token in the session. If you are reusing the form
+in the same view (i.e. you are not redirecting somewhere else)
+it&#8217;s recommended you call this before rendering the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="flaskext.wtf.Form.validate_on_submit">
+<tt class="descname">validate_on_submit</tt><big>(</big><big>)</big><a class="headerlink" href="#flaskext.wtf.Form.validate_on_submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if form has been submitted and if so runs validate. This is 
+a shortcut, equivalent to <tt class="docutils literal"><span class="pre">form.is_submitted()</span> <span class="pre">and</span> <span class="pre">form.validate()</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="flaskext.wtf.RecaptchaField">
+<em class="property">class </em><tt class="descclassname">flaskext.wtf.</tt><tt class="descname">RecaptchaField</tt><big>(</big><em>label=''</em>, <em>validators=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#flaskext.wtf.RecaptchaField" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="flaskext.wtf.Recaptcha">
+<em class="property">class </em><tt class="descclassname">flaskext.wtf.</tt><tt class="descname">Recaptcha</tt><big>(</big><em>message=u'Invalid word. Please try again.'</em><big>)</big><a class="headerlink" href="#flaskext.wtf.Recaptcha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates a ReCaptcha.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="flaskext.wtf.RecaptchaWidget">
+<em class="property">class </em><tt class="descclassname">flaskext.wtf.</tt><tt class="descname">RecaptchaWidget</tt><a class="headerlink" href="#flaskext.wtf.RecaptchaWidget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+
+  
+  </div>
+  
+
+  </body>
+</html>

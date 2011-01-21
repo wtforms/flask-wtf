@@ -13,7 +13,7 @@ import warnings
 import uuid
 
 from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FloatField, FileField, FormField, \
+    DateTimeField, FieldList, FloatField, FormField, \
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
     SelectMultipleField, SubmitField, TextField, TextAreaField
 
@@ -25,6 +25,8 @@ from wtforms.validators import Email, email, EqualTo, equal_to, \
 from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
     ListWidget, PasswordInput, RadioInput, Select, SubmitInput, \
     TableWidget, TextArea, TextInput
+
+from wtforms.fields import FileField as _FileField
 
 try:
     import sqlalchemy
@@ -75,6 +77,17 @@ if _is_sqlalchemy:
 
 def _generate_csrf_token():
     return str(uuid.uuid4())
+
+
+class FileField(_FileField):
+
+    @property
+    def file(self):
+        """
+        Returns FileStorage class if available from request.files
+        or None
+        """
+        return request.files.get(self.name, None)
 
 
 class Form(BaseForm):
@@ -133,12 +146,6 @@ class Form(BaseForm):
                 self.csrf_is_valid = False
             else:
                 self.csrf_is_valid = None
-
-            if request.files:
-
-                for name, field in self._fields.iteritems():
-                    if isinstance(field, FileField) and name in request.files:
-                        field.file = request.files[name]
 
         super(Form, self).process(formdata, obj, **kwargs)
 
