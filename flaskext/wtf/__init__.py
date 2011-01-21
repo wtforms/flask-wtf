@@ -197,7 +197,7 @@ class Form(BaseForm):
         Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
         compliance.
 
-        :versionadded: 0.3
+        .. versionadded:: 0.3
 
         :param fields: list of hidden field names. If not provided will render
                        all hidden fields, including the CSRF field.
