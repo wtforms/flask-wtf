@@ -182,6 +182,16 @@ HTML5 widgets
 
 **Flask-WTF** supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.
 
+HTML5-specific widgets are available under the **flaskext.wtf.html5** package::
+
+    from flaskext.wtf.html5 import URLField
+
+    class LinkForm():
+
+        url = URLField(validators=[url()])
+
+See the API for more details.
+
 Recaptcha
 ---------
 
@@ -277,9 +287,9 @@ API
 
 .. autoclass:: RecaptchaWidget
 
-.. automodule:: flaskext.wtf.file
+.. module:: flaskext.wtf.file
 
-.. automodule:: flaskext.wtf.html5
+.. module:: flaskext.wtf.html5
 
 .. _Flask: http://flask.pocoo.org
 .. _Bitbucket: http://bitbucket.org/danjac/flask-wtf

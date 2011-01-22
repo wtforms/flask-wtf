@@ -160,6 +160,7 @@ hidden fields, including the CSRF field, inside a hidden DIV tag:</p>
                            <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>It&#8217;s recommended you use <strong>werkzeug.secure_filename</strong> on any uploaded files as shown in the example to prevent malicious attempts to access your filesystem.</p>
 <p>Remember to set the <tt class="docutils literal"><span class="pre">enctype</span></tt> of your HTML form to <tt class="docutils literal"><span class="pre">multipart/form-data</span></tt> to enable file uploads:</p>
 <div class="highlight-python"><pre>&lt;form action="." method="POST" enctype="multipart/form-data"&gt;
     ....
@@ -168,9 +169,36 @@ hidden fields, including the CSRF field, inside a hidden DIV tag:</p>
 <p><strong>Note:</strong>  as of version <strong>0.4</strong> all <strong>FileField</strong> instances have access to the corresponding <strong>FileStorage</strong> object
 in <strong>request.files</strong>, including those embedded in <strong>FieldList</strong> instances.</p>
 </div>
+<div class="section" id="validating-file-uploads">
+<h2>Validating file uploads<a class="headerlink" href="#validating-file-uploads" title="Permalink to this headline">¶</a></h2>
+<p><strong>Flask-WTF</strong> supports validation through the Flask-Uploads extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flaskext.uploads</span> <span class="kn">import</span> <span class="n">UploadSet</span><span class="p">,</span> <span class="n">IMAGES</span>
+<span class="kn">from</span> <span class="nn">flaskext.wtf</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">FileField</span><span class="p">,</span> <span class="n">file_allowed</span><span class="p">,</span> \
+    <span class="n">file_required</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="n">UploadSet</span><span class="p">(</span><span class="s">&quot;images&quot;</span><span class="p">,</span> <span class="n">IMAGES</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">UploadForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+
+    <span class="n">upload</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s">&quot;Upload your image&quot;</span><span class="p">,</span>
+                       <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">file_required</span><span class="p">(),</span>
+                                   <span class="n">file_allowed</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="s">&quot;Images only!&quot;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>In the above example, only image files (JPEGs, PNGs etc) can be uploaded. The <tt class="docutils literal"><span class="pre">file_required</span></tt> validator, which does not require <tt class="docutils literal"><span class="pre">Flask-Uploads</span></tt>, will raise a validation error if the field does not contain a FileStorage object.</p>
+</div>
 <div class="section" id="html5-widgets">
 <h2>HTML5 widgets<a class="headerlink" href="#html5-widgets" title="Permalink to this headline">¶</a></h2>
 <p><strong>Flask-WTF</strong> supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.</p>
+<p>HTML5-specific widgets are available under the <strong>flaskext.wtf.html5</strong> package:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flaskext.wtf.html5</span> <span class="kn">import</span> <span class="n">URLField</span>
+
+<span class="k">class</span> <span class="nc">LinkForm</span><span class="p">():</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">URLField</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">url</span><span class="p">()])</span>
+</pre></div>
+</div>
+<p>See the API for more details.</p>
 </div>
 <div class="section" id="recaptcha">
 <h2>Recaptcha<a class="headerlink" href="#recaptcha" title="Permalink to this headline">¶</a></h2>
