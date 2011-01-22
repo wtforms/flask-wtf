@@ -16,13 +16,13 @@ syntax: glob
 
 *~
 
-fab_settings.py
-production_settings.py
 
 dist
+build
 docs/output
 
 _uploads
+uploads
 
 .git
 .gitignore
