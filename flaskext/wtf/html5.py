@@ -6,35 +6,35 @@ from wtforms.widgets import Input
 
 class DateInput(Input):
     """
-    Creates <input type=date> widget
+    Creates `<input type=date>` widget
     """
     input_type = "date"
 
 
 class NumberInput(Input):
     """
-    Creates <inpyt type=number> widget
+    Creates `<input type=number>` widget
     """
     input_type="number"
 
 
 class RangeInput(Input):
     """
-    Creates <inpyt type=range> widget
+    Creates `<input type=range>` widget
     """
     input_type="range"
 
 
 class URLInput(Input):
     """
-    Creates <input type=url> widget
+    Creates `<input type=url>` widget
     """
     input_type = "url"
 
 
 class EmailInput(Input):
     """
-    Creates <input type=email> widget
+    Creates `<input type=email>` widget
     """
 
     input_type = "email"
@@ -42,7 +42,7 @@ class EmailInput(Input):
 
 class SearchInput(Input):
     """
-    Creates <input type=search> widget
+    Creates `<input type=search>` widget
     """
 
     input_type = "search"
@@ -50,14 +50,14 @@ class SearchInput(Input):
 
 class SearchField(TextField):
     """
-    TextField using SearchInput by default
+    **TextField** using **SearchInput** by default
     """
     widget = SearchInput()
 
 
 class DateField(_DateField):
     """
-    DateField using DateInput by default
+    **DateField** using **DateInput** by default
     """
  
     widget = DateInput()
@@ -65,7 +65,7 @@ class DateField(_DateField):
 
 class URLField(TextField):
     """
-    TextField using URLInput by default
+    **TextField** using **URLInput** by default
     """
  
     widget = URLInput()
@@ -73,7 +73,7 @@ class URLField(TextField):
 
 class EmailField(TextField):
     """
-    TextField using EmailInput by default
+    **TextField** using **EmailInput** by default
     """
  
     widget = EmailInput()
@@ -81,7 +81,7 @@ class EmailField(TextField):
 
 class IntegerField(_IntegerField):
     """
-    IntegerField using NumberInput by default
+    **IntegerField** using **NumberInput** by default
     """
 
     widget = NumberInput()
@@ -89,7 +89,7 @@ class IntegerField(_IntegerField):
 
 class DecimalField(_DecimalField):
     """
-    DecimalField using NumberInput by default
+    **DecimalField** using **NumberInput** by default
     """
 
     widget = NumberInput()
@@ -97,7 +97,7 @@ class DecimalField(_DecimalField):
 
 class IntegerRangeField(_IntegerField):
     """
-    IntegerField using RangeInput by default
+    **IntegerField** using **RangeInput** by default
     """
 
     widget = RangeInput()
@@ -105,7 +105,7 @@ class IntegerRangeField(_IntegerField):
 
 class DecimalRangeField(_DecimalField):
     """
-    DecimalField using RangeInput by default
+    **DecimalField** using **RangeInput** by default
     """
 
     widget = RangeInput()

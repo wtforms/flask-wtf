@@ -159,7 +159,7 @@ in **request.files**, including those embedded in **FieldList** instances.
 Validating file uploads
 -----------------------
 
-**Flask-WTF** supports validation through the Flask-Uploads extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example::
+**Flask-WTF** supports validation through the `Flask Uploads <http://packages.python.org/Flask-Uploads/>`_ extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example::
 
 
     from flaskext.uploads import UploadSet, IMAGES
@@ -174,7 +174,7 @@ Validating file uploads
                            validators=[file_required(),
                                        file_allowed(images, "Images only!")])
 
-In the above example, only image files (JPEGs, PNGs etc) can be uploaded. The ``file_required`` validator, which does not require ``Flask-Uploads``, will raise a validation error if the field does not contain a FileStorage object.
+In the above example, only image files (JPEGs, PNGs etc) can be uploaded. The **file_required** validator, which does not require **Flask-Uploads**, will raise a validation error if the field does not contain a **FileStorage** object.
 
 
 HTML5 widgets
@@ -190,7 +190,7 @@ HTML5-specific widgets are available under the **flaskext.wtf.html5** package::
 
         url = URLField(validators=[url()])
 
-See the API for more details.
+See the `API`_ for more details.
 
 Recaptcha
 ---------
@@ -290,6 +290,7 @@ API
 .. module:: flaskext.wtf.file
 
 .. autoclass:: FileField
+   :members:
 
 .. autoclass:: FileAllowed
 
