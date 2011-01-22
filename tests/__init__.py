@@ -3,9 +3,11 @@ from __future__ import with_statement
 import re
 
 from flask import Flask, Response, render_template, jsonify
+from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-        SubmitField, Required, FieldList, FileMultipleField, FileMultipleInput
+        SubmitField, Required, FieldList, FileMultipleField, \
+        FileMultipleField, FileMultipleInput, file_required, file_allowed
 
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
@@ -89,6 +91,8 @@ class TestCase(_TestCase):
         
         return app
 
+images = UploadSet("images", IMAGES)
+text = UploadSet("text", TEXT)
 
 class FileUploadForm(Form):
 
@@ -104,12 +108,45 @@ class MultipleFileFieldUploadForm(Form):
     uploads = FileMultipleField("uploads")
 
 
+class ImageUploadForm(Form):
+
+    upload = FileField("Upload file", 
+                       validators=[file_required(),
+                                   file_allowed(images)])
+
+class TextUploadForm(Form):
+
+    upload = FileField("Upload file", 
+                       validators=[file_required(),
+                                   file_allowed(text)])
+
+
+
 class TestFileUpload(TestCase):
 
+  
     def create_app(self):
 
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
+        app.config['UPLOADED_FILES_DEST'] = 'uploads'
+        app.config['UPLOADS_DEFAULT_DEST'] = 'uploads'
+        configure_uploads(app, [images, text])
+
+        @app.route("/upload-image/", methods=("POST",))
+        def upload_image():
+            form = ImageUploadForm()
+            if form.validate_on_submit():
+                return "OK"
+            return "invalid"
+
+        @app.route("/upload-text/", methods=("POST",))
+        def upload_text():
+            form = TextUploadForm()
+            if form.validate_on_submit():
+                return "OK"
+            return "invalid"
+
 
         @app.route("/upload-multiple/", methods=("POST",))
         def upload_multiple():
@@ -172,10 +209,26 @@ class TestFileUpload(TestCase):
     def test_valid_file(self):
         
         with self.app.open_resource("flask.png") as fp:
-            response = self.client.post("/upload/", 
+            response = self.client.post("/upload-image/", 
                 data={'upload' : fp})
 
-        assert "flask.png</h3>" in response.data
+        assert "OK" in response.data
+
+    def test_missing_file(self):
+        
+        response = self.client.post("/upload-image/", 
+                data={'upload' : "test"})
+
+        assert "invalid" in response.data
+
+    def test_invalid_file(self):
+        
+        with self.app.open_resource("flask.png") as fp:
+            response = self.client.post("/upload-text/", 
+                data={'upload' : fp})
+
+        assert "invalid" in response.data
+
 
     def test_invalid_file(self):
         

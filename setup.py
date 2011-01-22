@@ -40,6 +40,7 @@ setup(
     tests_require=[
         'nose',
         'Flask-Testing',
+        'Flask-Uploads',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
