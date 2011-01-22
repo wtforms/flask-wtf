@@ -5,7 +5,7 @@ import re
 from flask import Flask, Response, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-    SubmitField, Required, FieldList
+        SubmitField, Required, FieldList, FileMultipleField
 
 class TestCase(_TestCase):
     
@@ -87,6 +87,10 @@ class TestFileUpload(TestCase):
 
             uploads = FieldList(FileField("upload"), min_entries=3)
 
+        
+        class MultipleFileFieldUploadForm(Form):
+
+            uploads = FileMultipleField("uploads")
 
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
@@ -95,11 +99,21 @@ class TestFileUpload(TestCase):
         def upload_multiple():
             form = MultipleFileUploadForm()
             if form.validate_on_submit():
+                assert len(form.uploads.entries) == 3
                 for upload in form.uploads.entries:
                     assert upload.file is not None
 
             return Response("OK")
 
+        @app.route("/upload-multiple-field/", methods=("POST",))
+        def upload_multiple_field():
+            form = MultipleFileFieldUploadForm()
+            if form.validate_on_submit():
+                assert len(form.uploads.files) == 3
+                for upload in form.uploads.files:
+                    assert "flask.png" in upload.filename
+                
+            return Response("OK")
 
         @app.route("/upload/", methods=("POST",))
         def upload():
@@ -124,6 +138,13 @@ class TestFileUpload(TestCase):
         fps = [self.app.open_resource("flask.png") for i in xrange(3)]
         data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)] 
         response = self.client.post("/upload-multiple/", data=dict(data))
+        assert response.status_code == 200
+
+    def test_multiple_file_field(self):
+
+        fps = [self.app.open_resource("flask.png") for i in xrange(3)]
+        data = {"uploads" : fps}
+        response = self.client.post("/upload-multiple-field/", data=data)
         assert response.status_code == 200
 
     def test_valid_file(self):

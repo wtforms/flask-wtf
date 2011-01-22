@@ -52,6 +52,22 @@ fields.RecaptchaField = RecaptchaField
 widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
+from flaskext.wtf.file import FileField, FileMultipleField
+from flaskext.wtf.file import FileMultipleInput
+from flaskext.wtf.file import FileAllowed, FileRequired, file_allowed, \
+        file_required
+
+fields.FileField = FileField
+fields.FileMultipleField = FileMultipleField
+
+widgets.FileMultipleInput = FileMultipleInput
+
+validators.file_allowed = file_allowed
+validators.file_required = file_required
+validators.FileAllowed = FileAllowed
+validators.FileRequired = FileRequired
+
+
 __all__  = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets']
 
@@ -77,17 +93,6 @@ if _is_sqlalchemy:
 
 def _generate_csrf_token():
     return str(uuid.uuid4())
-
-
-class FileField(_FileField):
-
-    @property
-    def file(self):
-        """
-        Returns FileStorage class if available from request.files
-        or None
-        """
-        return request.files.get(self.name, None)
 
 
 class Form(BaseForm):
