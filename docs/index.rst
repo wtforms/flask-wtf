@@ -289,7 +289,39 @@ API
 
 .. module:: flaskext.wtf.file
 
+.. autoclass:: FileField
+
+.. autoclass:: FileAllowed
+
+.. autoclass:: FileRequired
+
 .. module:: flaskext.wtf.html5
+
+.. autoclass:: SearchInput
+
+.. autoclass:: SearchField
+
+.. autoclass:: URLInput
+
+.. autoclass:: URLField
+
+.. autoclass:: EmailInput
+
+.. autoclass:: EmailField
+
+.. autoclass:: NumberInput
+
+.. autoclass:: IntegerField
+
+.. autoclass:: DecimalField
+
+.. autoclass:: RangeInput
+
+.. autoclass:: IntegerRangeField
+
+.. autoclass:: DecimalRangeField
+
+
 
 .. _Flask: http://flask.pocoo.org
 .. _Bitbucket: http://bitbucket.org/danjac/flask-wtf
