@@ -8,7 +8,7 @@ class FileMultipleInput(FileInput):
 
     def __call__(self, *args, **kwargs):
         kwargs['multiple'] = u'multiple'
-        super(FileMultipleInput, self).__call__(*args, **kwargs)
+        return super(FileMultipleInput, self).__call__(*args, **kwargs)
 
 
 class FileField(_FileField):

@@ -5,7 +5,21 @@ import re
 from flask import Flask, Response, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-        SubmitField, Required, FieldList, FileMultipleField
+        SubmitField, Required, FieldList, FileMultipleField, FileMultipleInput
+
+class DummyField(object):
+    def __init__(self, data, name='f', label='', id='', type='TextField'):
+        self.data = data
+        self.name = name
+        self.label = label
+        self.id = id
+        self.type = type
+
+    _value       = lambda x: x.data
+    __unicode__  = lambda x: x.data
+    __call__     = lambda x, **k: x.data
+    __iter__     = lambda x: iter(x.data)
+    iter_choices = lambda x: iter(x.data)
 
 class TestCase(_TestCase):
     
@@ -52,7 +66,7 @@ class TestCase(_TestCase):
             assert form.csrf_enabled
             assert not form.validate()
             assert not form.validate()
-            return Response("OK")
+            return "OK"
 
         @app.route("/hidden/")
         def hidden():
@@ -75,22 +89,24 @@ class TestCase(_TestCase):
         
         return app
 
+
+class FileUploadForm(Form):
+
+    upload = FileField("Upload file")
+
+class MultipleFileUploadForm(Form):
+
+    uploads = FieldList(FileField("upload"), min_entries=3)
+
+
+class MultipleFileFieldUploadForm(Form):
+
+    uploads = FileMultipleField("uploads")
+
+
 class TestFileUpload(TestCase):
 
     def create_app(self):
-
-        class FileUploadForm(Form):
-
-            upload = FileField("Upload file")
-
-        class MultipleFileUploadForm(Form):
-
-            uploads = FieldList(FileField("upload"), min_entries=3)
-
-        
-        class MultipleFileFieldUploadForm(Form):
-
-            uploads = FileMultipleField("uploads")
 
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
@@ -103,7 +119,7 @@ class TestFileUpload(TestCase):
                 for upload in form.uploads.entries:
                     assert upload.file is not None
 
-            return Response("OK")
+            return "OK"
 
         @app.route("/upload-multiple-field/", methods=("POST",))
         def upload_multiple_field():
@@ -113,7 +129,7 @@ class TestFileUpload(TestCase):
                 for upload in form.uploads.files:
                     assert "flask.png" in upload.filename
                 
-            return Response("OK")
+            return "OK"
 
         @app.route("/upload/", methods=("POST",))
         def upload():
@@ -132,6 +148,12 @@ class TestFileUpload(TestCase):
         
         return app
 
+    def test_multiple_file_widget(self):
+
+        field = DummyField("uploads", label="Uploads", name="uploads", id="uploads")
+
+        assert FileMultipleInput()(field) == \
+            '<input id="uploads" multiple="multiple" name="uploads" type="file" value="uploads" />'
 
     def test_multiple_files(self):
 
