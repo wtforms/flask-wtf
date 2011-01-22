@@ -1,0 +1,14 @@
+MANIFEST.in
+README
+setup.cfg
+setup.py
+Flask_Uploads.egg-info/PKG-INFO
+Flask_Uploads.egg-info/SOURCES.txt
+Flask_Uploads.egg-info/dependency_links.txt
+Flask_Uploads.egg-info/namespace_packages.txt
+Flask_Uploads.egg-info/not-zip-safe
+Flask_Uploads.egg-info/requires.txt
+Flask_Uploads.egg-info/top_level.txt
+flaskext/__init__.py
+flaskext/uploads.py
+tests/test-uploads.py

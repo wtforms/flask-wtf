@@ -91,6 +91,8 @@ class TestCase(_TestCase):
         
         return app
 
+# FILE UPLOAD TESTS #
+
 images = UploadSet("images", IMAGES)
 text = UploadSet("text", TEXT)
 

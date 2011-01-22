@@ -42,6 +42,8 @@ from flask import request, session, current_app
 
 from jinja2 import Markup
 
+from flaskext.wtf import html5
+
 from flaskext.wtf import recaptcha
 
 from flaskext.wtf.recaptcha.fields import RecaptchaField
@@ -69,7 +71,7 @@ validators.FileRequired = FileRequired
 
 
 __all__  = ['Form', 'ValidationError',
-            'fields', 'validators', 'widgets']
+            'fields', 'validators', 'widgets', 'html5']
 
 __all__ += fields.__all__
 __all__ += validators.__all__
