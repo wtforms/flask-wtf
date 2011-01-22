@@ -1,4 +1,6 @@
-from wtforms import TextField, IntegerField
+from wtforms import TextField
+from wtforms import IntegerField as _IntegerField
+from wtforms import DecimalField as _DecimalField
 from wtforms import DateField as _DateField
 from wtforms.widgets import Input
 
@@ -7,6 +9,20 @@ class DateInput(Input):
     Creates <input type=date> widget
     """
     input_type = "date"
+
+
+class NumberInput(Input):
+    """
+    Creates <inpyt type=number> widget
+    """
+    input_type="number"
+
+
+class RangeInput(Input):
+    """
+    Creates <inpyt type=range> widget
+    """
+    input_type="range"
 
 
 class URLInput(Input):
@@ -62,3 +78,34 @@ class EmailField(TextField):
  
     widget = EmailInput()
 
+
+class IntegerField(_IntegerField):
+    """
+    IntegerField using NumberInput by default
+    """
+
+    widget = NumberInput()
+
+
+class DecimalField(_DecimalField):
+    """
+    DecimalField using NumberInput by default
+    """
+
+    widget = NumberInput()
+
+
+class IntegerRangeField(_IntegerField):
+    """
+    IntegerField using RangeInput by default
+    """
+
+    widget = RangeInput()
+
+
+class DecimalRangeField(_DecimalField):
+    """
+    DecimalField using RangeInput by default
+    """
+
+    widget = RangeInput()

@@ -6,7 +6,7 @@ from flask import Flask, Response, render_template, jsonify
 from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-        SubmitField, Required, FieldList, file_required, file_allowed
+        SubmitField, Required, FieldList, file_required, file_allowed, html5
 
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
@@ -21,6 +21,7 @@ class DummyField(object):
     __call__     = lambda x, **k: x.data
     __iter__     = lambda x: iter(x.data)
     iter_choices = lambda x: iter(x.data)
+
 
 class TestCase(_TestCase):
     
@@ -90,6 +91,40 @@ class TestCase(_TestCase):
         
         return app
 
+class HTML5Tests(TestCase):
+
+    field = DummyField("name", id="name", name="name")
+
+    def test_url_input(self):
+
+        assert html5.URLInput()(self.field) == \
+        '<input id="name" name="name" type="url" value="name" />'
+ 
+    def test_search_input(self):
+
+        assert html5.SearchInput()(self.field) == \
+        '<input id="name" name="name" type="search" value="name" />'
+         
+    def test_date_input(self):
+
+        assert html5.DateInput()(self.field) == \
+        '<input id="name" name="name" type="date" value="name" />'
+ 
+    def test_email_input(self):
+
+        assert html5.EmailInput()(self.field) == \
+        '<input id="name" name="name" type="email" value="name" />'
+     
+    def test_number_input(self):
+
+        assert html5.NumberInput()(self.field, min=0, max=10) == \
+        '<input id="name" max="10" min="0" name="name" type="number" value="name" />'
+     
+    def test_range_input(self):
+
+        assert html5.RangeInput()(self.field, min=0, max=10) == \
+        '<input id="name" max="10" min="0" name="name" type="range" value="name" />'
+ 
 # FILE UPLOAD TESTS #
 
 images = UploadSet("images", IMAGES)
