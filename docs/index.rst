@@ -144,6 +144,8 @@ For example::
                                form=form,
                                filename=filename)
 
+It's recommended you use **werkzeug.secure_filename** on any uploaded files as shown in the example to prevent malicious attempts to access your filesystem.
+
 Remember to set the ``enctype`` of your HTML form to ``multipart/form-data`` to enable file uploads::
 
     <form action="." method="POST" enctype="multipart/form-data">
@@ -153,6 +155,32 @@ Remember to set the ``enctype`` of your HTML form to ``multipart/form-data`` to 
 **Note:**  as of version **0.4** all **FileField** instances have access to the corresponding **FileStorage** object
 in **request.files**, including those embedded in **FieldList** instances.
 
+
+Validating file uploads
+-----------------------
+
+**Flask-WTF** supports validation through the Flask-Uploads extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example::
+
+
+    from flaskext.uploads import UploadSet, IMAGES
+    from flaskext.wtf import Form, FileField, file_allowed, \
+        file_required
+
+    images = UploadSet("images", IMAGES)
+
+    class UploadForm(Form):
+
+        upload = FileField("Upload your image", 
+                           validators=[file_required(),
+                                       file_allowed(images, "Images only!")])
+
+In the above example, only image files (JPEGs, PNGs etc) can be uploaded. The ``file_required`` validator, which does not require ``Flask-Uploads``, will raise a validation error if the field does not contain a FileStorage object.
+
+
+HTML5 widgets
+-------------
+
+**Flask-WTF** supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.
 
 Recaptcha
 ---------
@@ -248,6 +276,10 @@ API
 .. autoclass:: Recaptcha
 
 .. autoclass:: RecaptchaWidget
+
+.. automodule:: flaskext.wtf.file
+
+.. automodule:: flaskext.wtf.html5
 
 .. _Flask: http://flask.pocoo.org
 .. _Bitbucket: http://bitbucket.org/danjac/flask-wtf

@@ -71,7 +71,6 @@ class FileAllowed(object):
 
         for file in files:
             if not self.upload_set.file_allowed(file, file.filename):
-
                 raise ValidationError, self.message
 
 file_allowed = FileAllowed

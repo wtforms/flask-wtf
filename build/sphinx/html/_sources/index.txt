@@ -154,6 +154,11 @@ Remember to set the ``enctype`` of your HTML form to ``multipart/form-data`` to 
 in **request.files**, including those embedded in **FieldList** instances.
 
 
+HTML5 widgets
+-------------
+
+**Flask-WTF** supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.
+
 Recaptcha
 ---------
 
@@ -248,6 +253,10 @@ API
 .. autoclass:: Recaptcha
 
 .. autoclass:: RecaptchaWidget
+
+.. automodule:: flaskext.wtf.file
+
+.. automodule:: flaskext.wtf.html5
 
 .. _Flask: http://flask.pocoo.org
 .. _Bitbucket: http://bitbucket.org/danjac/flask-wtf
