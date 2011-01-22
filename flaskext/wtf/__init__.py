@@ -54,15 +54,11 @@ fields.RecaptchaField = RecaptchaField
 widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
-from flaskext.wtf.file import FileField, FileMultipleField
-from flaskext.wtf.file import FileMultipleInput
+from flaskext.wtf.file import FileField
 from flaskext.wtf.file import FileAllowed, FileRequired, file_allowed, \
         file_required
 
 fields.FileField = FileField
-fields.FileMultipleField = FileMultipleField
-
-widgets.FileMultipleInput = FileMultipleInput
 
 validators.file_allowed = file_allowed
 validators.file_required = file_required

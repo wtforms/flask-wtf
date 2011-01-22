@@ -6,8 +6,7 @@ from flask import Flask, Response, render_template, jsonify
 from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
-        SubmitField, Required, FieldList, FileMultipleField, \
-        FileMultipleField, FileMultipleInput, file_required, file_allowed
+        SubmitField, Required, FieldList, file_required, file_allowed
 
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
@@ -105,11 +104,6 @@ class MultipleFileUploadForm(Form):
     uploads = FieldList(FileField("upload"), min_entries=3)
 
 
-class MultipleFileFieldUploadForm(Form):
-
-    uploads = FileMultipleField("uploads")
-
-
 class ImageUploadForm(Form):
 
     upload = FileField("Upload file", 
@@ -187,25 +181,11 @@ class TestFileUpload(TestCase):
         
         return app
 
-    def test_multiple_file_widget(self):
-
-        field = DummyField("uploads", label="Uploads", name="uploads", id="uploads")
-
-        assert FileMultipleInput()(field) == \
-            '<input id="uploads" multiple="multiple" name="uploads" type="file" value="uploads" />'
-
     def test_multiple_files(self):
 
         fps = [self.app.open_resource("flask.png") for i in xrange(3)]
         data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)] 
         response = self.client.post("/upload-multiple/", data=dict(data))
-        assert response.status_code == 200
-
-    def test_multiple_file_field(self):
-
-        fps = [self.app.open_resource("flask.png") for i in xrange(3)]
-        data = {"uploads" : fps}
-        response = self.client.post("/upload-multiple-field/", data=data)
         assert response.status_code == 200
 
     def test_valid_file(self):

@@ -2,13 +2,6 @@ from flask import request
 
 from wtforms import FileField as _FileField
 from wtforms import ValidationError
-from wtforms.widgets import FileInput
-
-class FileMultipleInput(FileInput):
-
-    def __call__(self, *args, **kwargs):
-        kwargs['multiple'] = u'multiple'
-        return super(FileMultipleInput, self).__call__(*args, **kwargs)
 
 
 class FileField(_FileField):
@@ -20,23 +13,6 @@ class FileField(_FileField):
         or None
         """
         return request.files.get(self.name, None)
-
-
-class FileMultipleField(_FileField):
-    """
-    Supports the HTML5 <input type="file" multiple> spec.
-
-    All files are obtainable from a **files** property.
-    """
-
-    widget = FileMultipleInput()
-
-    @property
-    def files(self):
-        """
-        Returns list of files matching name in request.files
-        """
-        return request.files.getlist(self.name)
 
 
 class FileRequired(object):
