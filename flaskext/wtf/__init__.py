@@ -76,15 +76,13 @@ __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
     from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
-        QuerySelectMultipleField, ModelSelectField
+        QuerySelectMultipleField
 
     __all__ += ['QuerySelectField', 
-                'QuerySelectMultipleField',
-                'ModelSelectField']
+                'QuerySelectMultipleField']
 
     for field in (QuerySelectField, 
-                  QuerySelectMultipleField,
-                  ModelSelectField):
+                  QuerySelectMultipleField):
 
         setattr(fields, field.__name__, field)
 
