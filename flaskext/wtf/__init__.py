@@ -174,7 +174,7 @@ class Form(BaseForm):
         return csrf_token
 
     def validate_csrf(self, field):
-        if not self.csrf_enabled or request.is_xhr:
+        if not self.csrf_enabled:
             return
 
         csrf_token = session.pop(self.csrf_session_key, None)
