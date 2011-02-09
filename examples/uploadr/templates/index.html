@@ -2,15 +2,17 @@
 
 <html>
     <body>
-        {% if filedata %}
-        <h3>{{ filedata.filename }}</h3>
-        {% endif %}
+        {% for upload in filedata %}
+        <h3>{{ upload.file.filename }}</h3>
+        {% endfor %}
         <form method="POST" enctype="multipart/form-data">
+            {{ form.errors }}
             {{ form.hidden_tag() }}
+            {% for upload in form.uploads.entries %}
             <p>
-                {{ form.file_upload.label }}
-                {{ form.file_upload }}
+            {{ upload }}
             </p>
+            {% endfor %}
             <p>
                 <input type="submit" value="Submit">
             </p>
