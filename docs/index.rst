@@ -38,11 +38,24 @@ The following settings are used with **Flask-WTF**:
 
     form = MyForm(csrf_enabled=False)
 
-Generally speaking it's a good idea to enable CSRF. There are two situations where you might not want to:
-unit tests and AJAX forms. In the first case, switching ``CSRF_ENABLED`` to ``False`` means that your
-forms will still work (and the CSRF hidden field will still be printed) but no validation will be done. In the
-second, CSRF validation is skipped if ``request.is_xhr`` is ``True`` (you can't do cross-domain AJAX anyway, 
-so CSRF validation is redundant).
+Generally speaking it's a good idea to enable CSRF. If you wish to disable checking in certain circumstances - for
+example, in unit tests - you can set ``CSRF_ENABLED`` to **False** in your configuration.
+
+**NOTE:** Previous to version **0.5.2**, **Flask-WTF** automatically skipped CSRF validation in the case of AJAX
+POST requests, as AJAX toolkits added headers such as ``X-Requested-With`` when using the XMLHttpRequest and browsers
+enforced a strict same-origin policy.
+
+However it has since come to light that various browser plugins can circumvent these measures, rendering AJAX requests
+insecure by allowing forged requests to appear as an AJAX request.
+
+Therefore CSRF checking will now be applied to all POST requests, unless you disable CSRF at your own risk through the options
+described above.
+
+You can pass in the CSRF field manually in your AJAX request by accessing the **csrf** field in your form directly::
+
+    var params = {'csrf' : '{{ form.csrf }}'};
+
+A more complete description of the issue can be found `here <http://www.djangoproject.com/weblog/2011/feb/08/security/>`_.
 
 One common pattern in wtforms is `enclosed forms <http://wtforms.simplecodes.com/docs/0.6.1/fields.html#field-enclosures>`_. For example::
 

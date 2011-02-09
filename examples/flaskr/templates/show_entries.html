@@ -2,7 +2,7 @@
 {% block body %}
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-    {{ form.hidden_tag() }}
+        {{ form.hidden_tag() }}
       <dl>
           <dt>{{ form.title.label }}:
           <dd>{{ form.title }}
