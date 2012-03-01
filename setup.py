@@ -19,7 +19,7 @@ from setuptools import setup
 
 setup(
     name='Flask-WTF',
-    version='0.5.3',
+    version='0.5.4',
     url='http://github.com/rduplain/flask-script',
     license='BSD',
     author='Dan Jacob',
@@ -37,7 +37,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms'
+        'WTForms>=1.0'
     ],
     tests_require=[
         'nose',
