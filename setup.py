@@ -19,11 +19,13 @@ from setuptools import setup
 
 setup(
     name='Flask-WTF',
-    version='0.5.2',
-    url='http://bitbucket.org/danjac/flask-wtf',
+    version='0.5.3',
+    url='http://github.com/rduplain/flask-script',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
+    maintainer='Ron DuPlain',
+    maintainer_email='ron.duplain@gmail.com',
     description='Simple integration of Flask and WTForms',
     long_description=__doc__,
     packages=['flaskext', 
