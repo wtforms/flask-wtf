@@ -69,9 +69,9 @@ validators.FileRequired = FileRequired
 __all__  = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets', 'html5']
 
-__all__ += fields.__all__
+__all__ += fields.core.__all__
 __all__ += validators.__all__
-__all__ += widgets.__all__
+__all__ += widgets.core.__all__
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
