@@ -8,6 +8,10 @@ from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, FileField, HiddenField, \
         SubmitField, Required, FieldList, file_required, file_allowed, html5
 
+# This tests whether __all__ namespace of WTForms is available.
+# Fails as AttributeError immediately if an import is missing in flaskext.wtf.
+from flaskext.wtf import *
+
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
         self.data = data
