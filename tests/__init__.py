@@ -98,32 +98,32 @@ class HTML5Tests(TestCase):
     def test_url_input(self):
 
         self.assertEqual(html5.URLInput()(self.field),
-            '<input id="name" name="name" type="url" value="name" />')
+            '<input id="name" name="name" type="url" value="name">')
 
     def test_search_input(self):
 
         self.assertEqual(html5.SearchInput()(self.field),
-            '<input id="name" name="name" type="search" value="name" />')
+            '<input id="name" name="name" type="search" value="name">')
 
     def test_date_input(self):
 
         self.assertEqual(html5.DateInput()(self.field),
-            '<input id="name" name="name" type="date" value="name" />')
+            '<input id="name" name="name" type="date" value="name">')
 
     def test_email_input(self):
 
         self.assertEqual(html5.EmailInput()(self.field),
-            '<input id="name" name="name" type="email" value="name" />')
+            '<input id="name" name="name" type="email" value="name">')
 
     def test_number_input(self):
 
         self.assertEqual(html5.NumberInput()(self.field, min=0, max=10),
-            '<input id="name" max="10" min="0" name="name" type="number" value="name" />')
+            '<input id="name" max="10" min="0" name="name" type="number" value="name">')
 
     def test_range_input(self):
 
         self.assertEqual(html5.RangeInput()(self.field, min=0, max=10),
-            '<input id="name" max="10" min="0" name="name" type="range" value="name" />')
+            '<input id="name" max="10" min="0" name="name" type="range" value="name">')
 
 # FILE UPLOAD TESTS #
 
