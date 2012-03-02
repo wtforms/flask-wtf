@@ -26,6 +26,7 @@ from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
     ListWidget, Option, PasswordInput, RadioInput, Select, SubmitInput, \
     TableWidget, TextArea, TextInput
 
+from wtforms.fields import Field as FieldBase
 from wtforms.fields import FileField as _FileField
 
 try:
