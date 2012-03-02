@@ -321,6 +321,10 @@ API
 
 .. autoclass:: EmailField
 
+.. autoclass:: TelInput
+
+.. autoclass:: TelField
+
 .. autoclass:: NumberInput
 
 .. autoclass:: IntegerField
