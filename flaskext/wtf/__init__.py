@@ -191,7 +191,7 @@ class Form(BaseForm):
         self.csrf_is_valid = bool(is_valid)
 
         if not is_valid:
-            raise ValidationError, "Missing or invalid CSRF token"
+            raise ValidationError(field.gettext('Missing or invalid CSRF token'))
 
     def hidden_tag(self, *fields):
         """
