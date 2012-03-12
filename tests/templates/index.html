@@ -9,7 +9,7 @@
 
         {{ form.errors }}
         <form method="POST" enctype="multipart/form-data">
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
             <p>
                 {{ form.name.label }}
                 {{ form.name }}
