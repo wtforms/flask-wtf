@@ -24,7 +24,6 @@ class TestValidateOnSubmit(TestCase):
         self.app.config['CSRF_ENABLED'] = False
 
         response = self.client.post("/", data={"name" : "danny"})
-        print response.data
 
         assert 'DANNY' in response.data
 
@@ -43,13 +42,13 @@ class TestCSRF(TestCase):
     def test_csrf_token(self):
 
         response = self.client.get("/")
-        assert '<div style="display:none;"><input id="csrf" name="csrf" type="hidden" value' in response.data
+        assert '<div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value' in response.data
     
     def test_invalid_csrf(self):
 
         response = self.client.post("/", data={"name" : "danny"})
         assert 'DANNY' not in response.data
-        assert "Missing or invalid CSRF token" in response.data
+        assert "CSRF token missing" in response.data
 
     def test_csrf_disabled(self):
         
@@ -74,26 +73,25 @@ class TestCSRF(TestCase):
     def test_valid_csrf(self):
 
         response = self.client.get("/")
-        pattern = re.compile(r'name="csrf" type="hidden" value="([0-9a-zA-Z-]*)"')
+        pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
         match = pattern.search(response.data)
         assert match
 
         csrf_token = match.groups()[0]
 
         response = self.client.post("/", data={"name" : "danny", 
-                                               "csrf" : csrf_token})
-
+                                               "csrf_token" : csrf_token})
         assert "DANNY" in response.data
 
     def test_double_csrf(self):
 
         response = self.client.get("/")
-        pattern = re.compile(r'name="csrf" type="hidden" value="([0-9a-zA-Z-]*)"')
+        pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
         match = pattern.search(response.data)
         assert match
 
         csrf_token = match.groups()[0]
 
         response = self.client.post("/two_forms/", data={"name" : "danny", 
-                                                         "csrf" : csrf_token})
+                                                         "csrf_token" : csrf_token})
         assert response.data == "OK"

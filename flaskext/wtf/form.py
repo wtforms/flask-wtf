@@ -4,47 +4,82 @@ import uuid
 from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms import fields, ValidationError
-from wtforms import Form as BaseForm
 from wtforms.fields import HiddenField
+from wtforms.ext.csrf.session import SessionSecureForm
 
+class _Auto():
+    '''Placeholder for unspecified variables that should be set to defaults.
 
-def _generate_csrf_token():
-    return str(uuid.uuid4())
+    Used when None is a valid option and should not be replaced by a default.
+    '''
+    pass
 
-
-class Form(BaseForm):
+class Form(SessionSecureForm):
 
     """
-    Subclass of WTForms **Form** class. The main difference is that
-    **request.form** is passed as `formdata` argument to constructor
-    so can handle request data implicitly. 
+    Flask-specific subclass of WTForms **SessionSecureForm** class.
 
-    In addition this **Form** implementation has automatic CSRF handling.
+    Flask-specific behaviors:
+    If formdata is not specified, this will use flask.request.form. Explicitly
+      pass formdata = None to prevent this.
+
+    csrf_context - a session or dict-like object to use when making CSRF tokens.
+      Default: flask.session.
+
+    secret_key - a secret key for building CSRF tokens. If this isn't specified,
+      the form will take the first of these that is defined:
+        * the SECRET_KEY attribute on this class
+        * the value of flask.current_app.config["SECRET_KEY"]
+        * the session's secret_key
+      If none of these are set, raise an exception.
+
+    csrf_enabled - whether to use CSRF protection. If False, all csrf behavior
+      is suppressed. Default: check app.config for CSRF_ENABLED, else True
+
     """
-
-    csrf = fields.HiddenField()
-
-    def __init__(self, formdata=None, *args, **kwargs):
-
-        csrf_enabled = kwargs.pop('csrf_enabled', None)
+    def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
+                 secret_key=None, csrf_enabled = None, *args, **kwargs):
 
         if csrf_enabled is None:
             csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
-        
         self.csrf_enabled = csrf_enabled
 
-        self.csrf_session_key = kwargs.pop('csrf_session_key', None)
+        if formdata is _Auto:
+            if self.is_submitted:
+                formdata = request.form
+            else:
+                formdata = None
+        if self.csrf_enabled:
+            if csrf_context is None:
+                csrf_context = session
+            if secret_key is None:
+                # It wasn't passed in, check if the class has a SECRET_KEY set
+                secret_key = getattr(self, "SECRET_KEY", None)
+            if secret_key is None:
+                # It wasn't on the class, check the application config
+                secret_key = current_app.config.get("SECRET_KEY")
+            if secret_key is None and session:
+                # It's not there either! Is there a session secret key if we can
+                secret_key = session.secret_key
+            if secret_key is None:
+                # It wasn't anywhere. This is an error.
+                raise Exception('Must provide secret_key or set configuration variable SECRET_KEY for csrf_enabled to work')
 
-        if self.csrf_session_key is None:
-            self.csrf_session_key = \
-                current_app.config.get('CSRF_SESSION_KEY', '_csrf_token')
+            self.SECRET_KEY = secret_key
+        else:
+            csrf_context = {}
+            self.SECRET_KEY = ""
+        super(Form, self).__init__(formdata, obj, prefix, csrf_context=csrf_context, *args, **kwargs)
 
-        csrf_token = session.get(self.csrf_session_key, None)
+    def generate_csrf_token(self, csrf_context=None):
+        if not self.csrf_enabled:
+            return None
+        return super(Form, self).generate_csrf_token(csrf_context)
 
-        if csrf_token is None:
-            csrf_token = self.reset_csrf()
-
-        super(Form, self).__init__(formdata, csrf=csrf_token, *args, **kwargs)
+    def validate_csrf_token(self, field):
+        if not self.csrf_enabled:
+            return
+        super(Form, self).validate_csrf_token(field)
 
     def is_submitted(self):
         """
@@ -53,63 +88,6 @@ class Form(BaseForm):
         """
 
         return request and request.method in ("PUT", "POST")
-
-    def process(self, formdata=None, obj=None, **kwargs):
-
-        if self.is_submitted():
-        
-            if formdata is None:
-                formdata = request.form
-
-            # ensure csrf validation occurs ONLY when formdata is passed
-            # in case "csrf" is the only field in the form
-
-            if not formdata and not request.files:
-                self.csrf_is_valid = False
-            else:
-                self.csrf_is_valid = None
-
-        super(Form, self).process(formdata, obj, **kwargs)
-
-    @property
-    def csrf_token(self):
-        """
-        Renders CSRF field inside a hidden DIV.
-
-        :deprecated: Use **hidden_tag** instead.
-        """
-        warnings.warn("csrf_token is deprecated. Use hidden_tag instead", 
-                      DeprecationWarning)
-
-        return self.hidden_tag('csrf')
-
-    def reset_csrf(self):
-        """
-        Resets the CSRF token in the session. If you are reusing the form
-        in the same view (i.e. you are not redirecting somewhere else)
-        it's recommended you call this before rendering the form.
-        """
-        
-        csrf_token = _generate_csrf_token()
-        session[self.csrf_session_key] = csrf_token
-        return csrf_token
-
-    def validate_csrf(self, field):
-        if not self.csrf_enabled:
-            return
-
-        csrf_token = session.get(self.csrf_session_key, None)
-        is_valid = field.data and \
-                   field.data == csrf_token and \
-                   self.csrf_is_valid is not False
-
-        # we set this flag to ensure consistent behaviour when
-        # calling validate() more than once
-
-        self.csrf_is_valid = bool(is_valid)
-
-        if not is_valid:
-            raise ValidationError, "Missing or invalid CSRF token"
 
     def hidden_tag(self, *fields):
         """

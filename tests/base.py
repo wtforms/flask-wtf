@@ -9,10 +9,12 @@ class TestCase(_TestCase):
     def create_app(self):
         
         class MyForm(Form):
+            SECRET_KEY = "a poorly kept secret."
             name = TextField("Name", validators=[Required()])
             submit = SubmitField("Submit")
 
         class HiddenFieldsForm(Form):
+            SECRET_KEY = "a poorly kept secret."
             name = HiddenField()
             url = HiddenField()
             method = HiddenField()
@@ -24,6 +26,7 @@ class TestCase(_TestCase):
                 self.method.name = '_method'
 
         class SimpleForm(Form):
+            SECRET_KEY = "a poorly kept secret."
             pass
 
         app = Flask(__name__)
@@ -45,6 +48,7 @@ class TestCase(_TestCase):
         @app.route("/simple/", methods=("POST",))
         def simple():
             form = SimpleForm()
+            form.validate()
             assert form.csrf_enabled
             assert not form.validate()
             return "OK"
