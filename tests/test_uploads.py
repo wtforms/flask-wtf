@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from flask import render_template
 
 from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads

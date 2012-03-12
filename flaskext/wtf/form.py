@@ -1,9 +1,5 @@
-import warnings
-import uuid
-
 from jinja2 import Markup
 from flask import request, session, current_app
-from wtforms import fields, ValidationError
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
 
@@ -38,7 +34,7 @@ class Form(SessionSecureForm):
 
     """
     def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
-                 secret_key=None, csrf_enabled = None, *args, **kwargs):
+                 secret_key=None, csrf_enabled=None, *args, **kwargs):
 
         if csrf_enabled is None:
             csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
@@ -63,7 +59,7 @@ class Form(SessionSecureForm):
                 secret_key = session.secret_key
             if secret_key is None:
                 # It wasn't anywhere. This is an error.
-                raise Exception('Must provide secret_key or set configuration variable SECRET_KEY for csrf_enabled to work')
+                raise Exception('Must provide secret_key to use csrf.')
 
             self.SECRET_KEY = secret_key
         else:
