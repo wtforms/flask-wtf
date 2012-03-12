@@ -68,10 +68,19 @@ class TestCase(_TestCase):
         @app.route("/simple/", methods=("POST",))
         def simple():
             form = SimpleForm()
-            form.validate()
             assert form.csrf_enabled
             assert not form.validate()
-            assert not form.validate()
+            return "OK"
+
+        @app.route("/two_forms/", methods=("POST",))
+        def two_forms():
+            form = SimpleForm()
+            assert form.csrf_enabled
+            assert form.validate()
+            assert form.validate()
+            form2 = SimpleForm()
+            assert form2.csrf_enabled
+            assert form2.validate()
             return "OK"
 
         @app.route("/hidden/")
@@ -339,3 +348,15 @@ class TestCSRF(TestCase):
 
         assert "DANNY" in response.data
 
+    def test_double_csrf(self):
+
+        response = self.client.get("/")
+        pattern = re.compile(r'name="csrf" type="hidden" value="([0-9a-zA-Z-]*)"')
+        match = pattern.search(response.data)
+        assert match
+
+        csrf_token = match.groups()[0]
+
+        response = self.client.post("/two_forms/", data={"name" : "danny", 
+                                                         "csrf" : csrf_token})
+        assert response.data == "OK"
