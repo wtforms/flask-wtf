@@ -17,7 +17,7 @@ except ImportError:
     _ = lambda(s) : s
 
 RECAPTCHA_API_SERVER = 'http://api.recaptcha.net/'
-RECAPTCHA_SSL_API_SERVER = 'https://api-secure.recaptcha.net/'
+RECAPTCHA_SSL_API_SERVER = 'https://www.google.com/recaptcha/api/'
 RECAPTCHA_HTML = u'''
 <script type="text/javascript">var RecaptchaOptions = %(options)s;</script>
 <script type="text/javascript" src="%(script_url)s"></script>
