@@ -1,10 +1,12 @@
 from __future__ import with_statement
 
-from flask import render_template
+from StringIO import StringIO
+
+from flask import render_template, request
 
 from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 
-from flaskext.wtf import Form, FileField, FieldList, \
+from flaskext.wtf import Form, TextField, FileField, FieldList, \
                          file_required, file_allowed
 
 from base import TestCase
@@ -67,7 +69,7 @@ class TestFileUpload(TestCase):
             if form.validate_on_submit():
                 assert len(form.uploads.entries) == 3
                 for upload in form.uploads.entries:
-                    assert upload.file is not None
+                    assert upload.has_file()
 
             return "OK"
 
@@ -75,11 +77,8 @@ class TestFileUpload(TestCase):
         def upload():
             form = FileUploadForm()
             if form.validate_on_submit():
-
-                filedata = form.upload.file
-            
+                filedata = form.upload.data
             else:
-                
                 filedata = None
 
             return render_template("upload.html",
@@ -125,3 +124,27 @@ class TestFileUpload(TestCase):
                 data={'upload' : 'flask.png'})
 
         assert "flask.png</h3>" not in response.data
+
+
+class BrokenForm(Form):
+    text_fields = FieldList(TextField())
+    file_fields = FieldList(FileField())
+
+text_data = [('text_fields-0', 'First input'),
+             ('text_fields-1', 'Second input')]
+
+file_data = [('file_fields-0', (StringIO('contents 0'), 'file0.txt')),
+             ('file_fields-1', (StringIO('contents 1'), 'file1.txt'))]
+
+class TestFileList(TestCase):
+    def test_multiple_upload(self):
+        with self.app.test_request_context(method='POST',
+                                           data=dict(text_data + file_data)):
+            assert len(request.files) # the files have been added to the
+                                      # request
+
+            f = BrokenForm(csrf_enabled=False)
+
+            assert f.validate_on_submit()
+            assert len(text_data) == len(f.text_fields)
+            assert len(file_data) == len(f.file_fields)

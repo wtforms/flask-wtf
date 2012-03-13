@@ -43,6 +43,9 @@ class Form(SessionSecureForm):
         if formdata is _Auto:
             if self.is_submitted:
                 formdata = request.form
+                if request.files:
+                    formdata = formdata.copy()
+                    formdata.update(request.files)
             else:
                 formdata = None
         if self.csrf_enabled:

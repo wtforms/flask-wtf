@@ -4,31 +4,30 @@ from flask import Flask, render_template, jsonify
 from flaskext.testing import TestCase as _TestCase
 from flaskext.wtf import Form, TextField, HiddenField, SubmitField, Required
 
+class MyForm(Form):
+    SECRET_KEY = "a poorly kept secret."
+    name = TextField("Name", validators=[Required()])
+    submit = SubmitField("Submit")
+
+class HiddenFieldsForm(Form):
+    SECRET_KEY = "a poorly kept secret."
+    name = HiddenField()
+    url = HiddenField()
+    method = HiddenField()
+    secret = HiddenField()
+    submit = SubmitField("Submit")
+
+    def __init__(self, *args, **kwargs):
+        super(HiddenFieldsForm, self).__init__(*args, **kwargs)
+        self.method.name = '_method'
+
+class SimpleForm(Form):
+    SECRET_KEY = "a poorly kept secret."
+    pass
+
 class TestCase(_TestCase):
     
     def create_app(self):
-        
-        class MyForm(Form):
-            SECRET_KEY = "a poorly kept secret."
-            name = TextField("Name", validators=[Required()])
-            submit = SubmitField("Submit")
-
-        class HiddenFieldsForm(Form):
-            SECRET_KEY = "a poorly kept secret."
-            name = HiddenField()
-            url = HiddenField()
-            method = HiddenField()
-            secret = HiddenField()
-            submit = SubmitField("Submit")
-
-            def __init__(self, *args, **kwargs):
-                super(HiddenFieldsForm, self).__init__(*args, **kwargs)
-                self.method.name = '_method'
-
-        class SimpleForm(Form):
-            SECRET_KEY = "a poorly kept secret."
-            pass
-
         app = Flask(__name__)
         app.secret_key = "secret"
         

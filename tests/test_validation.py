@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import re
 
-from base import TestCase
+from base import TestCase, MyForm
 
 class TestValidateOnSubmit(TestCase):
 
@@ -27,6 +27,16 @@ class TestValidateOnSubmit(TestCase):
 
         assert 'DANNY' in response.data
 
+
+class TestValidateWithoutSubmit(TestCase):
+
+    def test_unsubmitted_valid(self):
+        class obj:
+            name = "foo"
+        assert MyForm(obj=obj, csrf_enabled=False).validate()
+        fake_session = {}
+        t = MyForm(csrf_context=fake_session).generate_csrf_token(fake_session)
+        assert MyForm(obj=obj, csrf_token=t, csrf_context=fake_session).validate()
 
 class TestHiddenTag(TestCase):
 
