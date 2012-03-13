@@ -30,7 +30,6 @@ Configuring Flask-WTF
 The following settings are used with **Flask-WTF**:
 
     * ``CSRF_ENABLED`` default ``True``
-    * ``CSRF_SESSION_KEY`` default ``_csrf_token``
 
 ``CSRF_ENABLED`` enables CSRF. You can disable by passing in the ``csrf_enabled`` parameter to your form::
 
@@ -38,6 +37,17 @@ The following settings are used with **Flask-WTF**:
 
 Generally speaking it's a good idea to enable CSRF. If you wish to disable checking in certain circumstances - for
 example, in unit tests - you can set ``CSRF_ENABLED`` to **False** in your configuration.
+
+CSRF support is built using ``wtforms.ext.csrf``; ``Form`` is a subclass of
+`SessionSecureForm <http://wtforms.simplecodes.com/docs/dev/ext.html#wtforms.e
+xt.csrf.session.SessionSecureForm>`_. Essentially, each form generates a CSRF
+token deterministically based on a secret key and a randomly generated value
+stored in the user's session. You can specify a secret key by passing a value
+to the ``secret_key`` parameter of the form constructor, setting a
+``SECRET_KEY`` variable on a form class, or setting the config variable
+``SECRET_KEY``; if none of these are present, ``app.secret_key`` will be used
+(if this is also not present, then CSRF is impossible; creating a form with
+``csrf_enabled = True`` will raise an exception).
 
 **NOTE:** Previous to version **0.5.2**, **Flask-WTF** automatically skipped CSRF validation in the case of AJAX
 POST requests, as AJAX toolkits added headers such as ``X-Requested-With`` when using the XMLHttpRequest and browsers
@@ -55,40 +65,6 @@ You can pass in the CSRF field manually in your AJAX request by accessing the **
 
 A more complete description of the issue can be found `here <http://www.djangoproject.com/weblog/2011/feb/08/security/>`_.
 
-One common pattern in wtforms is `enclosed forms <http://wtforms.simplecodes.com/docs/0.6.1/fields.html#field-enclosures>`_. For example::
-
-    class TelephoneForm(Form):
-        country_code = IntegerField('Country Code', [validators.required()])
-        area_code    = IntegerField('Area Code/Exchange', [validators.required()])
-        number       = TextField('Number')
-
-    class ContactForm(Form):
-        first_name   = TextField()
-        last_name    = TextField()
-        mobile_phone = FormField(TelephoneForm)
-        office_phone = FormField(TelephoneForm)
-
-The problem with using the ``Form`` class provided by Flask-WTF is that the class will automatically include the CSRF validation. You don't need this for every single form - just the enclosing "master" form.  
-
-The easiest way to do this is to just override the enclosed form constructor::
-
-    class TelephoneForm(Form):
-        country_code = IntegerField('Country Code', [validators.required()])
-        area_code    = IntegerField('Area Code/Exchange', [validators.required()])
-        number       = TextField('Number')
-
-        def __init__(self, *args, **kwargs):
-            kwargs['csrf_enabled'] = False
-            super(TelephoneForm, self).__init__(*args, **kwargs)
-
-This will disable CSRF validation for all ``TelephoneForm`` instances.
-
-The ``CSRF_SESSION_KEY`` sets the key used in the Flask session for storing the generated token string. Usually
-the default should suffice, in certain cases you might want a custom key (for example, having several forms in a
-single page).
-
-Both these settings can be overriden in the ``Form`` constructor by passing in ``csrf_enabled`` and ``csrf_session_key``
-optional arguments respectively.
 
 In addition, there are additional configuration settings required for Recaptcha integration : see below.
 
@@ -131,9 +107,9 @@ Ensure you are running the latest stable version of WTForms so that you don't ne
 File uploads
 ------------
 
-The ``Form`` instance automatically appends a ``file`` attribute to any ``FileField`` field instances if the form is posted.
+Instances of the field type ``FileField`` automatically draw data from ``flask.request.files`` if the form is posted.
 
-This ``file`` attribute is an instance of `Werkzeug FileStorage <http://werkzeug.pocoo.org/documentation/0.5.1/datastructures.html#werkzeug.FileStorage>`_ instance from ``request.files``.
+The ``data`` attribute will be an instance of `Werkzeug FileStorage <http://werkzeug.pocoo.org/documentation/0.5.1/datastructures.html#werkzeug.FileStorage>`_.
 
 For example::
 
@@ -147,7 +123,7 @@ For example::
     def upload():
         form = PhotoForm()
         if form.validate_on_submit():
-            filename = secure_filename(form.photo.file.filename)
+            filename = secure_filename(form.photo.data.filename)
         else:
             filename = None
 
@@ -281,8 +257,7 @@ Note the difference from a pure WTForms solution::
 
 ``validate_on_submit`` will automatically check if the request method is PUT or POST.
 
-You don't need to pass ``request.form`` into your form instance, as the ``Form`` automatically populates from ``request.form`` unless
-specified. Other arguments are as with ``wtforms.Form``.
+You don't need to pass ``request.form`` into your form instance, as the ``Form`` automatically populates from ``request.form`` unless alternate data is specified. Pass in ``None`` to suppress this. Other arguments are as with ``wtforms.Form``.
 
 API
 ---

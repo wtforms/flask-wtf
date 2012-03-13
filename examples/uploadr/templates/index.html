@@ -3,7 +3,7 @@
 <html>
     <body>
         {% for upload in filedata %}
-        <h3>{{ upload.file.filename }}</h3>
+        <h3>{{ upload.data.filename }}</h3>
         {% endfor %}
         <form method="POST" enctype="multipart/form-data">
             {{ form.errors }}
