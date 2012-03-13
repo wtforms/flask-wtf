@@ -3,7 +3,7 @@ Flask-WTF
 
 .. module:: Flask-WTF
 
-**Flask-WTF** offers simple integration with `WTForms <http://wtforms.simplecodes.com/docs/0.6/>`_. This integration
+**Flask-WTF** offers simple integration with `WTForms <http://wtforms.simplecodes.com/docs/>`_. This integration
 includes optional CSRF handling for greater security.
 
 Source code and issue tracking at `GitHub`_.
