@@ -9,31 +9,17 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from wtforms.fields import BooleanField, DecimalField, DateField, \
-    DateTimeField, FieldList, FloatField, FormField, \
-    HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
-    SelectMultipleField, StringField, SubmitField, TextField, TextAreaField
-
-from wtforms.validators import Email, email, EqualTo, equal_to, \
-    IPAddress, ip_address, Length, length, MacAddress, mac_address, \
-    NumberRange, number_range, Optional, optional, Required, required, Regexp, \
-    regexp, UUID, URL, url, AnyOf, any_of, NoneOf, none_of
-
-from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
-    ListWidget, Option, PasswordInput, RadioInput, Select, SubmitInput, \
-    TableWidget, TextArea, TextInput
-
-from wtforms.fields import Field as FieldBase
-from wtforms.fields import FileField as _FileField
-
 try:
     import sqlalchemy
     _is_sqlalchemy = True
 except ImportError:
     _is_sqlalchemy = False
 
-
-from wtforms import fields, widgets, validators, ValidationError
+from wtforms import fields, widgets, validators
+from wtforms.fields import *
+from wtforms.validators import *
+from wtforms.widgets import *
+from wtforms import ValidationError
 
 from flaskext.wtf import html5
 from flaskext.wtf.form import Form
@@ -62,9 +48,9 @@ validators.FileRequired = FileRequired
 __all__  = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets', 'html5']
 
-__all__ += fields.core.__all__
 __all__ += validators.__all__
-__all__ += widgets.core.__all__
+__all__ += fields.__all__ if hasattr(fields, '__all__') else fields.core.__all__
+__all__ += widgets.__all__ if hasattr(widgets, '__all__') else widgets.core.__all__
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
