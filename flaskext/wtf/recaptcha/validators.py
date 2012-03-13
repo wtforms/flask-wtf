@@ -34,7 +34,7 @@ class Recaptcha(object):
 
         if not self._validate_recaptcha(challenge, response, remote_ip):
             field.recaptcha_error = 'incorrect-captcha-sol'
-            raise ValidationError(self.message)
+            raise ValidationError(field.gettext(self.message))
 
     def _validate_recaptcha(self, challenge, response, remote_addr):
         """Performs the actual validation."""
