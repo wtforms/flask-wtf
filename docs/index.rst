@@ -61,7 +61,7 @@ described above.
 
 You can pass in the CSRF field manually in your AJAX request by accessing the **csrf** field in your form directly::
 
-    var params = {'csrf' : '{{ form.csrf }}'};
+    var params = {'csrf' : '{{ form.csrf_token }}'};
 
 A more complete description of the issue can be found `here <http://www.djangoproject.com/weblog/2011/feb/08/security/>`_.
 
@@ -82,7 +82,7 @@ In addition, a CSRF token hidden field is created. You can print this in your te
 
     
     <form method="POST" action=".">
-        {{ form.csrf }}
+        {{ form.csrf_token }}
         {{ form.name.label }} {{ form.name(size=20) }}
         <input type="submit" value="Go">
     </form>
