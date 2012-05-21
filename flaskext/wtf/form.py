@@ -1,3 +1,5 @@
+import werkzeug.datastructures
+
 from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
@@ -46,6 +48,8 @@ class Form(SessionSecureForm):
                 if request.files:
                     formdata = formdata.copy()
                     formdata.update(request.files)
+                elif request.json:
+                    formdata = werkzeug.datastructures.MultiDict(request.json);
             else:
                 formdata = None
         if self.csrf_enabled:
