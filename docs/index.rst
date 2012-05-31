@@ -87,6 +87,10 @@ In addition, a CSRF token hidden field is created. You can print this in your te
         <input type="submit" value="Go">
     </form>
 
+.. warning::
+    .. versionchanged:: 0.6
+        The csrf field renamed from ``csrf`` to ``csrf_token``.
+
 However, in order to create valid XHTML/HTML the ``Form`` class has a method ``hidden_tag`` which renders any
 hidden fields, including the CSRF field, inside a hidden DIV tag::
     
