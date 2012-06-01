@@ -117,4 +117,10 @@ class Form(SessionSecureForm):
         a shortcut, equivalent to ``form.is_submitted() and form.validate()``
         """
         return self.is_submitted() and self.validate()
-    
+
+    @property
+    def csrf(self):
+        import warnings
+        warnings.warn("The csrf field renamed from csrf to csrf_token "
+                      "in version 0.6", stacklevel=3)
+        return super(Form, self).csrf
