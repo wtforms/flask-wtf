@@ -1,5 +1,6 @@
 from base import TestCase
-from flaskext.wtf import html5
+from flask.ext.wtf import html5
+
 
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
@@ -14,7 +15,6 @@ class DummyField(object):
     __call__     = lambda x, **k: x.data
     __iter__     = lambda x: iter(x.data)
     iter_choices = lambda x: iter(x.data)
-
 
 
 class HTML5Tests(TestCase):

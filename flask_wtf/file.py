@@ -51,7 +51,7 @@ class FileAllowed(object):
     Validates that the uploaded file is allowed by the given
     Flask-Uploads UploadSet.
 
-    `upload_set` : instance of **flaskext.uploads.UploadSet**
+    `upload_set` : instance of **flask.ext.uploads.UploadSet**
 
     `message`    : error message
 

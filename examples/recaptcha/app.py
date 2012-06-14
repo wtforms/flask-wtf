@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, session, redirect, url_for
-from flaskext.wtf import Form, TextAreaField, RecaptchaField, Required
+from flask.ext.wtf import Form, TextAreaField, RecaptchaField, Required
 
 DEBUG = True
 SECRET_KEY = 'secret'
