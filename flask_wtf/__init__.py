@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    flaskext.wtf
+    flask.ext.wtf
     ~~~~~~~~~~~~
 
     Flask-WTF extension
@@ -21,20 +21,20 @@ from wtforms.validators import *
 from wtforms.widgets import *
 from wtforms import ValidationError
 
-from flaskext.wtf import html5
-from flaskext.wtf.form import Form
-from flaskext.wtf import recaptcha
+from flask.ext.wtf import html5
+from flask.ext.wtf.form import Form
+from flask.ext.wtf import recaptcha
 
-from flaskext.wtf.recaptcha.fields import RecaptchaField
-from flaskext.wtf.recaptcha.widgets import RecaptchaWidget
-from flaskext.wtf.recaptcha.validators import Recaptcha
+from flask.ext.wtf.recaptcha.fields import RecaptchaField
+from flask.ext.wtf.recaptcha.widgets import RecaptchaWidget
+from flask.ext.wtf.recaptcha.validators import Recaptcha
 
 fields.RecaptchaField = RecaptchaField
 widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
-from flaskext.wtf.file import FileField
-from flaskext.wtf.file import FileAllowed, FileRequired, file_allowed, \
+from flask.ext.wtf.file import FileField
+from flask.ext.wtf.file import FileAllowed, FileRequired, file_allowed, \
         file_required
 
 fields.FileField = FileField

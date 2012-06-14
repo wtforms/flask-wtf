@@ -1,13 +1,15 @@
 from __future__ import with_statement
 
 from flask import Flask, render_template, jsonify
-from flaskext.testing import TestCase as _TestCase
-from flaskext.wtf import Form, TextField, HiddenField, SubmitField, Required
+from flask.ext.testing import TestCase as _TestCase
+from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
+
 
 class MyForm(Form):
     SECRET_KEY = "a poorly kept secret."
     name = TextField("Name", validators=[Required()])
     submit = SubmitField("Submit")
+
 
 class HiddenFieldsForm(Form):
     SECRET_KEY = "a poorly kept secret."
@@ -21,26 +23,28 @@ class HiddenFieldsForm(Form):
         super(HiddenFieldsForm, self).__init__(*args, **kwargs)
         self.method.name = '_method'
 
+
 class SimpleForm(Form):
     SECRET_KEY = "a poorly kept secret."
     pass
 
+
 class TestCase(_TestCase):
-    
+
     def create_app(self):
         app = Flask(__name__)
         app.secret_key = "secret"
-        
+
         @app.route("/", methods=("GET", "POST"))
         def index():
-            
+
             form = MyForm()
             if form.validate_on_submit():
                 name = form.name.data.upper()
             else:
                 name = ''
-            
-            return render_template("index.html", 
+
+            return render_template("index.html",
                                    form=form,
                                    name=name)
 
@@ -77,9 +81,8 @@ class TestCase(_TestCase):
                                success=True,
                                errors=None)
 
-            return jsonify(name=None, 
+            return jsonify(name=None,
                            errors=form.errors,
                            success=False)
 
-        
         return app

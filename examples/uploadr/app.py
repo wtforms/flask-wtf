@@ -1,17 +1,16 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
+from flask.ext.wtf import Form, FileField, FieldList
 
-from flaskext.wtf import Form, FileField, FieldList, required
 
 class FileUploadForm(Form):
-
     uploads = FieldList(FileField())
-
 
 DEBUG = True
 SECRET_KEY = 'secret'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
 
 @app.route("/", methods=("GET", "POST",))
 def index():
@@ -26,8 +25,8 @@ def index():
         for upload in form.uploads.entries:
             filedata.append(upload)
 
-    return render_template("index.html", 
-                           form=form, 
+    return render_template("index.html",
+                           form=form,
                            filedata=filedata)
 
 

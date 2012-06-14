@@ -1,7 +1,7 @@
 from wtforms.fields import Field
 
-from flaskext.wtf.recaptcha import widgets
-from flaskext.wtf.recaptcha.validators import Recaptcha
+from flask.ext.wtf.recaptcha import widgets
+from flask.ext.wtf.recaptcha.validators import Recaptcha
 
 __all__ = ["RecaptchaField"]
 
