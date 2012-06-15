@@ -5,7 +5,7 @@
 
     A microblog example application written as Flask tutorial with
     Flask using flask-sqlalchemy and flask-wtf extensions.
-    
+
     Adapted from original (c) Armin Ronacher.
 
     :copyright: (c) 2010 by Dan Jacob.
@@ -16,9 +16,9 @@ import sqlite3
 from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
-from flaskext.wtf import Form, TextField, TextAreaField, \
+from flask.ext.wtf import Form, TextField, TextAreaField, \
     PasswordField, SubmitField, Required, ValidationError
-from flaskext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 
 # configuration
 DEBUG = True
@@ -35,15 +35,17 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 db = SQLAlchemy(app)
 
+
 class Entry(db.Model):
-    
+
     __tablename__ = "entries"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(200))
     text = db.Column(db.UnicodeText)
-    
+
 db.create_all()
+
 
 class EntryForm(Form):
 
@@ -51,12 +53,13 @@ class EntryForm(Form):
     text = TextAreaField("Text")
     submit = SubmitField("Share")
 
+
 class LoginForm(Form):
 
     username = TextField("Username")
     password = PasswordField("Password")
     submit = SubmitField("Login")
-    
+
     def validate_username(self, field):
         if field.data != USERNAME:
             raise ValidationError, "Invalid username"
@@ -64,6 +67,7 @@ class LoginForm(Form):
     def validate_password(self, field):
         if field.data != PASSWORD:
             raise ValidationError, "Invalid password"
+
 
 @app.route('/')
 def show_entries():
