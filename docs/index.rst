@@ -73,7 +73,7 @@ Creating forms
 
 **Flask-WTF** provides you with all the API features of WTForms. For example::
 
-    from flaskext.wtf import Form, TextField, Required
+    from flask.ext.wtf import Form, TextField, Required
 
     class MyForm(Form):
         name = TextField(name, validators=[Required()])
@@ -153,8 +153,8 @@ Validating file uploads
 **Flask-WTF** supports validation through the `Flask Uploads <http://packages.python.org/Flask-Uploads/>`_ extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example::
 
 
-    from flaskext.uploads import UploadSet, IMAGES
-    from flaskext.wtf import Form, FileField, file_allowed, \
+    from flask.ext.uploads import UploadSet, IMAGES
+    from flask.ext.wtf import Form, FileField, file_allowed, \
         file_required
 
     images = UploadSet("images", IMAGES)
@@ -173,9 +173,9 @@ HTML5 widgets
 
 **Flask-WTF** supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.
 
-HTML5-specific widgets are available under the **flaskext.wtf.html5** package::
+HTML5-specific widgets are available under the **flask.ext.wtf.html5** package::
 
-    from flaskext.wtf.html5 import URLField
+    from flask.ext.wtf.html5 import URLField
 
     class LinkForm():
 
@@ -188,7 +188,7 @@ Recaptcha
 
 **Flask-WTF** also provides Recaptcha support through a ``RecaptchaField``::
     
-    from flaskext.wtf import Form, TextField, RecaptchaField
+    from flask.ext.wtf import Form, TextField, RecaptchaField
 
     class SignupForm(Form):
         username = TextField("Username")
@@ -211,7 +211,7 @@ Under test conditions (i.e. Flask app ``testing`` is ``True``) Recaptcha will al
                                 'recaptcha_challenge_field' : 'test',
                                 'recaptcha_response_field' : 'test'})
 
-If `flaskext-babel <http://packages.python.org/Flask-Babel/>`_ is installed then Recaptcha message strings can be localized.
+If `flask.ext-babel <http://packages.python.org/Flask-Babel/>`_ is installed then Recaptcha message strings can be localized.
 
 API changes
 -----------
@@ -222,7 +222,7 @@ validation, a convenience method ``validate_on_submit`` is added::
     from flask import Flask, request, flash, redirect, url_for, \
         render_template
     
-    from flaskext.wtf import Form, TextField
+    from flask.ext.wtf import Form, TextField
 
     app = Flask(__name__)
 
@@ -243,7 +243,7 @@ Note the difference from a pure WTForms solution::
     from flask import Flask, request, flash, redirect, url_for, \
         render_template
 
-    from flaskext.wtf import Form, TextField
+    from flask.ext.wtf import Form, TextField
 
     app = Flask(__name__)
 
@@ -266,7 +266,7 @@ You don't need to pass ``request.form`` into your form instance, as the ``Form``
 API
 ---
 
-.. module:: flaskext.wtf
+.. module:: flask.ext.wtf
 
 .. autoclass:: Form
    :members:
@@ -277,7 +277,7 @@ API
 
 .. autoclass:: RecaptchaWidget
 
-.. module:: flaskext.wtf.file
+.. module:: flask.ext.wtf.file
 
 .. autoclass:: FileField
    :members:
@@ -286,7 +286,7 @@ API
 
 .. autoclass:: FileRequired
 
-.. module:: flaskext.wtf.html5
+.. module:: flask.ext.wtf.html5
 
 .. autoclass:: SearchInput
 
