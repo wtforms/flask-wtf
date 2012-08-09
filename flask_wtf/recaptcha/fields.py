@@ -5,6 +5,7 @@ from flask.ext.wtf.recaptcha.validators import Recaptcha
 
 __all__ = ["RecaptchaField"]
 
+
 class RecaptchaField(Field):
     widget = widgets.RecaptchaWidget()
 
