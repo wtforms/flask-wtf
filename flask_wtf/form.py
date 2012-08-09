@@ -5,12 +5,28 @@ from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
 
+try:
+    from flask.ext.babel import gettext, ngettext
+
+    class _BabelTranslation(object):
+        def gettext(self, string):
+            return gettext(string)
+
+        def ngettext(self, singular, plural, n):
+            return ngettext(singular, plural, n)
+
+    BabelTranslation = _BabelTranslation()
+except ImportError:
+    BabelTranslation = None
+
+
 class _Auto():
     '''Placeholder for unspecified variables that should be set to defaults.
 
     Used when None is a valid option and should not be replaced by a default.
     '''
     pass
+
 
 class Form(SessionSecureForm):
 
@@ -121,4 +137,6 @@ class Form(SessionSecureForm):
         a shortcut, equivalent to ``form.is_submitted() and form.validate()``
         """
         return self.is_submitted() and self.validate()
-    
+
+    def _get_translations(self):
+        return BabelTranslation
