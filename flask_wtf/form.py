@@ -4,20 +4,9 @@ from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
+from wtforms.ext.i18n.utils import get_translations
 
-try:
-    from flask.ext.babel import gettext, ngettext
-
-    class _BabelTranslation(object):
-        def gettext(self, string):
-            return gettext(string)
-
-        def ngettext(self, singular, plural, n):
-            return ngettext(singular, plural, n)
-
-    BabelTranslation = _BabelTranslation()
-except ImportError:
-    BabelTranslation = None
+translations_cache = {}
 
 
 class _Auto():
@@ -145,4 +134,20 @@ class Form(SessionSecureForm):
         return self.is_submitted() and self.validate()
 
     def _get_translations(self):
-        return BabelTranslation
+        languages = []
+        if 'babel' in current_app.extensions:
+            babel = current_app.extensions['babel']
+            if babel.locale_selector_func is not None:
+                rv = babel.locale_selector_func()
+                if rv is not None:
+                    languages.append(rv)
+        else:
+            languages = request.accept_languages.values()
+
+        if 'en' not in languages:
+            languages.append('en')  # in case no match
+
+        languages = tuple(languages)
+        if languages not in translations_cache:
+            translations_cache[languages] = get_translations(languages)
+        return translations_cache[languages]
