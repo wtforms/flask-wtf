@@ -17,7 +17,7 @@ Install with **pip** and **easy_install**::
 
 or download the latest version from version control::
 
-    git clone https://github.com/rduplain/flask-wtf.git
+    git clone https://github.com/ajford/flask-wtf.git
     cd flask-wtf
     python setup.py develop
 
@@ -113,7 +113,7 @@ File uploads
 
 Instances of the field type ``FileField`` automatically draw data from ``flask.request.files`` if the form is posted.
 
-The ``data`` attribute will be an instance of `Werkzeug FileStorage <http://werkzeug.pocoo.org/documentation/0.5.1/datastructures.html#werkzeug.FileStorage>`_.
+The ``data`` attribute will be an instance of `Werkzeug FileStorage <http://werkzeug.pocoo.org/docs/datastructures/#werkzeug.datastructures.FileStorage>`_.
 
 For example::
 
