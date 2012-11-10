@@ -21,21 +21,20 @@ from wtforms.validators import *
 from wtforms.widgets import *
 from wtforms import ValidationError
 
-from flask.ext.wtf import html5
-from flask.ext.wtf.form import Form
-from flask.ext.wtf import recaptcha
+from . import html5
+from .form import Form
+from . import recaptcha
 
-from flask.ext.wtf.recaptcha.fields import RecaptchaField
-from flask.ext.wtf.recaptcha.widgets import RecaptchaWidget
-from flask.ext.wtf.recaptcha.validators import Recaptcha
+from .recaptcha.fields import RecaptchaField
+from .recaptcha.widgets import RecaptchaWidget
+from .recaptcha.validators import Recaptcha
 
 fields.RecaptchaField = RecaptchaField
 widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
-from flask.ext.wtf.file import FileField
-from flask.ext.wtf.file import FileAllowed, FileRequired, file_allowed, \
-        file_required
+from .file import FileField
+from .file import FileAllowed, FileRequired, file_allowed, file_required
 
 fields.FileField = FileField
 
@@ -45,8 +44,7 @@ validators.FileAllowed = FileAllowed
 validators.FileRequired = FileRequired
 
 
-__all__  = ['Form', 'ValidationError',
-            'fields', 'validators', 'widgets', 'html5']
+__all__ = ['Form', 'ValidationError', 'fields', 'validators', 'widgets', 'html5']
 
 __all__ += validators.__all__
 __all__ += fields.__all__ if hasattr(fields, '__all__') else fields.core.__all__
@@ -57,11 +55,10 @@ if _is_sqlalchemy:
     from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
         QuerySelectMultipleField
 
-    __all__ += ['QuerySelectField', 
+    __all__ += ['QuerySelectField',
                 'QuerySelectMultipleField']
 
-    for field in (QuerySelectField, 
+    for field in (QuerySelectField,
                   QuerySelectMultipleField):
 
         setattr(fields, field.__name__, field)
-
