@@ -46,9 +46,12 @@ validators.FileRequired = FileRequired
 
 __all__ = ['Form', 'ValidationError', 'fields', 'validators', 'widgets', 'html5']
 
-__all__ += validators.__all__
-__all__ += fields.__all__ if hasattr(fields, '__all__') else fields.core.__all__
-__all__ += widgets.__all__ if hasattr(widgets, '__all__') else widgets.core.__all__
+__all__ += [str(v) for v in validators.__all__ ]
+__all__ += [str(v) for v in (fields.__all__ if hasattr(fields, '__all__') else
+    fields.core.__all__) ]
+
+__all__ += [str(v) for v in (widgets.__all__ if hasattr(widgets, '__all__') else
+    widgets.core.__all__)]
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
