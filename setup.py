@@ -10,7 +10,7 @@ Links
 
 * `documentation <http://packages.python.org/Flask-WTF>`_
 * `development version
-  <http://github.com/rduplain/flask-wtf>`_
+  <http://github.com/ajford/flask-wtf>`_
 
 
 """
@@ -24,8 +24,8 @@ setup(
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
-    maintainer='Ron DuPlain',
-    maintainer_email='ron.duplain@gmail.com',
+    maintainer='Anthony J. Ford',
+    maintainer_email='ford.anthonyj@gmail.com',
     description='Simple integration of Flask and WTForms',
     long_description=__doc__,
     packages=[
