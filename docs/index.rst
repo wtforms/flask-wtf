@@ -319,4 +319,4 @@ API
 
 
 .. _Flask: http://flask.pocoo.org
-.. _GitHub: http://github.com/rduplain/flask-wtf
+.. _GitHub: http://github.com/ajford/flask-wtf
