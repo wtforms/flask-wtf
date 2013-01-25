@@ -20,7 +20,7 @@ from setuptools import setup
 setup(
     name='Flask-WTF',
     version='0.8.2',
-    url='http://github.com/rduplain/flask-wtf',
+    url='http://github.com/ajford/flask-wtf',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
