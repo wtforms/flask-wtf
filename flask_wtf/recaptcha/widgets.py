@@ -6,7 +6,7 @@ try:
 except ImportError:
     import simplejson as json
 
-from flask import current_app
+from flask import current_app, Markup
 from werkzeug import url_encode
 
 # use flaskext.babel for translations, if available
@@ -34,11 +34,11 @@ __all__ = ["RecaptchaWidget"]
 class RecaptchaWidget(object):
 
     def recaptcha_html(self, server, query, options):
-        return RECAPTCHA_HTML % dict(
+        return Markup(RECAPTCHA_HTML % dict(
             script_url='%schallenge?%s' % (server, query),
             frame_url='%snoscript?%s' % (server, query),
             options=json.dumps(options)
-        )
+        ))
 
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
