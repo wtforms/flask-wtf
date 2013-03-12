@@ -14,7 +14,7 @@ from werkzeug import url_encode
 try:
     from flaskext.babel import gettext as _
 except ImportError:
-    _ = lambda(s) : s
+    _ = lambda(s): s
 
 RECAPTCHA_API_SERVER = 'http://api.recaptcha.net/'
 RECAPTCHA_SSL_API_SERVER = 'https://www.google.com/recaptcha/api/'
@@ -54,7 +54,7 @@ class RecaptchaWidget(object):
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
-            raise RuntimeError, "RECAPTCHA_PUBLIC_KEY config not set"
+            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set")
         query_options = dict(k=public_key)
 
         if field.recaptcha_error is not None:
