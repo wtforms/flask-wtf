@@ -4,6 +4,9 @@ from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
+from wtforms.ext.i18n.utils import get_translations
+
+translations_cache = {}
 
 class _Auto():
     '''Placeholder for unspecified variables that should be set to defaults.
@@ -121,4 +124,22 @@ class Form(SessionSecureForm):
         a shortcut, equivalent to ``form.is_submitted() and form.validate()``
         """
         return self.is_submitted() and self.validate()
-    
+
+    def _get_translations(self):
+        languages = []
+        if 'babel' in current_app.extensions:
+            babel = current_app.extensions['babel']
+            if babel.locale_selector_func is not None:
+                rv = babel.locale_selector_func()
+                if rv is not None:
+                    languages.append(rv)
+        else:
+            languages = request.accept_languages.values()
+
+        if 'en' not in languages:
+            languages.append('en')  # in case no match
+
+        languages = tuple(languages)
+        if languages not in translations_cache:
+            translations_cache[languages] = get_translations(languages)
+        return translations_cache[languages]
