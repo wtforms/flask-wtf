@@ -2,6 +2,7 @@ from werkzeug import FileStorage
 from wtforms import FileField as _FileField
 from wtforms import ValidationError
 
+
 class FileField(_FileField):
     """
     Werkzeug-aware subclass of **wtforms.FileField**
@@ -37,11 +38,11 @@ class FileRequired(object):
     """
 
     def __init__(self, message=None):
-        self.message=message
+        self.message = message
 
     def __call__(self, form, field):
         if not field.has_file():
-            raise ValidationError, self.message
+            raise ValidationError(self.message)
 
 file_required = FileRequired
 
@@ -66,7 +67,6 @@ class FileAllowed(object):
         if not field.has_file():
             return
         if not self.upload_set.file_allowed(field.data, field.data.filename):
-            raise ValidationError, self.message
+            raise ValidationError(self.message)
 
 file_allowed = FileAllowed
-    
