@@ -3,8 +3,8 @@ from __future__ import with_statement
 from base import TestCase
 
 
-class TestValidateOnSubmit(TestCase):
-    def test_submitted_and_valid(self):
+class TestI18NCase(TestCase):
+    def test_submitted_not_valid(self):
         self.app.config['CSRF_ENABLED'] = False
 
         response = self.client.post(

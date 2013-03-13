@@ -126,6 +126,8 @@ class Form(SessionSecureForm):
         return self.is_submitted() and self.validate()
 
     def _get_translations(self):
+        if not current_app.config.get('WTF_I18N_ENABLED', True):
+            return None
         languages = []
         if 'babel' in current_app.extensions:
             babel = current_app.extensions['babel']
