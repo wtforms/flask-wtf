@@ -15,13 +15,12 @@ class _Auto():
 
 
 class Form(SessionSecureForm):
-
     """
     Flask-specific subclass of WTForms **SessionSecureForm** class.
 
     Flask-specific behaviors:
     If formdata is not specified, this will use flask.request.form. Explicitly
-      pass formdata = None to prevent this.
+    pass formdata = None to prevent this.
 
     csrf_context - a session or dict-like object to use when making CSRF tokens.
       Default: flask.session.
@@ -31,6 +30,7 @@ class Form(SessionSecureForm):
         * the SECRET_KEY attribute on this class
         * the value of flask.current_app.config["SECRET_KEY"]
         * the session's secret_key
+
       If none of these are set, raise an exception.
 
     csrf_enabled - whether to use CSRF protection. If False, all csrf behavior

@@ -34,7 +34,7 @@ Configuring Flask-WTF
 
 The following settings are used with **Flask-WTF**:
 
-.. tabularcolumns::
+.. tabularcolumns:: |l|l|
 
 ================ ================
 ``CSRF_ENABLED`` default ``True``
