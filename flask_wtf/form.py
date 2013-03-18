@@ -8,12 +8,14 @@ from wtforms.ext.i18n.utils import get_translations
 
 translations_cache = {}
 
+
 class _Auto():
     '''Placeholder for unspecified variables that should be set to defaults.
 
     Used when None is a valid option and should not be replaced by a default.
     '''
     pass
+
 
 class Form(SessionSecureForm):
 
@@ -52,7 +54,7 @@ class Form(SessionSecureForm):
                     formdata = formdata.copy()
                     formdata.update(request.files)
                 elif request.json:
-                    formdata = werkzeug.datastructures.MultiDict(request.json);
+                    formdata = werkzeug.datastructures.MultiDict(request.json)
             else:
                 formdata = None
         if self.csrf_enabled:
@@ -89,7 +91,7 @@ class Form(SessionSecureForm):
 
     def is_submitted(self):
         """
-        Checks if form has been submitted. The default case is if the HTTP 
+        Checks if form has been submitted. The default case is if the HTTP
         method is **PUT** or **POST**.
         """
 
@@ -97,7 +99,7 @@ class Form(SessionSecureForm):
 
     def hidden_tag(self, *fields):
         """
-        Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
+        Wraps hidden fields in a hidden DIV tag, in order to keep XHTML
         compliance.
 
         .. versionadded:: 0.3
@@ -117,10 +119,10 @@ class Form(SessionSecureForm):
         rv.append(u"</div>")
 
         return Markup(u"".join(rv))
-        
+
     def validate_on_submit(self):
         """
-        Checks if form has been submitted and if so runs validate. This is 
+        Checks if form has been submitted and if so runs validate. This is
         a shortcut, equivalent to ``form.is_submitted() and form.validate()``
         """
         return self.is_submitted() and self.validate()

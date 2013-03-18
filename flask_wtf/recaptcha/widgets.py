@@ -6,7 +6,7 @@ try:
 except ImportError:
     import simplejson as json
 
-from flask import current_app
+from flask import current_app, Markup
 from werkzeug import url_encode
 
 # use flaskext.babel for translations, if available
@@ -14,7 +14,7 @@ from werkzeug import url_encode
 try:
     from flaskext.babel import gettext as _
 except ImportError:
-    _ = lambda(s) : s
+    _ = lambda(s): s
 
 RECAPTCHA_API_SERVER = 'http://api.recaptcha.net/'
 RECAPTCHA_SSL_API_SERVER = 'https://www.google.com/recaptcha/api/'
@@ -34,11 +34,11 @@ __all__ = ["RecaptchaWidget"]
 class RecaptchaWidget(object):
 
     def recaptcha_html(self, server, query, options):
-        return RECAPTCHA_HTML % dict(
+        return Markup(RECAPTCHA_HTML % dict(
             script_url='%schallenge?%s' % (server, query),
             frame_url='%snoscript?%s' % (server, query),
             options=json.dumps(options)
-        )
+        ))
 
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
@@ -54,7 +54,7 @@ class RecaptchaWidget(object):
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
-            raise RuntimeError, "RECAPTCHA_PUBLIC_KEY config not set"
+            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set")
         query_options = dict(k=public_key)
 
         if field.recaptcha_error is not None:
