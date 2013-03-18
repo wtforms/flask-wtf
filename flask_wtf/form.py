@@ -4,7 +4,16 @@ from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
-from wtforms.ext.i18n.utils import get_translations
+from wtforms.ext.i18n.utils import get_builtin_gnu_translations
+
+_I18N_ENABLED = True
+try:
+    from speaklater import make_lazy_string
+except:
+    _I18N_ENABLED = False
+
+    def make_lazy_string(func, *args, **kwargs):
+        return func(*args, **kwargs)
 
 translations_cache = {}
 
@@ -15,6 +24,27 @@ class _Auto():
     Used when None is a valid option and should not be replaced by a default.
     '''
     pass
+
+
+class _Translations(object):
+    def __init__(self, translations):
+        self.translations = translations
+
+    def gettext(self, string):
+        if hasattr(self.translations, 'ugettext'):
+            return make_lazy_string(self.translations.ugettext, string)
+        # Python 3 has no ugettext
+        return make_lazy_string(self.translations.gettext, string)
+
+    def ngettext(self, singular, plural, n):
+        if hasattr(self.translations, 'ungettext'):
+            return make_lazy_string(
+                self.translations.ungettext, singular, plural, n
+            )
+        # Python 3 has no ungettext
+        return make_lazy_string(
+            self.translations.ngettext, singular, plural, n
+        )
 
 
 class Form(SessionSecureForm):
@@ -128,6 +158,8 @@ class Form(SessionSecureForm):
         return self.is_submitted() and self.validate()
 
     def _get_translations(self):
+        if not _I18N_ENABLED:
+            return None
         if not current_app.config.get('WTF_I18N_ENABLED', True):
             return None
         languages = []
@@ -145,5 +177,6 @@ class Form(SessionSecureForm):
 
         languages = tuple(languages)
         if languages not in translations_cache:
-            translations_cache[languages] = get_translations(languages)
+            t = _Translations(get_builtin_gnu_translations(languages))
+            translations_cache[languages] = t
         return translations_cache[languages]
