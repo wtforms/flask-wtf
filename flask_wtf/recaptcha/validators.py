@@ -31,7 +31,7 @@ class Recaptcha(object):
         remote_ip = request.remote_addr
 
         if not challenge or not response:
-            raise ValidationError(field.gettext('This field is required.'))
+            raise ValidationError(field.gettext(self.message))
 
         if not self._validate_recaptcha(challenge, response, remote_ip):
             field.recaptcha_error = 'incorrect-captcha-sol'
