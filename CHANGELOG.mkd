@@ -3,6 +3,15 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.8.4
+-------------
+
+Released 2013/3/28
+
+- Recaptcha Validator now returns provided message (issue #66)
+- Minor doc fixes
+- Fixed issue with tests barking because of nose/multiprocessing issue.
+
 Version 0.8.3
 -------------
 
