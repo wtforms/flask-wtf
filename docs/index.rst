@@ -101,10 +101,10 @@ Creating forms
 **Flask-WTF** provides you with all the API features of WTForms. For example::
 
     from flask.ext.wtf import Form 
-    from wtforms import TextField, DataRequired
+    from wtforms import TextField, validators
 
     class MyForm(Form):
-        name = TextField(name, validators=[DataRequired()])
+        name = TextField(name, validators=[validators.Required()])
 
 In addition, a CSRF token hidden field is created. You can print this in your
 template as any other field::
