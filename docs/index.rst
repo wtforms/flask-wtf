@@ -104,7 +104,7 @@ Creating forms
     from wtforms import TextField, validators
 
     class MyForm(Form):
-        name = TextField(name, validators=[validators.Required()])
+        name = TextField(name, validators=[validators.DataRequired()])
 
 In addition, a CSRF token hidden field is created. You can print this in your
 template as any other field::
