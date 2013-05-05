@@ -83,7 +83,7 @@ class Form(SessionSecureForm):
 
     def validate_csrf_token(self, field):
         if not self.csrf_enabled:
-            return
+            return True
         super(Form, self).validate_csrf_token(field)
 
     def is_submitted(self):
