@@ -4,12 +4,32 @@ from base import TestCase
 
 
 class TestI18NCase(TestCase):
-    def test_submitted_not_valid(self):
+    def test_i18n_disabled(self):
         self.app.config['CSRF_ENABLED'] = False
+        response = self.client.post(
+            "/",
+            headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
+            data={}
+        )
+        assert 'This field is required.' in response.data
 
+    def test_i18n_enabled(self):
+        from flask import request
+        from flask.ext.babel import Babel
+        babel = Babel(self.app)
+
+        @babel.localeselector
+        def get_locale():
+            return request.accept_languages.best_match(['en', 'zh'], 'en')
+
+        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_I18N_ENABLED'] = True
         response = self.client.post(
             "/",
             headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
             data={}
         )
         assert '\u8be5\u5b57\u6bb5\u662f' in response.data
+
+        response = self.client.post("/", data={})
+        assert 'This field is required.' in response.data
