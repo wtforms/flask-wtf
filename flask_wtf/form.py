@@ -1,21 +1,64 @@
 import werkzeug.datastructures
 
 from jinja2 import Markup
-from flask import request, session, current_app
+from flask import request, session, current_app, _request_ctx_stack
 from wtforms.fields import HiddenField
 from wtforms.ext.csrf.session import SessionSecureForm
-from wtforms.ext.i18n.utils import get_builtin_gnu_translations
+from wtforms.ext.i18n.utils import messages_path
 
-_I18N_ENABLED = True
 try:
+    from flask.ext.babel import get_locale
     from speaklater import make_lazy_string
+    from babel import support
+
+    def _get_translations():
+        """Returns the correct gettext translations.
+        Copy from flask-babel with some modifications.
+        """
+        ctx = _request_ctx_stack.top
+        if ctx is None:
+            return None
+        translations = getattr(ctx, 'wtforms_translations', None)
+        if translations is None:
+            dirname = messages_path()
+            translations = support.Translations.load(
+                dirname, [get_locale()], domain='wtforms'
+            )
+            ctx.wtforms_translations = translations
+        return translations
+
+    def _gettext(string):
+        t = _get_translations()
+        if t is None:
+            return string
+        if hasattr(t, 'ugettext'):
+            return t.ugettext(string)
+        # Python 3 has no ugettext
+        return t.gettext(string)
+
+    def _ngettext(singular, plural, n):
+        t = _get_translations()
+        if t is None:
+            if n == 1:
+                return singular
+            return plural
+
+        if hasattr(t, 'ungettext'):
+            return t.ungettext(singular, plural, n)
+        # Python 3 has no ungettext
+        return t.ngettext(singular, plural, n)
+
+    class _Translations(object):
+        def gettext(self, string):
+            return make_lazy_string(_gettext, string)
+
+        def ngettext(self, singular, plural, n):
+            return make_lazy_string(_ngettext, singular, plural, n)
+
+    _translations = _Translations()
+
 except:
-    _I18N_ENABLED = False
-
-    def make_lazy_string(func, *args, **kwargs):
-        return func(*args, **kwargs)
-
-translations_cache = {}
+    _translations = None
 
 
 class _Auto():
@@ -25,26 +68,6 @@ class _Auto():
     '''
     pass
 
-
-class _Translations(object):
-    def __init__(self, translations):
-        self.translations = translations
-
-    def gettext(self, string):
-        if hasattr(self.translations, 'ugettext'):
-            return make_lazy_string(self.translations.ugettext, string)
-        # Python 3 has no ugettext
-        return make_lazy_string(self.translations.gettext, string)
-
-    def ngettext(self, singular, plural, n):
-        if hasattr(self.translations, 'ungettext'):
-            return make_lazy_string(
-                self.translations.ungettext, singular, plural, n
-            )
-        # Python 3 has no ungettext
-        return make_lazy_string(
-            self.translations.ngettext, singular, plural, n
-        )
 
 
 class Form(SessionSecureForm):
@@ -158,25 +181,6 @@ class Form(SessionSecureForm):
         return self.is_submitted() and self.validate()
 
     def _get_translations(self):
-        if not _I18N_ENABLED:
-            return None
         if not current_app.config.get('WTF_I18N_ENABLED', True):
             return None
-        languages = []
-        if 'babel' in current_app.extensions:
-            babel = current_app.extensions['babel']
-            if babel.locale_selector_func is not None:
-                rv = babel.locale_selector_func()
-                if rv is not None:
-                    languages.append(rv)
-        else:
-            languages = request.accept_languages.values()
-
-        if 'en' not in languages:
-            languages.append('en')  # in case no match
-
-        languages = tuple(languages)
-        if languages not in translations_cache:
-            t = _Translations(get_builtin_gnu_translations(languages))
-            translations_cache[languages] = t
-        return translations_cache[languages]
+        return _translations
