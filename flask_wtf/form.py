@@ -106,7 +106,8 @@ class Form(SessionSecureForm):
         """
 
         if not fields:
-            fields = [f for f in self if isinstance(f, HiddenField)]
+            fields = [f for f in self if isinstance(f, HiddenField) or \
+                      isinstance(f.widget, HiddenField)]
 
         rv = [u'<div style="display:none;">']
         for field in fields:
