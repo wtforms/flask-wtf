@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <p><a href="?lang=zh">zh</a> <a href="?lang=en">en</a></p>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      {% for error in form.name.errors %}
+      <p>{{ error }}</p>
+      {% endfor %}
+      <p>
+        {{ form.name.label }} {{ form.name() }}
+      </p>
+      <p>
+        <input type="submit" value="Submit">
+      </p>
+    </form>
+  </body>
+</html>
