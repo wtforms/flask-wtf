@@ -18,6 +18,9 @@ try:
         ctx = _request_ctx_stack.top
         if ctx is None:
             return None
+        # babel should be in extensions for get_locale
+        if 'babel' not in ctx.app.extensions:
+            return None
         translations = getattr(ctx, 'wtforms_translations', None)
         if translations is None:
             dirname = messages_path()
