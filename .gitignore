@@ -8,3 +8,4 @@ lib/*
 src/*
 !.gitignore
 cover/
+venv/

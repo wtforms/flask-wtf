@@ -42,12 +42,13 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms>=1.0'
+        'WTForms>=1.0.4'
     ],
     tests_require=[
         'nose',
         'Flask-Testing',
         'Flask-Uploads',
+        'Flask-Babel',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
