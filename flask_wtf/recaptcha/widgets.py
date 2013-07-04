@@ -23,8 +23,11 @@ RECAPTCHA_HTML = u'''
 <script type="text/javascript" src="%(script_url)s"></script>
 <noscript>
   <div><iframe src="%(frame_url)s" height="300" width="500"></iframe></div>
-  <div><textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-  <input type="hidden" name="recaptcha_response_field" value="manual_challenge"></div>
+  <div>
+    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+    <input type="hidden" name="recaptcha_response_field"
+           value="manual_challenge" />
+  </div>
 </noscript>
 '''
 

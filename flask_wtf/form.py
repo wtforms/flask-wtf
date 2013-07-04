@@ -25,24 +25,24 @@ class Form(SessionSecureForm):
     """
     Flask-specific subclass of WTForms **SessionSecureForm** class.
 
-    Flask-specific behaviors:
-    If formdata is not specified, this will use flask.request.form. Explicitly
-    pass formdata = None to prevent this.
+    If formdata is not specified, this will use flask.request.form.
+    Explicitly pass formdata = None to prevent this.
 
-    csrf_context - a session or dict-like object to use when making CSRF tokens.
-      Default: flask.session.
+    csrf_context: a session or dict-like object to use when making CSRF
+                  tokens. Default: flask.session.
 
-    secret_key - a secret key for building CSRF tokens. If this isn't specified,
-      the form will take the first of these that is defined:
+    secret_key: a secret key for building CSRF tokens. If this isn't
+    specified, the form will take the first of these that is defined:
+
         * the SECRET_KEY attribute on this class
         * the value of flask.current_app.config["SECRET_KEY"]
         * the session's secret_key
 
       If none of these are set, raise an exception.
 
-    csrf_enabled - whether to use CSRF protection. If False, all csrf behavior
-      is suppressed. Default: check app.config for CSRF_ENABLED, else True
-
+    csrf_enabled: whether to use CSRF protection. If False, all csrf
+                  behavior is suppressed.
+                  Default: check app.config for CSRF_ENABLED, else True
     """
     def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
                  secret_key=None, csrf_enabled=None, *args, **kwargs):
@@ -71,7 +71,8 @@ class Form(SessionSecureForm):
                 # It wasn't on the class, check the application config
                 secret_key = current_app.config.get("SECRET_KEY")
             if secret_key is None and session:
-                # It's not there either! Is there a session secret key if we can
+                # It's not there either!
+                # Is there a session secret key if we can
                 secret_key = session.secret_key
             if secret_key is None:
                 # It wasn't anywhere. This is an error.
@@ -81,7 +82,9 @@ class Form(SessionSecureForm):
         else:
             csrf_context = {}
             self.SECRET_KEY = ""
-        super(Form, self).__init__(formdata, obj, prefix, csrf_context=csrf_context, *args, **kwargs)
+        super(Form, self).__init__(formdata, obj, prefix,
+                                   csrf_context=csrf_context,
+                                   *args, **kwargs)
 
     def generate_csrf_token(self, csrf_context=None):
         if not self.csrf_enabled:

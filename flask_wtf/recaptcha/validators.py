@@ -13,13 +13,18 @@ __all__ = ["Recaptcha"]
 
 class Recaptcha(object):
     """Validates a ReCaptcha."""
+
     _error_codes = {
         'invalid-site-public-key': 'The public key for reCAPTCHA is invalid',
         'invalid-site-private-key': 'The private key for reCAPTCHA is invalid',
-        'invalid-referrer': 'The public key for reCAPTCHA is not valid for '
-            'this domainin',
-        'verify-params-incorrect': 'The parameters passed to reCAPTCHA '
-            'verification are incorrect',
+        'invalid-referrer': (
+            'The public key for reCAPTCHA is not valid for '
+            'this domainin'
+        ),
+        'verify-params-incorrect': (
+            'The parameters passed to reCAPTCHA '
+            'verification are incorrect'
+        )
     }
 
     def __init__(self, message=u'Invalid word. Please try again.'):
