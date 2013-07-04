@@ -8,7 +8,7 @@
     :copyright: (c) 2010 by Dan Jacob.
     :license: BSD, see LICENSE for more details.
 """
-
+# flake8: noqa
 from __future__ import absolute_import
 
 try:
