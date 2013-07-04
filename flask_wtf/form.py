@@ -5,6 +5,7 @@ import werkzeug.datastructures
 from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
+from wtforms.widgets import HiddenInput
 from wtforms.ext.csrf.session import SessionSecureForm
 
 try:
@@ -19,6 +20,15 @@ class _Auto():
     Used when None is a valid option and should not be replaced by a default.
     '''
     pass
+
+
+def _is_hidden(field):
+    """Detect if the field is hidden."""
+    if isinstance(field, HiddenField):
+        return True
+    if isinstance(field.widget, HiddenInput):
+        return True
+    return False
 
 
 class Form(SessionSecureForm):
@@ -116,7 +126,7 @@ class Form(SessionSecureForm):
         """
 
         if not fields:
-            fields = [f for f in self if isinstance(f, HiddenField)]
+            fields = [f for f in self if _is_hidden(f)]
 
         rv = [u'<div style="display:none;">']
         for field in fields:
