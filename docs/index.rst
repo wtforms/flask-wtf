@@ -233,6 +233,11 @@ See the `API`_ for more details.
     widgets will be removed from Flask-WTF in the effort to clean up the
     namespace.
 
+.. note::
+    WTForms 1.0.4 has released, but it didn't include the `DateInput` widget.
+    **flask.ext.wtf.html5** is still available.
+
+
 Recaptcha
 ---------
 
