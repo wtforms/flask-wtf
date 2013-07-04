@@ -1,8 +1,17 @@
 from __future__ import with_statement
 
+from speaklater import _LazyString
+from flask.json import JSONEncoder
 from flask import Flask, render_template, jsonify
 from flask.ext.testing import TestCase as _TestCase
 from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
+
+
+class _JSONEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, _LazyString):
+            return str(o)
+        return JSONEncoder.default(self, o)
 
 
 class MyForm(Form):
@@ -33,6 +42,7 @@ class TestCase(_TestCase):
 
     def create_app(self):
         app = Flask(__name__)
+        app.json_encoder = _JSONEncoder
         app.secret_key = "secret"
 
         @app.route("/", methods=("GET", "POST"))
