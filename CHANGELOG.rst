@@ -3,6 +3,14 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.8.5
+-------------
+
+Released date to be decided
+
+- Add i18n support (issue #65)
+- Use default html5 widgets and fields provided by wtforms
+
 Version 0.8.4
 -------------
 
