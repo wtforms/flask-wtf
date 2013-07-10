@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from base import TestCase
+from .base import TestCase
 
 
 class TestI18NCase(TestCase):

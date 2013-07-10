@@ -9,7 +9,7 @@ from flask.ext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 from flask.ext.wtf import Form, TextField, FileField, FieldList, \
                          file_required, file_allowed
 
-from base import TestCase
+from .base import TestCase
 
 images = UploadSet("images", IMAGES)
 text = UploadSet("text", TEXT)

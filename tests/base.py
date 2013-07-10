@@ -3,7 +3,6 @@ from __future__ import with_statement
 from speaklater import _LazyString
 from flask.json import JSONEncoder
 from flask import Flask, render_template, jsonify
-from flask.ext.testing import TestCase as _TestCase
 from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
 
 
@@ -38,7 +37,10 @@ class SimpleForm(Form):
     pass
 
 
-class TestCase(_TestCase):
+class TestCase(object):
+    def setUp(self):
+        self.app = self.create_app()
+        self.client = self.app.test_client()
 
     def create_app(self):
         app = Flask(__name__)

@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import re
 
-from base import TestCase, MyForm
+from .base import TestCase, MyForm
 
 
 class TestValidateOnSubmit(TestCase):
@@ -27,10 +27,16 @@ class TestValidateWithoutSubmit(TestCase):
     def test_unsubmitted_valid(self):
         class obj:
             name = "foo"
-        assert MyForm(obj=obj, csrf_enabled=False).validate()
-        fake_session = {}
-        t = MyForm(csrf_context=fake_session).generate_csrf_token(fake_session)
-        assert MyForm(obj=obj, csrf_token=t, csrf_context=fake_session).validate()
+
+        with self.app.test_request_context():
+            assert MyForm(obj=obj, csrf_enabled=False).validate()
+            fake_session = {}
+            t = MyForm(csrf_context=fake_session).generate_csrf_token(
+                fake_session
+            )
+            assert MyForm(
+                obj=obj, csrf_token=t,
+                csrf_context=fake_session).validate()
 
 
 class TestHiddenTag(TestCase):
@@ -65,7 +71,7 @@ class TestCSRF(TestCase):
     def test_validate_twice(self):
 
         response = self.client.post("/simple/", data={})
-        self.assert_200(response)
+        assert response.status_code == 200
 
     def test_ajax(self):
 

@@ -1,4 +1,4 @@
-from base import TestCase
+from .base import TestCase
 from flask.ext.wtf import html5
 
 
