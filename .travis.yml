@@ -5,7 +5,12 @@ python:
     - "2.7"
 
 script:
-    - python setup.py test
+    - nosetests
+
+after_success:
+    - pip install coveralls
+    - coverage run --source=flask_wtf setup.py -q nosetests
+    - coveralls
 
 notifications:
     email: false
