@@ -29,6 +29,13 @@ class _Auto():
     pass
 
 
+def to_bytes(text):
+    """Transform string to bytes."""
+    if isinstance(text, string_type):
+        text = text.encode('utf-8')
+    return text
+
+
 def _is_hidden(field):
     """Detect if the field is hidden."""
     if isinstance(field, HiddenField):
@@ -95,10 +102,10 @@ class Form(SessionSecureForm):
                 # It wasn't anywhere. This is an error.
                 raise Exception('Must provide secret_key to use csrf.')
 
-            self.SECRET_KEY = secret_key
+            self.SECRET_KEY = to_bytes(secret_key)
         else:
             csrf_context = {}
-            self.SECRET_KEY = ""
+            self.SECRET_KEY = to_bytes("")
         super(Form, self).__init__(formdata, obj, prefix,
                                    csrf_context=csrf_context,
                                    *args, **kwargs)
