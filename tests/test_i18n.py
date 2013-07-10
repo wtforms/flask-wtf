@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from .base import TestCase
+from .base import TestCase, to_unicode
 
 
 class TestI18NCase(TestCase):
@@ -11,7 +11,7 @@ class TestI18NCase(TestCase):
             headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
             data={}
         )
-        assert 'This field is required.' in response.data
+        assert 'This field is required.' in to_unicode(response.data)
 
     def test_i18n_enabled(self):
         from flask import request
@@ -29,7 +29,7 @@ class TestI18NCase(TestCase):
             headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
             data={}
         )
-        assert '\u8be5\u5b57\u6bb5\u662f' in response.data
+        assert '\u8be5\u5b57\u6bb5\u662f' in to_unicode(response.data)
 
         response = self.client.post("/", data={})
-        assert 'This field is required.' in response.data
+        assert 'This field is required.' in to_unicode(response.data)

@@ -6,6 +6,10 @@ from flask import Flask, render_template, jsonify
 from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
 
 
+def to_unicode(text):
+    return text.decode('utf-8')
+
+
 class _JSONEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, _LazyString):

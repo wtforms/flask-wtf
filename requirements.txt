@@ -3,6 +3,6 @@ WTForms>=1.0.4
 
 # for testing
 nose
-Flask-Testing
 Flask-Uploads
 Flask-Babel
+# -e git://github.com/mitsuhiko/babel.git#egg=Babel
