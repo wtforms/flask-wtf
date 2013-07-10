@@ -1,13 +1,16 @@
 from __future__ import with_statement
 
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from flask import render_template, request
 
 from flask.ext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 
-from flask.ext.wtf import Form, TextField, FileField, FieldList, \
-                         file_required, file_allowed
+from flask.ext.wtf import Form, TextField, FileField, FieldList
+from flask.ext.wtf import file_required, file_allowed
 
 from .base import TestCase
 
