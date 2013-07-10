@@ -1,9 +1,11 @@
-import urllib2
+try:
+    import urllib2 as http
+except ImportError:
+    # Python 3
+    from urllib import request as http
 
 from flask import request, current_app
-
 from wtforms import ValidationError
-
 from werkzeug import url_encode
 
 RECAPTCHA_VERIFY_SERVER = 'http://api-verify.recaptcha.net/verify'
@@ -60,7 +62,7 @@ class Recaptcha(object):
             'response':   response
         })
 
-        response = urllib2.urlopen(RECAPTCHA_VERIFY_SERVER, data)
+        response = http.urlopen(RECAPTCHA_VERIFY_SERVER, data)
 
         if response.code != 200:
             return False

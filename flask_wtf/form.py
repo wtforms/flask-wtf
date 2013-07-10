@@ -1,5 +1,12 @@
 # coding: utf-8
 
+import sys
+if sys.version_info[0] == 3:
+    basestring = str
+    string_type = str
+else:
+    string_type = unicode
+
 import werkzeug.datastructures
 
 from jinja2 import Markup
@@ -132,7 +139,7 @@ class Form(SessionSecureForm):
         for field in fields:
             if isinstance(field, basestring):
                 field = getattr(self, field)
-            rv.append(unicode(field))
+            rv.append(string_type(field))
         rv.append(u"</div>")
 
         return Markup(u"".join(rv))
