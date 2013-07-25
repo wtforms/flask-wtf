@@ -3,6 +3,18 @@ language: python
 python:
     - "2.6"
     - "2.7"
+    - "pypy"
+    - "3.3"
+
+install:
+    # TODO: remove babel when it is released
+    - git clone https://github.com/mitsuhiko/babel.git
+    - cd babel
+    - python setup.py import_cldr install
+    - cd ..
+    - rm -fr babel
+    # Normal installation
+    - pip install -r requirements.txt
 
 script:
     - nosetests
