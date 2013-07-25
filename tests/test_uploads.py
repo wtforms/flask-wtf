@@ -1,16 +1,16 @@
 from __future__ import with_statement
 
 try:
-    from StringIO import StringIO
+    from io import BytesIO
 except ImportError:
-    from io import StringIO
+    from StringIO import StringIO as BytesIO
 
 from flask import render_template, request
 
 from flask.ext.wtf import Form, TextField, FileField, FieldList
 from flask.ext.wtf import file_required, file_allowed
 
-from .base import TestCase
+from .base import TestCase, to_unicode
 
 
 class UploadSet(object):
@@ -94,7 +94,7 @@ class TestFileUpload(TestCase):
         return app
 
     def test_multiple_files(self):
-        fps = [self.app.open_resource("flask.png") for i in xrange(3)]
+        fps = [self.app.open_resource("flask.png") for i in range(3)]
         data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)]
         response = self.client.post("/upload-multiple/", data=dict(data))
         assert response.status_code == 200
@@ -104,26 +104,26 @@ class TestFileUpload(TestCase):
             response = self.client.post("/upload-image/",
                 data={'upload': fp})
 
-        assert "OK" in response.data
+        assert "OK" in to_unicode(response.data)
 
     def test_missing_file(self):
         response = self.client.post("/upload-image/",
                 data={'upload': "test"})
 
-        assert "invalid" in response.data
+        assert "invalid" in to_unicode(response.data)
 
     def test_invalid_file(self):
         with self.app.open_resource("flask.png") as fp:
             response = self.client.post("/upload-text/", 
                 data={'upload': fp})
 
-        assert "invalid" in response.data
+        assert "invalid" in to_unicode(response.data)
 
     def test_invalid_file_2(self):
         response = self.client.post("/upload/",
                 data={'upload': 'flask.png'})
 
-        assert "flask.png</h3>" not in response.data
+        assert "flask.png</h3>" not in to_unicode(response.data)
 
 
 class BrokenForm(Form):
@@ -133,13 +133,13 @@ class BrokenForm(Form):
 text_data = [('text_fields-0', 'First input'),
              ('text_fields-1', 'Second input')]
 
-file_data = [('file_fields-0', (StringIO('contents 0'), 'file0.txt')),
-             ('file_fields-1', (StringIO('contents 1'), 'file1.txt'))]
+file_data = [('file_fields-0', (BytesIO(b'contents 0'), 'file0.txt')),
+             ('file_fields-1', (BytesIO(b'contents 1'), 'file1.txt'))]
 
 class TestFileList(TestCase):
     def test_multiple_upload(self):
-        with self.app.test_request_context(method='POST',
-                                           data=dict(text_data + file_data)):
+        data = dict(text_data + file_data)
+        with self.app.test_request_context(method='POST', data=data):
             assert len(request.files) # the files have been added to the
                                       # request
 
