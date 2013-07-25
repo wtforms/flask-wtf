@@ -46,8 +46,6 @@ setup(
     ],
     tests_require=[
         'nose',
-        'Flask-Testing',
-        'Flask-Uploads',
         'Flask-Babel',
     ],
     classifiers=[
