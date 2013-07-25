@@ -8,6 +8,7 @@ python:
 
 install:
     # TODO: remove babel when it is released
+    - pip install pytz
     - git clone https://github.com/mitsuhiko/babel.git
     - cd babel
     - python setup.py import_cldr install
