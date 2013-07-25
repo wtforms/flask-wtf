@@ -1,12 +1,5 @@
 # coding: utf-8
 
-import sys
-if sys.version_info[0] == 3:
-    basestring = str
-    string_type = str
-else:
-    string_type = unicode
-
 import werkzeug.datastructures
 
 from jinja2 import Markup
@@ -14,6 +7,7 @@ from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.widgets import HiddenInput
 from wtforms.ext.csrf.session import SessionSecureForm
+from ._compat import string_type, to_bytes
 
 try:
     from .i18n import translations
@@ -27,13 +21,6 @@ class _Auto():
     Used when None is a valid option and should not be replaced by a default.
     '''
     pass
-
-
-def to_bytes(text):
-    """Transform string to bytes."""
-    if isinstance(text, string_type):
-        text = text.encode('utf-8')
-    return text
 
 
 def _is_hidden(field):
