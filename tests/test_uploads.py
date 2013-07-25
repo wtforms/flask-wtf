@@ -7,15 +7,26 @@ except ImportError:
 
 from flask import render_template, request
 
-from flask.ext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
-
 from flask.ext.wtf import Form, TextField, FileField, FieldList
 from flask.ext.wtf import file_required, file_allowed
 
 from .base import TestCase
 
-images = UploadSet("images", IMAGES)
-text = UploadSet("text", TEXT)
+
+class UploadSet(object):
+    def __init__(self, name='files', extensions=None):
+        self.name = name
+        self.extensions = extensions
+
+    def file_allowed(self, storage, basename):
+        if not self.extensions:
+            return True
+
+        ext = basename.rsplit('.', 1)[-1]
+        return ext in self.extensions
+
+images = UploadSet('images', ['jpg', 'png'])
+text = UploadSet('text', ['txt'])
 
 
 class FileUploadForm(Form):
@@ -42,9 +53,6 @@ class TestFileUpload(TestCase):
     def create_app(self):
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
-        app.config['UPLOADED_FILES_DEST'] = 'uploads'
-        app.config['UPLOADS_DEFAULT_DEST'] = 'uploads'
-        configure_uploads(app, [images, text])
 
         @app.route("/upload-image/", methods=("POST",))
         def upload_image():
