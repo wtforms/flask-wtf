@@ -7,7 +7,7 @@ from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.widgets import HiddenInput
 from wtforms.ext.csrf.session import SessionSecureForm
-from ._compat import string_type, to_bytes
+from ._compat import string_type, string_types, to_bytes
 
 try:
     from .i18n import translations
@@ -131,7 +131,7 @@ class Form(SessionSecureForm):
 
         rv = [u'<div style="display:none;">']
         for field in fields:
-            if isinstance(field, basestring):
+            if isinstance(field, string_types):
                 field = getattr(self, field)
             rv.append(string_type(field))
         rv.append(u"</div>")
