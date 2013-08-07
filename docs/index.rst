@@ -36,9 +36,17 @@ The following settings are used with **Flask-WTF**:
 
 .. tabularcolumns:: |l|l|
 
-================ ================
-``CSRF_ENABLED`` default ``True``
-================ ================
+==================== =======================
+``CSRF_ENABLED``     default ``True``
+``WTF_I18N_ENABLED`` default ``True``
+==================== =======================
+
+.. versionadded:: 0.9.0
+
+    ``WTF_I18N_ENABLED``
+
+When you have installed `Flask-Babel <http://pythonhosted.org/Flask-Babel/>`_ and ``WTF_I18N_ENABLED`` is ``True``, it will auto load translations
+from wtforms.
 
 ``CSRF_ENABLED`` enables CSRF. You can disable by passing in the
 ``csrf_enabled`` parameter to your form::
@@ -130,7 +138,7 @@ Using the 'safe' filter
 -----------------------
 
 The **safe** filter used to be required with WTForms in Jinja2 templates,
-otherwise your markup would be escaped. For example:
+otherwise your markup would be escaped. For example::
 
     {{ form.name|safe }}
 
