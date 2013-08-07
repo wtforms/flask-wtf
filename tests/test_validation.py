@@ -4,6 +4,16 @@ import re
 
 from .base import TestCase, MyForm, to_unicode
 
+csrf_token_input = re.compile(
+    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"'
+)
+
+
+def get_csrf_token(data):
+    match = csrf_token_input.search(to_unicode(data))
+    assert match
+    return match.groups()[0]
+
 
 class TestValidateOnSubmit(TestCase):
 
@@ -53,7 +63,11 @@ class TestCSRF(TestCase):
     def test_csrf_token(self):
 
         response = self.client.get("/")
-        assert '<div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value' in to_unicode(response.data)
+        snippet = (
+            '<div style="display:none;">'
+            '<input id="csrf_token" name="csrf_token" type="hidden" value'
+        )
+        assert snippet in to_unicode(response.data)
 
     def test_invalid_csrf(self):
 
@@ -75,20 +89,16 @@ class TestCSRF(TestCase):
 
     def test_ajax(self):
 
-        response = self.client.post("/ajax/",
-                                    data={"name": "danny"},
-                                    headers={'X-Requested-With': 'XMLHttpRequest'})
-
+        response = self.client.post(
+            "/ajax/", data={"name": "danny"},
+            headers={'X-Requested-With': 'XMLHttpRequest'}
+        )
         assert response.status_code == 200
 
     def test_valid_csrf(self):
 
         response = self.client.get("/")
-        pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
-        match = pattern.search(to_unicode(response.data))
-        assert match
-
-        csrf_token = match.groups()[0]
+        csrf_token = get_csrf_token(response.data)
 
         response = self.client.post("/", data={"name": "danny",
                                                "csrf_token": csrf_token})
@@ -97,21 +107,16 @@ class TestCSRF(TestCase):
     def test_double_csrf(self):
 
         response = self.client.get("/")
-        pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
-        match = pattern.search(to_unicode(response.data))
-        assert match
+        csrf_token = get_csrf_token(response.data)
 
-        csrf_token = match.groups()[0]
-
-        response = self.client.post("/two_forms/", data={"name": "danny",
-                                                         "csrf_token": csrf_token})
+        response = self.client.post("/two_forms/", data={
+            "name": "danny",
+            "csrf_token": csrf_token
+        })
         assert to_unicode(response.data) == "OK"
 
     def test_valid_csrf_data(self):
         with self.app.test_request_context():
             form = MyForm()
-            pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
-            match = pattern.search(form.csrf_token())
-            assert match
-            csrf_token = match.groups()[0]
+            csrf_token = get_csrf_token(form.csrf_token())
             assert form.validate_csrf_data(csrf_token)
