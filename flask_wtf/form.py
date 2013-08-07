@@ -107,6 +107,15 @@ class Form(SessionSecureForm):
             return True
         super(Form, self).validate_csrf_token(field)
 
+    def validate_csrf_data(self, data):
+        field = self.csrf_token
+        field.data = data
+        try:
+            self.validate_csrf_token(field)
+            return True
+        except:
+            return False
+
     def is_submitted(self):
         """
         Checks if form has been submitted. The default case is if the HTTP

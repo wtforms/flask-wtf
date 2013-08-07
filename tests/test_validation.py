@@ -106,3 +106,12 @@ class TestCSRF(TestCase):
         response = self.client.post("/two_forms/", data={"name": "danny",
                                                          "csrf_token": csrf_token})
         assert to_unicode(response.data) == "OK"
+
+    def test_valid_csrf_data(self):
+        with self.app.test_request_context():
+            form = MyForm()
+            pattern = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"')
+            match = pattern.search(form.csrf_token())
+            assert match
+            csrf_token = match.groups()[0]
+            assert form.validate_csrf_data(csrf_token)
