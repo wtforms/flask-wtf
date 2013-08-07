@@ -11,7 +11,7 @@
 import os
 import hmac
 import hashlib
-from datetime import datetime, timedelta
+import time
 from flask import current_app, session, request, abort
 from ._compat import to_bytes
 
@@ -19,13 +19,13 @@ from ._compat import to_bytes
 TIME_FORMAT = '%Y%m%d%H%M%S'
 
 
-def generate_csrf(secret_key=None, time_limit=30):
+def generate_csrf(secret_key=None, time_limit=3600):
     """Generate csrf token code.
 
     :param secret_key: A secret key for mixing in the token,
                        default is Flask.secret_key.
     :param time_limit: Token valid in the time limit,
-                       default is 30 minutes.
+                       default is 3600s.
     """
     if not secret_key:
         secret_key = current_app.secret_key
@@ -34,9 +34,7 @@ def generate_csrf(secret_key=None, time_limit=30):
         session['csrf_token'] = hashlib.sha1(os.urandom(64)).hexdigest()
 
     if time_limit:
-        if not isinstance(time_limit, timedelta):
-            time_limit = timedelta(minutes=time_limit)
-        expires = (datetime.now() + time_limit).strftime(TIME_FORMAT)
+        expires = time.time() + time_limit
         csrf_build = '%s%s' % (session['csrf_token'], expires)
     else:
         expires = ''
@@ -63,9 +61,13 @@ def validate_csrf(data, secret_key=None, time_limit=True):
         return False
 
     expires, hmac_csrf = data.split('##')
+    try:
+        expires = float(expires)
+    except:
+        return False
 
     if time_limit:
-        now = datetime.now().strftime(TIME_FORMAT)
+        now = time.time()
         if now > expires:
             # refresh session
             session.pop('csrf_token', None)

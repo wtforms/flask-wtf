@@ -5,7 +5,7 @@ import re
 from .base import TestCase, MyForm, to_unicode
 
 csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"'
+    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
 )
 
 

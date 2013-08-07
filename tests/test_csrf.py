@@ -5,7 +5,7 @@ from flask.ext.wtf.csrf import csrf_protect
 from .base import TestCase, to_unicode
 
 csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-]*)"'
+    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
 )
 
 

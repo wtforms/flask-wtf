@@ -58,7 +58,7 @@ class Form(SecureForm):
                   Default: check app.config for CSRF_ENABLED, else True
     """
     SECRET_KEY = None
-    TIME_LIMIT = 30
+    TIME_LIMIT = 3600
 
     def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
                  secret_key=None, csrf_enabled=None, *args, **kwargs):
