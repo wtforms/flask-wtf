@@ -69,8 +69,6 @@ def validate_csrf(data, secret_key=None, time_limit=True):
     if time_limit:
         now = time.time()
         if now > expires:
-            # refresh session
-            session.pop('csrf_token', None)
             return False
 
     if not secret_key:
@@ -85,23 +83,56 @@ def validate_csrf(data, secret_key=None, time_limit=True):
     return hmac_compare == hmac_csrf
 
 
-def csrf_protect(app, on_csrf=None):
-    """Enable csrf protect for Flask."""
+class CsrfProtect(object):
+    """Enable csrf protect for Flask.
 
-    app.config['WTF_CSRF_PROTECT'] = True
-    secret_key = app.config.get('WTF_CSRF_SECRET_KEY', app.secret_key)
+    Register it with::
 
-    @app.before_request
-    def _csrf_protect():
-        if app.testing:
-            return
-        if not request.method == 'POST':
-            return
+        app = Flask(__name__)
+        CsrfProtect(app)
 
-        csrf_token = request.form.get('csrf_token')
-        if not validate_csrf(csrf_token, secret_key):
-            if on_csrf:
-                on_csrf(*app.match_request())
-            return abort(400)
+    And in the templates, add the token input::
 
-    app.jinja_env.globals['csrf_token'] = generate_csrf
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+    If you need to send the token via AJAX, and there is no form::
+
+        <meta name="csrf_token" value="{{ csrf_token() }}" />
+
+    You can grab the csrf token with JavaScript, and send the token together.
+    """
+
+    def __init__(self, app=None, on_csrf=None):
+        self.on_csrf = on_csrf
+        self._exempt_views = set()
+
+        if app:
+            self.init_app(app)
+
+    def init_app(self, app):
+        secret_key = app.config.get('WTF_CSRF_SECRET_KEY', app.secret_key)
+        app.jinja_env.globals['csrf_token'] = generate_csrf
+
+        @app.before_request
+        def _csrf_protect():
+            if app.testing:
+                return
+            if not request.method == 'POST':
+                return
+
+            view = app.view_functions.get(request.endpoint)
+            dest = '%s.%s' % (view.__module__, view.__name__)
+            if self._exempt_views and dest in self._exempt_views:
+                return
+
+            request._csrf_protected = True
+            csrf_token = request.form.get('csrf_token')
+            if not validate_csrf(csrf_token, secret_key):
+                if self.on_csrf:
+                    self.on_csrf(*app.match_request())
+                return abort(400)
+
+    def exempt(self, view):
+        view_location = '%s.%s' % (view.__module__, view.__name__)
+        self._exempt_views.add(view_location)
+        return view

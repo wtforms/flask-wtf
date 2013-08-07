@@ -112,7 +112,7 @@ class Form(SecureForm):
     def validate_csrf_token(self, field):
         if not self.csrf_enabled:
             return True
-        if current_app.config.get('WTF_CSRF_PROTECT'):
+        if hasattr(request, 'csrf_protected') and request.csrf_protected:
             return True
         if not validate_csrf(field.data, self.SECRET_KEY, self.TIME_LIMIT):
             raise ValidationError(field.gettext('CSRF token missing'))

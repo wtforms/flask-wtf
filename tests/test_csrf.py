@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
 import re
-from flask.ext.wtf.csrf import csrf_protect
+from flask.ext.wtf.csrf import CsrfProtect
 from .base import TestCase, to_unicode
 
 csrf_token_input = re.compile(
@@ -19,7 +19,7 @@ class TestCSRF(TestCase):
     def setUp(self):
         self.app = self.create_app()
         self.app.config['WTF_CSRF_SECRET_KEY'] = "a poorly kept secret."
-        csrf_protect(self.app)
+        CsrfProtect(self.app)
         self.client = self.app.test_client()
 
     def test_invalid_csrf(self):
