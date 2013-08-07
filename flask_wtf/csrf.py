@@ -87,6 +87,7 @@ def csrf_protect(app, on_csrf=None):
     """Enable csrf protect for Flask."""
 
     app.config['WTF_CSRF_PROTECT'] = True
+    secret_key = app.config.get('WTF_CSRF_SECRET_KEY', app.secret_key)
 
     @app.before_request
     def _csrf_protect():
@@ -96,7 +97,7 @@ def csrf_protect(app, on_csrf=None):
             return
 
         csrf_token = request.form.get('csrf_token')
-        if not validate_csrf(csrf_token):
+        if not validate_csrf(csrf_token, secret_key):
             if on_csrf:
                 on_csrf(*app.match_request())
             return abort(400)

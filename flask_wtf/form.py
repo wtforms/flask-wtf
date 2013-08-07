@@ -64,11 +64,8 @@ class Form(SecureForm):
                  secret_key=None, csrf_enabled=None, *args, **kwargs):
 
         if csrf_enabled is None:
-            if current_app.config.get('WTF_CSRF_PROTECT'):
-                # it is global enabled, no need for each form
-                csrf_enabled = False
-            else:
-                csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+            csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+
         self.csrf_enabled = csrf_enabled
 
         if formdata is _Auto:
@@ -114,6 +111,8 @@ class Form(SecureForm):
 
     def validate_csrf_token(self, field):
         if not self.csrf_enabled:
+            return True
+        if current_app.config.get('WTF_CSRF_PROTECT'):
             return True
         if not validate_csrf(field.data, self.SECRET_KEY, self.TIME_LIMIT):
             raise ValidationError(field.gettext('CSRF token missing'))
