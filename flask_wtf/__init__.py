@@ -15,10 +15,9 @@ from wtforms import fields, widgets, validators
 from wtforms.fields import *
 from wtforms.validators import *
 from wtforms.widgets import *
-from wtforms import ValidationError
 
-from . import html5
 from .form import Form
+from . import html5
 from . import recaptcha
 
 from .recaptcha.fields import RecaptchaField
@@ -30,7 +29,8 @@ widgets.RecaptchaWidget = RecaptchaWidget
 validators.Recaptcha = Recaptcha
 
 from .file import FileField
-from .file import FileAllowed, FileRequired, file_allowed, file_required
+from .file import FileAllowed, FileRequired
+from .file import file_allowed, file_required
 
 fields.FileField = FileField
 
@@ -38,14 +38,3 @@ validators.file_allowed = file_allowed
 validators.file_required = file_required
 validators.FileAllowed = FileAllowed
 validators.FileRequired = FileRequired
-
-
-__all__ = ['Form', 'ValidationError', 'fields', 'validators', 'widgets', 'html5']
-
-__all__ += [str(v) for v in validators.__all__ ]
-__all__ += [str(v) for v in (fields.__all__ if hasattr(fields, '__all__') else
-    fields.core.__all__) ]
-
-__all__ += [str(v) for v in (widgets.__all__ if hasattr(widgets, '__all__') else
-    widgets.core.__all__)]
-__all__ += recaptcha.__all__
