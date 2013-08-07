@@ -12,11 +12,9 @@
     :license: BSD, see LICENSE for more details.
 """
 from __future__ import with_statement
-import sqlite3
-from contextlib import closing
-from flask import (Flask, request, session, g, redirect, url_for, abort,
+from flask import (Flask, session, redirect, url_for, abort,
                    render_template, flash)
-from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField, 
+from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField,
                            SubmitField, Required, ValidationError)
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -62,11 +60,11 @@ class LoginForm(Form):
 
     def validate_username(self, field):
         if field.data != USERNAME:
-            raise ValidationError, "Invalid username"
+            raise ValidationError("Invalid username")
 
     def validate_password(self, field):
         if field.data != PASSWORD:
-            raise ValidationError, "Invalid password"
+            raise ValidationError("Invalid password")
 
 
 @app.route('/')
