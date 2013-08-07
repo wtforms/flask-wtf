@@ -6,8 +6,10 @@ from jinja2 import Markup
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.widgets import HiddenInput
-from wtforms.ext.csrf.session import SessionSecureForm
-from ._compat import text_type, string_types, to_bytes
+from wtforms.validators import ValidationError
+from wtforms.ext.csrf.form import SecureForm
+from ._compat import text_type, string_types
+from .csrf import generate_csrf, validate_csrf
 
 try:
     from .i18n import translations
@@ -32,7 +34,7 @@ def _is_hidden(field):
     return False
 
 
-class Form(SessionSecureForm):
+class Form(SecureForm):
     """
     Flask-specific subclass of WTForms **SessionSecureForm** class.
 
@@ -55,11 +57,18 @@ class Form(SessionSecureForm):
                   behavior is suppressed.
                   Default: check app.config for CSRF_ENABLED, else True
     """
+    SECRET_KEY = None
+    TIME_LIMIT = 30
+
     def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
                  secret_key=None, csrf_enabled=None, *args, **kwargs):
 
         if csrf_enabled is None:
-            csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+            if current_app.config.get('WTF_CSRF_PROTECT'):
+                # it is global enabled, no need for each form
+                csrf_enabled = False
+            else:
+                csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
         self.csrf_enabled = csrf_enabled
 
         if formdata is _Auto:
@@ -72,6 +81,7 @@ class Form(SessionSecureForm):
                     formdata = werkzeug.datastructures.MultiDict(request.json)
             else:
                 formdata = None
+
         if self.csrf_enabled:
             if csrf_context is None:
                 csrf_context = session
@@ -89,10 +99,10 @@ class Form(SessionSecureForm):
                 # It wasn't anywhere. This is an error.
                 raise Exception('Must provide secret_key to use csrf.')
 
-            self.SECRET_KEY = to_bytes(secret_key)
+            self.SECRET_KEY = secret_key
         else:
             csrf_context = {}
-            self.SECRET_KEY = to_bytes("")
+            self.SECRET_KEY = ''
         super(Form, self).__init__(formdata, obj, prefix,
                                    csrf_context=csrf_context,
                                    *args, **kwargs)
@@ -100,12 +110,13 @@ class Form(SessionSecureForm):
     def generate_csrf_token(self, csrf_context=None):
         if not self.csrf_enabled:
             return None
-        return super(Form, self).generate_csrf_token(csrf_context)
+        return generate_csrf(self.SECRET_KEY, self.TIME_LIMIT)
 
     def validate_csrf_token(self, field):
         if not self.csrf_enabled:
             return True
-        super(Form, self).validate_csrf_token(field)
+        if not validate_csrf(field.data, self.SECRET_KEY, self.TIME_LIMIT):
+            raise ValidationError(field.gettext('CSRF token missing'))
 
     def validate_csrf_data(self, data):
         """Check if the csrf data is valid.
@@ -114,13 +125,7 @@ class Form(SessionSecureForm):
 
         :param data: the csrf string to be validated.
         """
-        field = self.csrf_token
-        field.data = data
-        try:
-            self.validate_csrf_token(field)
-            return True
-        except:
-            return False
+        return validate_csrf(data, self.SECRET_KEY, self.TIME_LIMIT)
 
     def is_submitted(self):
         """
