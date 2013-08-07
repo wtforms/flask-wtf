@@ -11,12 +11,6 @@
 # flake8: noqa
 from __future__ import absolute_import
 
-try:
-    import sqlalchemy
-    _is_sqlalchemy = True
-except ImportError:
-    _is_sqlalchemy = False
-
 from wtforms import fields, widgets, validators
 from wtforms.fields import *
 from wtforms.validators import *
@@ -55,15 +49,3 @@ __all__ += [str(v) for v in (fields.__all__ if hasattr(fields, '__all__') else
 __all__ += [str(v) for v in (widgets.__all__ if hasattr(widgets, '__all__') else
     widgets.core.__all__)]
 __all__ += recaptcha.__all__
-
-if _is_sqlalchemy:
-    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
-        QuerySelectMultipleField
-
-    __all__ += ['QuerySelectField',
-                'QuerySelectMultipleField']
-
-    for field in (QuerySelectField,
-                  QuerySelectMultipleField):
-
-        setattr(fields, field.__name__, field)
