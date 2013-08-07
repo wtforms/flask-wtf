@@ -29,6 +29,19 @@ or download the latest version from version control::
 If you are using **virtualenv**, it is assumed that you are installing Flask-WTF
 in the same virtualenv as your Flask application(s).
 
+Examples
+--------
+
+You may find examples more helpful, we have some examples on GitHub:
+
+* flaskr_: A micro blog application
+* babel_: How to integer with babel
+
+.. _flaskr: https://github.com/ajford/flask-wtf/tree/master/examples/flaskr
+.. _babel: https://github.com/ajford/flask-wtf/tree/master/examples/babel
+
+Explore more examples on GitHub.
+
 Configuring Flask-WTF
 ----------------------
 
