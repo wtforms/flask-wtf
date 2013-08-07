@@ -108,6 +108,12 @@ class Form(SessionSecureForm):
         super(Form, self).validate_csrf_token(field)
 
     def validate_csrf_data(self, data):
+        """Check if the csrf data is valid.
+
+        .. versionadded: 0.9.0
+
+        :param data: the csrf string to be validated.
+        """
         field = self.csrf_token
         field.data = data
         try:

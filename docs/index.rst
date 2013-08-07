@@ -11,7 +11,7 @@ Source code and issue tracking at `GitHub`_.
 
 Current Version
 ---------------
-The current version of Flask-WTF is |release|. 
+The current version of Flask-WTF is |release|.
 
 Installing Flask-WTF
 ---------------------
@@ -92,15 +92,15 @@ Creating forms
     Flask-WTF will provide a facade to the more common WTForms fields and
     validator.  However, this facade is proving difficult to maintain and has
     caused confusion when it does not provide a field/validator that was
-    desired. 
-    
+    desired.
+
     You should now import all fields and validators from the main WTForms
     package, excepting the HTML5 fields (which will be introduced to WTForms
     soon, see `HTML5 widgets`_ for more info) and the Recaptcha field.
 
 **Flask-WTF** provides you with all the API features of WTForms. For example::
 
-    from flask.ext.wtf import Form 
+    from flask.ext.wtf import Form
     from wtforms import TextField, validators
 
     class MyForm(Form):
@@ -109,7 +109,7 @@ Creating forms
 In addition, a CSRF token hidden field is created. You can print this in your
 template as any other field::
 
-    
+
     <form method="POST" action=".">
         {{ form.csrf_token }}
         {{ form.name.label }} {{ form.name(size=20) }}
@@ -122,7 +122,7 @@ template as any other field::
 However, in order to create valid XHTML/HTML the ``Form`` class has a method
 ``hidden_tag`` which renders any hidden fields, including the CSRF field, inside
 a hidden DIV tag::
-    
+
     <form method="POST" action=".">
         {{ form.hidden_tag() }}
 
@@ -202,7 +202,7 @@ example::
 
     class UploadForm(Form):
 
-        upload = FileField("Upload your image", 
+        upload = FileField("Upload your image",
                            validators=[file_required(),
                                        file_allowed(images, "Images only!")])
 
@@ -242,7 +242,7 @@ Recaptcha
 ---------
 
 **Flask-WTF** also provides Recaptcha support through a ``RecaptchaField``::
-    
+
     from flask.ext.wtf import Form, RecaptchaField
     from wtforms import TextField
 
@@ -256,7 +256,7 @@ output. The following settings are required in order to use Recaptcha:
     * ``RECAPTCHA_USE_SSL`` : default ``False``
     * ``RECAPTCHA_PUBLIC_KEY``
     * ``RECAPTCHA_PRIVATE_KEY``
-    * ``RECAPTCHA_OPTIONS`` 
+    * ``RECAPTCHA_OPTIONS``
 
 ``RECAPTCHA_OPTIONS`` is an optional dict of configuration options. The public
 and private keys are required in order to authenticate your request with
@@ -291,7 +291,7 @@ with a couple of changes. Aside from CSRF validation, a convenience method
 
     from flask import Flask, request, flash, redirect, url_for, \
         render_template
-    
+
     from flask.ext.wtf import Form
     from wtforms import TextField
 
@@ -302,7 +302,7 @@ with a couple of changes. Aside from CSRF validation, a convenience method
 
     @app.route("/submit/", methods=("GET", "POST"))
     def submit():
-        
+
         form = MyForm()
         if form.validate_on_submit():
             flash("Success")
@@ -323,7 +323,7 @@ Note the difference from a pure WTForms solution::
 
     @app.route("/submit/", methods=("GET", "POST"))
     def submit():
-        
+
         form = MyForm(request.form)
         if request.method == "POST" and form.validate():
             flash("Success")
@@ -345,7 +345,7 @@ API
 
 .. autoclass:: Form
    :members:
-    
+
 .. autoclass:: RecaptchaField
 
 .. autoclass:: Recaptcha
