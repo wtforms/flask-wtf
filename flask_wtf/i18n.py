@@ -1,10 +1,20 @@
 # coding: utf-8
+"""
+    flask_wtf.i18n
+    ~~~~~~~~~~~~~~
+
+    Internationalization support for Flask WTF.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
+"""
 
 from flask import _request_ctx_stack
 from wtforms.ext.i18n.utils import messages_path
 from flask.ext.babel import get_locale
 from speaklater import make_lazy_string
 from babel import support
+
+__all__ = ('Translations', 'translations')
 
 
 def _get_translations():
