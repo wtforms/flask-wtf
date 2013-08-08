@@ -96,7 +96,7 @@ class CsrfProtect(object):
 
     If you need to send the token via AJAX, and there is no form::
 
-        <meta name="csrf_token" value="{{ csrf_token() }}" />
+        <meta name="csrf_token" content="{{ csrf_token() }}" />
 
     You can grab the csrf token with JavaScript, and send the token together.
     """
@@ -116,15 +116,24 @@ class CsrfProtect(object):
         def _csrf_protect():
             if app.testing:
                 return
+
             if not request.method == 'POST':
+                # only protect POST methods
                 return
 
-            view = app.view_functions.get(request.endpoint)
-            dest = '%s.%s' % (view.__module__, view.__name__)
-            if self._exempt_views and dest in self._exempt_views:
-                return
+            if self._exempt_views:
+                if not request.endpoint:
+                    return
 
-            request.csrf_protected = True
+                view = app.view_functions.get(request.endpoint)
+                if not view:
+                    return
+
+                dest = '%s.%s' % (view.__module__, view.__name__)
+                if dest in self._exempt_views:
+                    return
+
+            request.csrf_valid = True  # mark this request is csrf valid
             csrf_token = request.form.get('csrf_token')
             if not validate_csrf(csrf_token, secret_key):
                 if self.on_csrf:
