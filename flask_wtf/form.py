@@ -36,7 +36,7 @@ def _is_hidden(field):
 
 class Form(SecureForm):
     """
-    Flask-specific subclass of WTForms **SessionSecureForm** class.
+    Flask-specific subclass of WTForms **SecureForm** class.
 
     If formdata is not specified, this will use flask.request.form.
     Explicitly pass formdata = None to prevent this.
@@ -48,6 +48,7 @@ class Form(SecureForm):
     specified, the form will take the first of these that is defined:
 
         * the SECRET_KEY attribute on this class
+        * the value of flask.current_app.config["WTF_CSRF_SECRET_KEY"]
         * the value of flask.current_app.config["SECRET_KEY"]
         * the session's secret_key
 
@@ -55,7 +56,7 @@ class Form(SecureForm):
 
     csrf_enabled: whether to use CSRF protection. If False, all csrf
                   behavior is suppressed.
-                  Default: check app.config for CSRF_ENABLED, else True
+                  Default: check app.config for WTF_CSRF_ENABLED, else True
     """
     SECRET_KEY = None
     TIME_LIMIT = 3600
@@ -64,7 +65,7 @@ class Form(SecureForm):
                  secret_key=None, csrf_enabled=None, *args, **kwargs):
 
         if csrf_enabled is None:
-            csrf_enabled = current_app.config.get('CSRF_ENABLED', True)
+            csrf_enabled = current_app.config.get('WTF_CSRF_ENABLED', True)
 
         self.csrf_enabled = csrf_enabled
 
@@ -86,8 +87,10 @@ class Form(SecureForm):
                 # It wasn't passed in, check if the class has a SECRET_KEY set
                 secret_key = getattr(self, "SECRET_KEY", None)
             if secret_key is None:
+                secret_key = getattr(self, "WTF_CSRF_SECRET_KEY", None)
+            if secret_key is None:
                 # It wasn't on the class, check the application config
-                secret_key = current_app.config.get("SECRET_KEY")
+                secret_key = current_app.secret_key
             if secret_key is None and session:
                 # It's not there either!
                 # Is there a session secret key if we can
