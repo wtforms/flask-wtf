@@ -8,9 +8,9 @@ except ImportError:
 from flask import render_template, request
 
 from wtforms import TextField, FieldList
-from flask.ext.wtf import Form
-from flask.ext.wtf.file import FileField
-from flask.ext.wtf.file import file_required, file_allowed
+from flask_wtf import Form
+from flask_wtf.file import FileField
+from flask_wtf.file import file_required, file_allowed
 
 from .base import TestCase, to_unicode
 

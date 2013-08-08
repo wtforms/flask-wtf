@@ -2,8 +2,8 @@ from __future__ import with_statement
 
 import re
 from flask import render_template
-from flask.ext.wtf.csrf import CsrfProtect
-from flask.ext.wtf.csrf import validate_csrf, generate_csrf
+from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import validate_csrf, generate_csrf
 from .base import TestCase, MyForm, to_unicode
 
 csrf_token_input = re.compile(

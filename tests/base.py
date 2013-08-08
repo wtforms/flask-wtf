@@ -3,10 +3,10 @@ from __future__ import with_statement
 from speaklater import _LazyString
 from flask.json import JSONEncoder
 from flask import Flask, render_template, jsonify
-from flask.ext.wtf import Form
 from wtforms import TextField, HiddenField, SubmitField
 from wtforms.validators import DataRequired
-from flask.ext.wtf._compat import text_type
+from flask_wtf import Form
+from flask_wtf._compat import text_type
 
 
 def to_unicode(text):

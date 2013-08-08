@@ -1,5 +1,5 @@
 from .base import TestCase
-from flask.ext.wtf import html5
+from flask_wtf import html5
 
 
 class DummyField(object):
