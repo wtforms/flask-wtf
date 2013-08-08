@@ -126,7 +126,7 @@ class CsrfProtect(object):
             csrf_token = request.form.get('csrf_token')
             if not validate_csrf(csrf_token, secret_key):
                 if self.on_csrf:
-                    self.on_csrf(*app.match_request())
+                    self.on_csrf(request)
                 return abort(400)
 
     def exempt(self, view):
