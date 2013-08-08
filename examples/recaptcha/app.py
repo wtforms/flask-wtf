@@ -1,5 +1,8 @@
 from flask import Flask, render_template, flash, session, redirect, url_for
-from flask.ext.wtf import Form, TextAreaField, RecaptchaField, Required
+from wtforms import TextAreaField
+from wtforms.validators import DataRequired
+from flask.ext.wtf import Form
+from flask.ext.wtf.recaptcha import RecaptchaField
 
 
 DEBUG = True
@@ -16,7 +19,7 @@ app.config.from_object(__name__)
 
 class CommentForm(Form):
 
-    comment = TextAreaField("Comment", validators=[Required()])
+    comment = TextAreaField("Comment", validators=[DataRequired()])
     recaptcha = RecaptchaField()
 
 

@@ -14,8 +14,9 @@
 from __future__ import with_statement
 from flask import (Flask, session, redirect, url_for, abort,
                    render_template, flash)
-from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField,
-                           SubmitField, Required, ValidationError)
+from flask.ext.wtf import Form
+from wtforms import TextField, TextAreaField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, ValidationError
 from flask.ext.sqlalchemy import SQLAlchemy
 
 # configuration
@@ -47,7 +48,7 @@ db.create_all()
 
 class EntryForm(Form):
 
-    title = TextField("Title", validators=[Required()])
+    title = TextField("Title", validators=[DataRequired()])
     text = TextAreaField("Text")
     submit = SubmitField("Share")
 
