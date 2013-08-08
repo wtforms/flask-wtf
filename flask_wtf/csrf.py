@@ -16,9 +16,6 @@ from flask import current_app, session, request, abort
 from ._compat import to_bytes
 
 
-TIME_FORMAT = '%Y%m%d%H%M%S'
-
-
 def generate_csrf(secret_key=None, time_limit=3600):
     """Generate csrf token code.
 
@@ -125,7 +122,7 @@ class CsrfProtect(object):
             if self._exempt_views and dest in self._exempt_views:
                 return
 
-            request._csrf_protected = True
+            request.csrf_protected = True
             csrf_token = request.form.get('csrf_token')
             if not validate_csrf(csrf_token, secret_key):
                 if self.on_csrf:
@@ -133,6 +130,17 @@ class CsrfProtect(object):
                 return abort(400)
 
     def exempt(self, view):
+        """A decorator that can exclude a view from csrf protection.
+
+        Remember to put the decorator above the `route`::
+
+            csrf = CsrfProtect(app)
+
+            @csrf.exempt
+            @app.route('/some-view', methods=['POST'])
+            def some_view():
+                return
+        """
         view_location = '%s.%s' % (view.__module__, view.__name__)
         self._exempt_views.add(view_location)
         return view
