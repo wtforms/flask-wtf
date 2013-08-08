@@ -3,7 +3,9 @@ from __future__ import with_statement
 from speaklater import _LazyString
 from flask.json import JSONEncoder
 from flask import Flask, render_template, jsonify
-from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
+from flask.ext.wtf import Form
+from wtforms import TextField, HiddenField, SubmitField
+from wtforms.validators import DataRequired
 
 
 def to_unicode(text):
@@ -19,7 +21,7 @@ class _JSONEncoder(JSONEncoder):
 
 class MyForm(Form):
     SECRET_KEY = "a poorly kept secret."
-    name = TextField("Name", validators=[Required()])
+    name = TextField("Name", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
