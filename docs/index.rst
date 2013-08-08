@@ -49,23 +49,18 @@ The following settings are used with **Flask-WTF**:
 
 .. tabularcolumns:: |l|l|
 
-======================== =======================
-``WTF_CSRF_ENABLED``     default ``True``
-``WTF_CSRF_SECRET_KEY``  default ``None``
-``WTF_I18N_ENABLED``     default ``True``
-======================== =======================
+======================== ================================================
+``WTF_CSRF_ENABLED``     enable/disable csrf protection, default ``True``
+``WTF_CSRF_SECRET_KEY``  a secret key for generating csrf token, default
+                         is the same secret key of Flask app.
+``WTF_I18N_ENABLED``     enable/disable i18n support, default ``True``
+======================== ================================================
 
-.. versionadded:: 0.9.0
-
-    ``WTF_I18N_ENABLED``
-    ``WTF_CSRF_SECRET_KEY``
+In addition, there are additional configuration settings required for Recaptcha
+integration : see below.
 
 When you have installed `Flask-Babel <http://pythonhosted.org/Flask-Babel/>`_ and ``WTF_I18N_ENABLED`` is ``True``, it will auto load translations
 from wtforms.
-
-.. versionchanged:: 0.9.0
-
-    ``CSRF_ENABLED`` is changed to ``WTF_CSRF_ENABLED``
 
 ``WTF_CSRF_ENABLED`` enables CSRF. You can disable by passing in the
 ``csrf_enabled`` parameter to your form::
@@ -87,29 +82,37 @@ to the ``secret_key`` parameter of the form constructor, setting a
 (if this is also not present, then CSRF is impossible; creating a form with
 ``csrf_enabled = True`` will raise an exception).
 
-**NOTE:** Previous to version **0.5.2**, **Flask-WTF** automatically skipped
-CSRF validation in the case of AJAX POST requests, as AJAX toolkits added
-headers such as ``X-Requested-With`` when using the XMLHttpRequest and browsers
-enforced a strict same-origin policy.
+----------
 
-However it has since come to light that various browser plugins can circumvent
-these measures, rendering AJAX requests insecure by allowing forged requests to
-appear as an AJAX request.
+.. versionadded:: 0.9.0
 
-Therefore CSRF checking will now be applied to all POST requests, unless you
-disable CSRF at your own risk through the options described above.
+    ``WTF_I18N_ENABLED``, ``WTF_CSRF_SECRET_KEY``
 
-You can pass in the CSRF field manually in your AJAX request by accessing the
-**csrf** field in your form directly::
+.. versionchanged:: 0.9.0
 
-    var params = {'csrf' : '{{ form.csrf_token }}'};
+    ``CSRF_ENABLED`` is changed to ``WTF_CSRF_ENABLED``
 
-A more complete description of the issue can be found `here
-<http://www.djangoproject.com/weblog/2011/feb/08/security/>`_.
+.. note::
+    Previous to version **0.5.2**, **Flask-WTF** automatically skipped
+    CSRF validation in the case of AJAX POST requests, as AJAX toolkits added
+    headers such as ``X-Requested-With`` when using the XMLHttpRequest and browsers
+    enforced a strict same-origin policy.
 
+    However it has since come to light that various browser plugins can circumvent
+    these measures, rendering AJAX requests insecure by allowing forged requests to
+    appear as an AJAX request.
 
-In addition, there are additional configuration settings required for Recaptcha
-integration : see below.
+    Therefore CSRF checking will now be applied to all POST requests, unless you
+    disable CSRF at your own risk through the options described above.
+
+    You can pass in the CSRF field manually in your AJAX request by accessing the
+    **csrf** field in your form directly::
+
+        var params = {'csrf_token' : '{{ form.csrf_token }}'};
+
+    A more complete description of the issue can be found `here
+    <http://www.djangoproject.com/weblog/2011/feb/08/security/>`_.
+
 
 Creating forms
 --------------
@@ -152,21 +155,6 @@ a hidden DIV tag::
 
     <form method="POST" action=".">
         {{ form.hidden_tag() }}
-
-Using the 'safe' filter
------------------------
-
-The **safe** filter used to be required with WTForms in Jinja2 templates,
-otherwise your markup would be escaped. For example::
-
-    {{ form.name|safe }}
-
-However widgets in the latest version of WTForms return a `HTML safe string
-<http://jinja.pocoo.org/2/documentation/api#jinja2.Markup>`_ so you shouldn't
-need to use **safe**.
-
-Ensure you are running the latest stable version of WTForms so that you don't
-need to use this filter everywhere.
 
 File uploads
 ------------
@@ -308,6 +296,47 @@ then Recaptcha message strings can be localized.
     the widget within a Markup string. This issue has now been fixed. If you
     have already wrapped things in your code, this shouldn't be a problem, as
     rewrapping a Markup object does not have any detrimental effects.
+
+
+Csrf protection
+---------------
+
+.. versionadded:: 0.9.0
+
+Previously csrf protection is only designed for forms, since **version 0.9.0**, we have a solution for all POST requests.
+
+There are other libaries that handles csrf protection, for example `Flask-SeaSurf`_. However, it does not work the same way as `Flask-WTF`_, we need
+to share the same csrf protection way.
+
+To enable global csrf protection::
+
+    from flask.ext.wtf.csrf import CsrfProtect
+
+    csrf = CsrfProtect(app)
+
+You don't need to add any extra fields for your forms, keep the original
+way is all you need::
+
+    {{ form.csrf_token }}
+
+However, if the page has no forms, and it will handle a ``POST`` request,
+you should add an extra csrf token field yourself::
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+For those who send requests via AJAX, you can also get the parameters::
+
+    var params = {'csrf_token': "{{ csrf_token() }}"}
+
+.. _`Flask-SeaSurf`: http://pythonhosted.org/Flask-SeaSurf/
+
+If you want to exclude some views from csrf protection, you can add a `exempt`
+decorator for them::
+
+    @csrf.exempt
+    @app.route('/some-view', methods=['POST'])
+    def some_view():
+        pass
 
 API changes
 -----------
