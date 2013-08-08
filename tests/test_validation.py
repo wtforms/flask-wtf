@@ -22,12 +22,12 @@ class TestValidateOnSubmit(TestCase):
         assert 'DANNY' not in to_unicode(response.data)
 
     def test_submitted_not_valid(self):
-        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_CSRF_ENABLED'] = False
         response = self.client.post("/", data={})
         assert 'DANNY' not in to_unicode(response.data)
 
     def test_submitted_and_valid(self):
-        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_CSRF_ENABLED'] = False
         response = self.client.post("/", data={"name": "danny"})
         assert 'DANNY' in to_unicode(response.data)
 
@@ -77,7 +77,7 @@ class TestCSRF(TestCase):
 
     def test_csrf_disabled(self):
 
-        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_CSRF_ENABLED'] = False
 
         response = self.client.post("/", data={"name": "danny"})
         assert 'DANNY' in to_unicode(response.data)

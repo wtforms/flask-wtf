@@ -49,30 +49,36 @@ The following settings are used with **Flask-WTF**:
 
 .. tabularcolumns:: |l|l|
 
-==================== =======================
-``CSRF_ENABLED``     default ``True``
-``WTF_I18N_ENABLED`` default ``True``
-==================== =======================
+======================== =======================
+``WTF_CSRF_ENABLED``     default ``True``
+``WTF_CSRF_SECRET_KEY``  default ``None``
+``WTF_I18N_ENABLED``     default ``True``
+======================== =======================
 
 .. versionadded:: 0.9.0
 
     ``WTF_I18N_ENABLED``
+    ``WTF_CSRF_SECRET_KEY``
 
 When you have installed `Flask-Babel <http://pythonhosted.org/Flask-Babel/>`_ and ``WTF_I18N_ENABLED`` is ``True``, it will auto load translations
 from wtforms.
 
-``CSRF_ENABLED`` enables CSRF. You can disable by passing in the
+.. versionchanged:: 0.9.0
+
+    ``CSRF_ENABLED`` is changed to ``WTF_CSRF_ENABLED``
+
+``WTF_CSRF_ENABLED`` enables CSRF. You can disable by passing in the
 ``csrf_enabled`` parameter to your form::
 
     form = MyForm(csrf_enabled=False)
 
 Generally speaking it's a good idea to enable CSRF. If you wish to disable
 checking in certain circumstances - for example, in unit tests - you can set
-``CSRF_ENABLED`` to **False** in your configuration.
+``WTF_CSRF_ENABLED`` to **False** in your configuration.
 
 CSRF support is built using ``wtforms.ext.csrf``; ``Form`` is a subclass of
-`SessionSecureForm <http://wtforms.simplecodes.com/docs/dev/ext.html#wtforms.e
-xt.csrf.session.SessionSecureForm>`_. Essentially, each form generates a CSRF
+`SecureForm <http://wtforms.simplecodes.com/docs/dev/ext.html#wtforms.e
+xt.csrf.form.SecureForm>`_. Essentially, each form generates a CSRF
 token deterministically based on a secret key and a randomly generated value
 stored in the user's session. You can specify a secret key by passing a value
 to the ``secret_key`` parameter of the form constructor, setting a
