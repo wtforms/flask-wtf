@@ -62,6 +62,77 @@ class TestCSRF(TestCase):
         })
         assert "DANNY" in to_unicode(response.data)
 
+    def test_invalid_secure_csrf(self):
+        response = self.client.get("/", base_url='https://localhost/')
+        csrf_token = get_csrf_token(response.data)
+
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={'X-CSRFToken': csrf_token},
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 400
+        assert "failed" in to_unicode(response.data)
+
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://example.com/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 400
+        assert "not match" in to_unicode(response.data)
+
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'http://localhost/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 400
+        assert "not match" in to_unicode(response.data)
+
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://localhost:3000/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 400
+        assert "not match" in to_unicode(response.data)
+
+    def test_valid_secure_csrf(self):
+        response = self.client.get("/", base_url='https://localhost/')
+        csrf_token = get_csrf_token(response.data)
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://localhost/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 200
+
     def test_csrf_exempt(self):
         response = self.client.get("/csrf-exempt")
         csrf_token = get_csrf_token(response.data)
