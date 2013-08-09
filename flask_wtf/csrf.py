@@ -18,7 +18,7 @@ from ._compat import to_bytes
 __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
 
 
-def generate_csrf(secret_key=None, time_limit=3600):
+def generate_csrf(secret_key=None, time_limit=None):
     """Generate csrf token code.
 
     :param secret_key: A secret key for mixing in the token,
@@ -27,7 +27,15 @@ def generate_csrf(secret_key=None, time_limit=3600):
                        default is 3600s.
     """
     if not secret_key:
-        secret_key = current_app.secret_key
+        secret_key = current_app.config.get(
+            'WTF_CSRF_SECRET_KEY', current_app.secret_key
+        )
+
+    if not secret_key:
+        raise Exception('Must provide secret_key to use csrf.')
+
+    if time_limit is None:
+        time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
 
     if 'csrf_token' not in session:
         session['csrf_token'] = hashlib.sha1(os.urandom(64)).hexdigest()
@@ -47,7 +55,7 @@ def generate_csrf(secret_key=None, time_limit=3600):
     return '%s##%s' % (expires, hmac_csrf)
 
 
-def validate_csrf(data, secret_key=None, time_limit=True):
+def validate_csrf(data, secret_key=None, time_limit=None):
     """Check if the given data is a valid csrf token.
 
     :param data: The csrf token value to be checked.
@@ -65,13 +73,18 @@ def validate_csrf(data, secret_key=None, time_limit=True):
     except:
         return False
 
+    if time_limit is None:
+        time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
+
     if time_limit:
         now = time.time()
         if now > expires:
             return False
 
     if not secret_key:
-        secret_key = current_app.secret_key
+        secret_key = current_app.config.get(
+            'WTF_CSRF_SECRET_KEY', current_app.secret_key
+        )
 
     csrf_build = '%s%s' % (session['csrf_token'], expires)
     hmac_compare = hmac.new(
@@ -109,7 +122,6 @@ class CsrfProtect(object):
             self.init_app(app)
 
     def init_app(self, app):
-        secret_key = app.config.get('WTF_CSRF_SECRET_KEY', app.secret_key)
         app.jinja_env.globals['csrf_token'] = generate_csrf
 
         @app.before_request
@@ -138,7 +150,7 @@ class CsrfProtect(object):
                 # You can get csrf token from header
                 # The header name is the same as Django
                 csrf_token = request.headers.get('X-CSRFToken')
-            if not validate_csrf(csrf_token, secret_key):
+            if not validate_csrf(csrf_token):
                 if self.on_csrf:
                     self.on_csrf(request)
                 return abort(400)

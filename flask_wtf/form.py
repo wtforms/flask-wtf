@@ -84,20 +84,8 @@ class Form(SecureForm):
             if csrf_context is None:
                 csrf_context = session
             if secret_key is None:
-                # It wasn't passed in, check if the class has a SECRET_KEY set
+                # It wasn't passed in, check if the class has a SECRET_KEY
                 secret_key = getattr(self, "SECRET_KEY", None)
-            if secret_key is None:
-                secret_key = getattr(self, "WTF_CSRF_SECRET_KEY", None)
-            if secret_key is None:
-                # It wasn't on the class, check the application config
-                secret_key = current_app.secret_key
-            if secret_key is None and session:
-                # It's not there either!
-                # Is there a session secret key if we can
-                secret_key = session.secret_key
-            if secret_key is None:
-                # It wasn't anywhere. This is an error.
-                raise Exception('Must provide secret_key to use csrf.')
 
             self.SECRET_KEY = secret_key
         else:
