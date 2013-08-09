@@ -24,7 +24,7 @@ class TestRecaptcha(TestCase):
 
         @app.route("/", methods=("GET", "POST"))
         def inex():
-            form = RecaptchaFrom()
+            form = RecaptchaFrom(csrf_enabled=False)
             if form.validate_on_submit():
                 return 'OK'
             return render_template("recaptcha.html", form=form)
@@ -39,3 +39,35 @@ class TestRecaptcha(TestCase):
         response = self.client.get('/')
         ret = to_unicode(response.data)
         assert 'https://www.google.com/recaptcha/api/' in ret
+
+    def test_invalid_recaptcha(self):
+        response = self.client.post('/', data={})
+        assert 'Invalid word' in to_unicode(response.data)
+
+    def test_send_recaptcha_request(self):
+        response = self.client.post('/', data={
+            'recaptcha_challenge_field': 'test',
+            'recaptcha_response_field': 'test'
+        })
+        assert 'Invalid word' in to_unicode(response.data)
+
+    def test_testing(self):
+        self.app.testing = True
+        response = self.client.post('/', data={
+            'recaptcha_challenge_field': 'test',
+            'recaptcha_response_field': 'test'
+        })
+        assert 'Invalid word' not in to_unicode(response.data)
+
+    def test_no_private_key(self):
+        self.app.config.pop('RECAPTCHA_PRIVATE_KEY', None)
+        response = self.client.post('/', data={
+            'recaptcha_challenge_field': 'test',
+            'recaptcha_response_field': 'test'
+        })
+        assert response.status_code == 500
+
+    def test_no_public_key(self):
+        self.app.config.pop('RECAPTCHA_PUBLIC_KEY', None)
+        response = self.client.get('/')
+        assert response.status_code == 500
