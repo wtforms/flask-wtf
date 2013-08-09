@@ -3,6 +3,7 @@
 from flask import current_app, Markup
 from werkzeug import url_encode
 from flask.json import dumps, JSONEncoder
+from .._compat import text_type
 
 try:
     from speaklater import _LazyString
@@ -59,7 +60,7 @@ class RecaptchaWidget(object):
         query_options = dict(k=public_key)
 
         if field.recaptcha_error is not None:
-            query_options['error'] = unicode(field.recaptcha_error)
+            query_options['error'] = text_type(field.recaptcha_error)
 
         query = url_encode(query_options)
 
