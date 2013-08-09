@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html>
+    <body>
+        {{ form.errors }}
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.recaptcha }}
+            </p>
+            <p>
+                {{ form.submit }}
+            </p>
+        </form>
+    </body>
+</html>
+
