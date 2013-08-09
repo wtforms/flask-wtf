@@ -3,13 +3,21 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
-Version 0.8.5
+Version 0.9.0
 -------------
 
 Released date to be decided
 
 - Add i18n support (issue #65)
 - Use default html5 widgets and fields provided by wtforms
+- Python 3.3+ support
+- Redesign form, replace SessionSecureForm
+- CSRF protection solution
+- Drop wtforms imports
+- Fix recaptcha i18n support
+- Fix recaptcha validator for python 3
+- More test cases, it's 90%+ coverage now
+- Redesign documentation
 
 Version 0.8.4
 -------------
