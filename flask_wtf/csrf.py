@@ -133,12 +133,16 @@ class CsrfProtect(object):
                 if dest in self._exempt_views:
                     return
 
-            request.csrf_valid = True  # mark this request is csrf valid
             csrf_token = request.form.get('csrf_token')
+            if not csrf_token:
+                # You can get csrf token from header
+                # The header name is the same as Django
+                csrf_token = request.headers.get('X-CSRFToken')
             if not validate_csrf(csrf_token, secret_key):
                 if self.on_csrf:
                     self.on_csrf(request)
                 return abort(400)
+            request.csrf_valid = True  # mark this request is csrf valid
 
     def exempt(self, view):
         """A decorator that can exclude a view from csrf protection.
