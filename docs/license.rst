@@ -1,0 +1,4 @@
+BSD License
+===========
+
+.. include:: ../LICENSE

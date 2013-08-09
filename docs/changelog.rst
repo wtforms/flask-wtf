@@ -31,7 +31,7 @@ Released 2013/3/13
 - Fix Recaptcha widget (issue #49)
 
 Version 0.8.2 and prior
----------------------
+-----------------------
 
 Initial development by Dan Jacob and Ron Duplain. 0.8.2 and prior there was not
 a change log.
