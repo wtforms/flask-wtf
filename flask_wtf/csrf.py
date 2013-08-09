@@ -14,6 +14,12 @@ import hashlib
 import time
 from flask import current_app, session, request, abort
 from ._compat import to_bytes
+try:
+    from urlparse import urlparse
+except ImportError:
+    # python 3
+    from urllib.parse import urlparse
+
 
 __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
 
@@ -123,14 +129,15 @@ class CsrfProtect(object):
 
     def init_app(self, app):
         app.jinja_env.globals['csrf_token'] = generate_csrf
+        strict = app.config.get('WTF_CSRF_SSL_STRICT', True)
 
         @app.before_request
         def _csrf_protect():
+            # many things come from django.middleware.csrf
             if app.testing:
                 return
 
-            if not request.method == 'POST':
-                # only protect POST methods
+            if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
                 return
 
             if self._exempt_views:
@@ -154,6 +161,15 @@ class CsrfProtect(object):
                 if self.on_csrf:
                     self.on_csrf(request)
                 return abort(400)
+
+            if request.is_secure and strict:
+                if not request.referer:
+                    return abort(400)
+
+                good_referer = 'https://%s/' % request.host
+                if not same_origin(request.referer, good_referer):
+                    return abort(400)
+
             request.csrf_valid = True  # mark this request is csrf valid
 
     def exempt(self, view):
@@ -171,3 +187,20 @@ class CsrfProtect(object):
         view_location = '%s.%s' % (view.__module__, view.__name__)
         self._exempt_views.add(view_location)
         return view
+
+
+def same_origin(current_uri, compare_uri):
+    parsed_uri = urlparse(current_uri)
+    if not parsed_uri.scheme:
+        return True
+    parsed_compare = urlparse(compare_uri)
+
+    if parsed_uri.scheme != parsed_compare.scheme:
+        return False
+
+    if parsed_uri.hostname != parsed_compare.hostname:
+        return False
+
+    if parsed_uri.port != parsed_compare.port:
+        return False
+    return True
