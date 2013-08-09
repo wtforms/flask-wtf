@@ -133,6 +133,14 @@ class TestCSRF(TestCase):
         )
         assert response.status_code == 200
 
+    def test_not_endpoint(self):
+        response = self.client.post('/not-endpoint')
+        assert response.status_code == 404
+
+    def test_testing(self):
+        self.app.testing = True
+        self.client.post("/", data={"name": "danny"})
+
     def test_csrf_exempt(self):
         response = self.client.get("/csrf-exempt")
         csrf_token = get_csrf_token(response.data)
