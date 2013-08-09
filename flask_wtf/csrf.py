@@ -161,13 +161,13 @@ class CsrfProtect(object):
                 return self._error_response(reason)
 
             if request.is_secure and strict:
-                if not request.referer:
-                    reason = 'Referer checking failed - no Referer.'
+                if not request.referrer:
+                    reason = 'Referrer checking failed - no Referrer.'
                     return self._error_response(reason)
 
-                good_referer = 'https://%s/' % request.host
-                if not same_origin(request.referer, good_referer):
-                    reason = 'Referer checking failed - origin not match.'
+                good_referrer = 'https://%s/' % request.host
+                if not same_origin(request.referrer, good_referrer):
+                    reason = 'Referrer checking failed - origin not match.'
                     return self._error_response(reason)
 
             request.csrf_valid = True  # mark this request is csrf valid
@@ -208,8 +208,6 @@ class CsrfProtect(object):
 
 def same_origin(current_uri, compare_uri):
     parsed_uri = urlparse(current_uri)
-    if not parsed_uri.scheme:
-        return True
     parsed_compare = urlparse(compare_uri)
 
     if parsed_uri.scheme != parsed_compare.scheme:
