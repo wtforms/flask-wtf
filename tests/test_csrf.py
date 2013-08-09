@@ -21,9 +21,8 @@ class TestCSRF(TestCase):
     def setUp(self):
         app = self.create_app()
         app.config['WTF_CSRF_SECRET_KEY'] = "a poorly kept secret."
-        csrf = CsrfProtect(app, self.csrf_hook)
-
-        self.csrf_count = 0
+        csrf = CsrfProtect(app)
+        self.csrf = csrf
 
         @csrf.exempt
         @app.route('/csrf-exempt', methods=['GET', 'POST'])
@@ -41,13 +40,17 @@ class TestCSRF(TestCase):
         self.app = app
         self.client = self.app.test_client()
 
-    def csrf_hook(self, request):
-        self.csrf_count += 1
-
     def test_invalid_csrf(self):
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 400
-        assert self.csrf_count
+
+        @self.csrf.error_handler
+        def invalid(reason):
+            return reason
+
+        response = self.client.post("/", data={"name": "danny"})
+        assert response.status_code == 200
+        assert 'token missing' in to_unicode(response.data)
 
     def test_valid_csrf(self):
         response = self.client.get("/")

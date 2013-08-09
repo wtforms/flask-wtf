@@ -120,8 +120,7 @@ class CsrfProtect(object):
     You can grab the csrf token with JavaScript, and send the token together.
     """
 
-    def __init__(self, app=None, on_csrf=None):
-        self.on_csrf = on_csrf
+    def __init__(self, app=None):
         self._exempt_views = set()
 
         if app:
@@ -158,17 +157,18 @@ class CsrfProtect(object):
                 # The header name is the same as Django
                 csrf_token = request.headers.get('X-CSRFToken')
             if not validate_csrf(csrf_token):
-                if self.on_csrf:
-                    self.on_csrf(request)
-                return abort(400)
+                reason = 'CSRF token missing or incorrect.'
+                return self._error_response(reason)
 
             if request.is_secure and strict:
                 if not request.referer:
-                    return abort(400)
+                    reason = 'Referer checking failed - no Referer.'
+                    return self._error_response(reason)
 
                 good_referer = 'https://%s/' % request.host
                 if not same_origin(request.referer, good_referer):
-                    return abort(400)
+                    reason = 'Referer checking failed - origin not match.'
+                    return self._error_response(reason)
 
             request.csrf_valid = True  # mark this request is csrf valid
 
@@ -186,6 +186,23 @@ class CsrfProtect(object):
         """
         view_location = '%s.%s' % (view.__module__, view.__name__)
         self._exempt_views.add(view_location)
+        return view
+
+    def _error_response(self, reason):
+        return abort(400, reason)
+
+    def error_handler(self, view):
+        """A decorator that set the error response handler.
+
+        It accepts one parameter `reason`::
+
+            @csrf.error_handler
+            def csrf_error(reason):
+                return render_template('error.html', reason=reason)
+
+        By default, it will return a 400 response.
+        """
+        self._error_response = view
         return view
 
 
