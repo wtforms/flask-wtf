@@ -1,2 +1,10 @@
 CSRF Protection
 ===============
+
+
+Implementation
+--------------
+
+
+AJAX
+----

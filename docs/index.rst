@@ -53,6 +53,7 @@ Legal information and changelog are here.
 .. toctree::
    :maxdepth: 2
 
+   upgrade
    changelog
    authors
    license
