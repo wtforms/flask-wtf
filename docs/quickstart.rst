@@ -24,7 +24,9 @@ Flask-WTF provides you with the integration WTForms. For example::
    you need to import fields from wtforms.
 
 In addition, a CSRF token hidden field is created automatically. You can
-render this in your template::
+render this in your template:
+
+.. sourcecode:: html+jinja
 
     <form method="POST" action="/">
         {{ form.csrf_token }}
@@ -34,7 +36,9 @@ render this in your template::
 
 However, in order to create valid XHTML/HTML the Form class has a method
 hidden_tag which renders any hidden fields, including the CSRF field,
-inside a hidden DIV tag::
+inside a hidden DIV tag:
+
+.. sourcecode:: html+jinja
 
     <form method="POST" action="/">
         {{ form.hidden_tag() }}
@@ -59,4 +63,4 @@ Note that, you don't have to pass ``request.form`` to Flask-WTF, it will
 load automatically. And the convience ``validate_on_submit`` will check
 if it is a POST request and if it is valid.
 
-Heading over to :doc:`forms` to learn more skills.
+Heading over to :doc:`form` to learn more skills.

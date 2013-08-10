@@ -1,11 +1,9 @@
 Flask-WTF
 ======================================
 
-**Flask-WTF** offers simple integration with `WTForms
-<http://wtforms.simplecodes.com/docs/>`_. This integration includes optional
-CSRF handling for greater security.
+**Flask-WTF** offers simple integration with WTForms_.
 
-Source code and issue tracking at `GitHub`_.
+.. _WTForms: http://wtforms.simplecodes.com/docs/
 
 Current Version
 ---------------
@@ -17,6 +15,9 @@ Features
 * Integration with wtforms.
 * Secure Form with csrf token.
 * Global csrf protection.
+* Recaptcha supporting.
+* File upload that works with Flask-Uploads.
+* Internationalization integeration.
 
 User's Guide
 ------------
