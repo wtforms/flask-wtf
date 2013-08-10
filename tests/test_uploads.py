@@ -28,7 +28,6 @@ class UploadSet(object):
         return ext in self.extensions
 
 images = UploadSet('images', ['jpg', 'png'])
-text = UploadSet('text', ['txt'])
 
 
 class FileUploadForm(Form):
@@ -48,7 +47,7 @@ class ImageUploadForm(Form):
 class TextUploadForm(Form):
     upload = FileField("Upload file",
                        validators=[file_required(),
-                                   file_allowed(text)])
+                                   file_allowed(['txt'])])
 
 
 class TestFileUpload(TestCase):
@@ -133,6 +132,24 @@ class TestFileUpload(TestCase):
         )
 
         assert "flask.png</h3>" not in to_unicode(response.data)
+
+    def test_valid_txt_file(self):
+        with self.app.open_resource("flask.txt") as fp:
+            response = self.client.post(
+                "/upload-text/",
+                data={'upload': fp}
+            )
+
+        assert "OK" in to_unicode(response.data)
+
+    def test_invalid_image_file(self):
+        with self.app.open_resource("flask.txt") as fp:
+            response = self.client.post(
+                "/upload-image/",
+                data={'upload': fp}
+            )
+
+        assert "invalid" in to_unicode(response.data)
 
 
 class BrokenForm(Form):
