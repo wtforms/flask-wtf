@@ -151,7 +151,10 @@ class CsrfProtect(object):
                 if dest in self._exempt_views:
                     return
 
-            csrf_token = request.form.get('csrf_token')
+            csrf_token = None
+            if request.method == 'POST':
+                # DELETE has no form
+                csrf_token = request.form.get('csrf_token')
             if not csrf_token:
                 # You can get csrf token from header
                 # The header name is the same as Django
