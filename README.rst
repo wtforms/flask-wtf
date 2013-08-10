@@ -11,4 +11,4 @@ and Recaptcha integration.
 
 For more information please refer to the online docs:
 
-http://pythonhosted.org/Flask-WTF
+https://flask-wtf.readthedocs.org

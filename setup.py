@@ -1,14 +1,14 @@
 """
 Flask-WTF
----------
+=========
 
 Simple integration of Flask and WTForms, including CSRF, file upload
 and Recaptcha integration.
 
 Links
-`````
+-----
 
-* `documentation <http://packages.python.org/Flask-WTF>`_
+* `documentation <https://flask-wtf.readthedocs.org>`_
 * `development version
   <http://github.com/ajford/flask-wtf>`_
 
@@ -24,7 +24,7 @@ from setuptools import setup
 
 setup(
     name='Flask-WTF',
-    version='0.8.4',
+    version='0.9.0',
     url='http://github.com/ajford/flask-wtf',
     license='BSD',
     author='Dan Jacob',
