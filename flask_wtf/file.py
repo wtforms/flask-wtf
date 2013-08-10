@@ -32,7 +32,7 @@ class FileRequired(object):
     """
     Validates that field has a file.
 
-    `message` : error message
+    :param message: error message
 
     You can also use the synonym **file_required**.
     """
@@ -52,9 +52,9 @@ class FileAllowed(object):
     Validates that the uploaded file is allowed by the given
     Flask-Uploads UploadSet.
 
-    `upload_set` : instance of **flask.ext.uploads.UploadSet**
-
-    `message`    : error message
+    :param upload_set: A list/tuple of extention names or an instance
+                       of ``flask.ext.uploads.UploadSet``
+    :param message: error message
 
     You can also use the synonym **file_allowed**.
     """
@@ -66,6 +66,13 @@ class FileAllowed(object):
     def __call__(self, form, field):
         if not field.has_file():
             return
+        if isinstance(self.upload_set, (tuple, list)):
+            field.data.filename
+            ext = field.data.filename.rsplit('.', 1)[-1]
+            if ext in self.upload_set:
+                return
+            raise ValidationError(self.message)
+
         if not self.upload_set.file_allowed(field.data, field.data.filename):
             raise ValidationError(self.message)
 
