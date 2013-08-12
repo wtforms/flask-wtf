@@ -41,22 +41,21 @@ class Form(SecureForm):
     If formdata is not specified, this will use flask.request.form.
     Explicitly pass formdata = None to prevent this.
 
-    csrf_context: a session or dict-like object to use when making CSRF
-                  tokens. Default: flask.session.
+    :param csrf_context: a session or dict-like object to use when making
+                         CSRF tokens. Default: flask.session.
 
-    secret_key: a secret key for building CSRF tokens. If this isn't
-    specified, the form will take the first of these that is defined:
+    :param secret_key: a secret key for building CSRF tokens. If this isn't
+                       specified, the form will take the first of these
+                       that is defined:
 
-        * the SECRET_KEY attribute on this class
-        * the value of flask.current_app.config["WTF_CSRF_SECRET_KEY"]
-        * the value of flask.current_app.config["SECRET_KEY"]
-        * the session's secret_key
+                           * SECRET_KEY attribute on this class
+                           * WTF_CSRF_SECRET_KEY config of flask app
+                           * SECRET_KEY config of flask app
+                           * session secret key
 
-      If none of these are set, raise an exception.
-
-    csrf_enabled: whether to use CSRF protection. If False, all csrf
-                  behavior is suppressed.
-                  Default: check app.config for WTF_CSRF_ENABLED, else True
+    :param csrf_enabled: whether to use CSRF protection. If False, all
+                         csrf behavior is suppressed.
+                         Default: WTF_CSRF_ENABLED config value
     """
     SECRET_KEY = None
     TIME_LIMIT = 3600
