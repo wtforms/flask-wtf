@@ -6,8 +6,8 @@ This part of the documentation covers the CSRF protection.
 Why CSRF
 --------
 
-Flask-WTF form is already protecting your from CSRF, you don't have to
-worry about that. But you have views that contains no forms, but they
+Flask-WTF form is already protecting you from CSRF, you don't have to
+worry about that. However, you have views that contain no forms, and they
 still need protection.
 
 For example, the POST request is sent by AJAX, but it has no form behind
@@ -39,7 +39,7 @@ Like any other Flask extensions, you can load it lazily::
 .. note::
 
     You need to setup a secret key for CSRF protection. Usually, this
-    is the SECRET_KEY of your Flask instance.
+    is the same as your Flask app SECRET_KEY.
 
 If the template has a form, you don't need to do any thing. It is the
 same as before:
@@ -77,8 +77,8 @@ is a chance that you might exclude some view handlers, it can be done::
 AJAX
 ----
 
-Sending POST requests via AJAX is possible, where there is no forms at
-all. This feature is only available since 0.9.0.
+Sending POST requests via AJAX is possible where there is no forms at all.
+This feature is only available since 0.9.0.
 
 Assume you have done ``CsrfProtect(app)``, you can get the csrf token via
 ``{{ csrf_token() }}``. This method is available in every templates, that
@@ -102,7 +102,7 @@ And it is also possible to render it in the ``<script>`` tag:
 We will take the ``<meta>`` way for example, the ``<script>`` way is far
 more easier, you don't have to worry if there is no example for it.
 
-When never you send a AJAX POST request, add the ``X-CSRFToken`` for it:
+Whenever you send a AJAX POST request, add the ``X-CSRFToken`` for it:
 
 .. sourcecode:: javascript
 

@@ -72,14 +72,14 @@ The :class:`FileAllowed` works well with Flask-Uploads, for example::
 
     from flask.ext.uploads import UploadSet, IMAGES
     from flask_wtf import Form
-    from flask_wtf.file import FileField, file_allowed, file_required
+    from flask_wtf.file import FileField, FileAllowed, FileRequired
 
     images = UploadSet('images', IMAGES)
 
     class UploadForm(Form):
         upload = FileField('image', validators=[
-            file_required(),
-            file_allowed(images, 'Images only!')
+            FileRequired(),
+            FileAllowed(images, 'Images only!')
         ])
 
 It can work without Flask-Uploads too. You need to pass the extensions
@@ -87,8 +87,8 @@ to :class:`FileAllowed`::
 
     class UploadForm(Form):
         upload = FileField('image', validators=[
-            file_required(),
-            file_allowed(['jpg', 'png'], 'Images only!')
+            FileRequired(),
+            FileAllowed(['jpg', 'png'], 'Images only!')
         ])
 
 HTML5 Widgets
@@ -141,4 +141,17 @@ RECAPTCHA_OPTIONS     **optional** A dict of configuration options.
 ===================== ==============================================
 
 For testing your application, if ``app.testing`` is ``True``, recaptcha
-field will always be valid for you convience.
+field will always be valid for you convenience.
+
+And it can be easily setup in the templates:
+
+.. sourcecode:: html+jinja
+
+    <form action="/" method="post">
+        {{ form.username }}
+        {{ form.recaptcha }}
+    </form>
+
+We have an example for you: `recaptcha@github`_.
+
+.. _`recaptcha@github`: https://github.com/ajford/flask-wtf/tree/master/examples/recaptcha

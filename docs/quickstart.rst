@@ -11,7 +11,7 @@ Creating Forms
 
 Flask-WTF provides you with the integration WTForms. For example::
 
-    from flask.ext.wtf import Form
+    from flask_wtf import Form
     from wtforms import TextField, DataRequired
 
     class MyForm(Form):

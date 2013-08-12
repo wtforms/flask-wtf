@@ -1,7 +1,7 @@
 Developer Interface
 ===================
 
-This part of the documentation covers the interface of Flask-WTF.
+This part of the documentation covers all interfaces of Flask-WTF.
 
 Forms and Fields
 ----------------
