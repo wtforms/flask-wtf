@@ -9,6 +9,10 @@ Current Version
 ---------------
 The current version of Flask-WTF is |release|.
 
+View other versions of documentation at `Read the Docs`_.
+
+.. _`Read the Docs`: https://flask-wtf.readthedocs.org
+
 Features
 --------
 
