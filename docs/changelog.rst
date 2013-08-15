@@ -6,7 +6,7 @@ Full list of changes between each Flask-WTF release.
 Version 0.9.0
 -------------
 
-Released date to be decided
+Released 2013/8/15
 
 - Add i18n support (issue #65)
 - Use default html5 widgets and fields provided by wtforms
