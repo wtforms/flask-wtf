@@ -2,8 +2,9 @@
 
 from flask import current_app, Markup
 from werkzeug import url_encode
-from flask.json import dumps, JSONEncoder
+from flask import json
 from .._compat import text_type
+JSONEncoder = json.JSONEncoder
 
 try:
     from speaklater import _LazyString
@@ -42,7 +43,7 @@ class RecaptchaWidget(object):
         return Markup(html % dict(
             script_url='%schallenge?%s' % (server, query),
             frame_url='%snoscript?%s' % (server, query),
-            options=dumps(options, cls=_JSONEncoder)
+            options=json.dumps(options, cls=_JSONEncoder)
         ))
 
     def __call__(self, field, error=None, **kwargs):
