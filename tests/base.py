@@ -103,7 +103,7 @@ class TestCase(object):
                                errors=None)
 
             return jsonify(name=None,
-                           errors=form.errors,
+                           #errors=form.errors,
                            success=False)
 
         return app

@@ -48,10 +48,10 @@ class Form(SecureForm):
                        specified, the form will take the first of these
                        that is defined:
 
-                           * SECRET_KEY attribute on this class
-                           * WTF_CSRF_SECRET_KEY config of flask app
-                           * SECRET_KEY config of flask app
-                           * session secret key
+                       * SECRET_KEY attribute on this class
+                       * WTF_CSRF_SECRET_KEY config of flask app
+                       * SECRET_KEY config of flask app
+                       * session secret key
 
     :param csrf_enabled: whether to use CSRF protection. If False, all
                          csrf behavior is suppressed.
