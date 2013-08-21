@@ -3,6 +3,15 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.9.1
+-------------
+
+Released 2013/8/21
+
+This is a patch version for backward compitable for Flask<0.10 `#82`_.
+
+.. _`#82`: https://github.com/ajford/flask-wtf/issues/82
+
 Version 0.9.0
 -------------
 

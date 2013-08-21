@@ -24,7 +24,7 @@ from setuptools import setup
 
 setup(
     name='Flask-WTF',
-    version='0.9.0',
+    version='0.9.1',
     url='http://github.com/ajford/flask-wtf',
     license='BSD',
     author='Dan Jacob',
