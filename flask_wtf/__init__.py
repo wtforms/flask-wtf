@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    flask.ext.wtf
-    ~~~~~~~~~~~~
+    flask_wtf
+    ~~~~~~~~~
 
     Flask-WTF extension
 
@@ -14,3 +14,5 @@ from __future__ import absolute_import
 from .form import Form
 from .csrf import CsrfProtect
 from .recaptcha import *
+
+__version__ = '0.9.1'

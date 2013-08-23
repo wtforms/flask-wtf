@@ -19,12 +19,17 @@ try:
 except ImportError:
     pass
 
+import re
 from setuptools import setup
+
+with open('flask_wtf/__init__.py') as f:
+    m = re.findall(r'__version__\s*=\s*\'(.*)\'', f.read())
+    version = m[0]
 
 
 setup(
     name='Flask-WTF',
-    version='0.9.1',
+    version=version,
     url='http://github.com/ajford/flask-wtf',
     license='BSD',
     author='Dan Jacob',
