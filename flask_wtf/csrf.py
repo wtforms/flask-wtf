@@ -129,11 +129,12 @@ class CsrfProtect(object):
     def init_app(self, app):
         app.jinja_env.globals['csrf_token'] = generate_csrf
         strict = app.config.get('WTF_CSRF_SSL_STRICT', True)
+        csrf_enabled = app.config.get('WTF_CSRF_ENABLED', True)
 
         @app.before_request
         def _csrf_protect():
             # many things come from django.middleware.csrf
-            if app.testing:
+            if not csrf_enabled:
                 return
 
             if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
