@@ -160,6 +160,9 @@ class CsrfProtect(object):
                 # You can get csrf token from header
                 # The header name is the same as Django
                 csrf_token = request.headers.get('X-CSRFToken')
+            if not csrf_token:
+                # The header name is the same as Rails
+                csrf_token = request.headers.get('X-CSRF-Token')
             if not validate_csrf(csrf_token):
                 reason = 'CSRF token missing or incorrect.'
                 return self._error_response(reason)
