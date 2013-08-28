@@ -153,8 +153,7 @@ class CsrfProtect(object):
                     return
 
             csrf_token = None
-            if request.method == 'POST':
-                # DELETE has no form
+            if request.method in ('POST', 'PUT', 'PATCH'):
                 csrf_token = request.form.get('csrf_token')
             if not csrf_token:
                 # You can get csrf token from header
