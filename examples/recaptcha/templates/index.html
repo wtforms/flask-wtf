@@ -10,6 +10,9 @@
                 {{ form.comment(rows=5, cols=40) }}
             </p>
             <p>
+                {% for error in form.recaptcha.errors %}
+                    {{ error }}
+                {% endfor %}
                 {{ form.recaptcha }}
             </p>
             <p>
