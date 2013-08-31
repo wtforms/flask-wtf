@@ -38,7 +38,7 @@ class Recaptcha(object):
         response = request.form.get('recaptcha_response_field', '')
         remote_ip = request.remote_addr
 
-        if not challenge or not response:
+        if not current_app.testing and (not challenge or not response):
             raise ValidationError(field.gettext(self.message))
 
         if not self._validate_recaptcha(challenge, response, remote_ip):
