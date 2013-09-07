@@ -16,7 +16,7 @@ Flask-WTF provides you with the integration WTForms. For example::
     from wtforms.validators import DataRequired
 
     class MyForm(Form):
-        name = TextField(name, validators=[DataRequired()])
+        name = TextField('name', validators=[DataRequired()])
 
 
 .. note::
