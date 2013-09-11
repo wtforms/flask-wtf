@@ -11,7 +11,6 @@
 from flask import _request_ctx_stack
 from wtforms.ext.i18n.utils import messages_path
 from flask.ext.babel import get_locale
-from speaklater import make_lazy_string
 from babel import support
 
 __all__ = ('Translations', 'translations')
@@ -37,35 +36,27 @@ def _get_translations():
     return translations
 
 
-def _gettext(string):
-    t = _get_translations()
-    if t is None:
-        return string
-    if hasattr(t, 'ugettext'):
-        return t.ugettext(string)
-    # Python 3 has no ugettext
-    return t.gettext(string)
-
-
-def _ngettext(singular, plural, n):
-    t = _get_translations()
-    if t is None:
-        if n == 1:
-            return singular
-        return plural
-
-    if hasattr(t, 'ungettext'):
-        return t.ungettext(singular, plural, n)
-    # Python 3 has no ungettext
-    return t.ngettext(singular, plural, n)
-
-
 class Translations(object):
     def gettext(self, string):
-        return make_lazy_string(_gettext, string)
+        t = _get_translations()
+        if t is None:
+            return string
+        if hasattr(t, 'ugettext'):
+            return t.ugettext(string)
+        # Python 3 has no ugettext
+        return t.gettext(string)
 
     def ngettext(self, singular, plural, n):
-        return make_lazy_string(_ngettext, singular, plural, n)
+        t = _get_translations()
+        if t is None:
+            if n == 1:
+                return singular
+            return plural
+
+        if hasattr(t, 'ungettext'):
+            return t.ungettext(singular, plural, n)
+        # Python 3 has no ungettext
+        return t.ngettext(singular, plural, n)
 
 
 translations = Translations()
