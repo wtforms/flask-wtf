@@ -1,25 +1,16 @@
 from __future__ import with_statement
 
-from speaklater import _LazyString
-from flask import Flask, render_template, json, jsonify
+from flask import Flask, render_template, jsonify
 from wtforms import TextField, HiddenField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
 from flask_wtf._compat import text_type
-JSONEncoder = json.JSONEncoder
 
 
 def to_unicode(text):
     if not isinstance(text, text_type):
         return text.decode('utf-8')
     return text
-
-
-class _JSONEncoder(JSONEncoder):
-    def default(self, o):
-        if isinstance(o, _LazyString):
-            return str(o)
-        return JSONEncoder.default(self, o)
 
 
 class MyForm(Form):
@@ -53,7 +44,6 @@ class TestCase(object):
 
     def create_app(self):
         app = Flask(__name__)
-        app.json_encoder = _JSONEncoder
         app.secret_key = "secret"
 
         @app.route("/", methods=("GET", "POST"))
