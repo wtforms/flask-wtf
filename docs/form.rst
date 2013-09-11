@@ -96,16 +96,14 @@ HTML5 Widgets
 
 .. note::
 
-    HTML5 widgets and fields are builtin of wtforms since 1.0.4. You
+    HTML5 widgets and fields are builtin of wtforms since 1.0.5. You
     should consider import them from wtforms if possible.
 
-    However, wtforms missed a ``DateInput``, which is why we still keep
-    the html5 module. Once wtforms has a full feature of html5 forms,
-    Flask-WTF will drop supporting for them.
+    We will drop html5 module in next release 0.9.3.
 
-You can import a number of HTML5 widgets from ``flask_wtf.html5``::
+You can import a number of HTML5 widgets from ``wtforms``::
 
-    from flask_wtf.html5 import URLField
+    from wtforms.fields.html5 import URLField
     from wtforms.validators import url
 
     class LinkForm(Form):

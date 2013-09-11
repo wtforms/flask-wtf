@@ -3,6 +3,21 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.9.2
+-------------
+
+Released 2013/9/11
+
+- Upgrade wtforms to 1.0.5.
+- No lazy string for i18n `#77`_.
+- No DateInput widget in html5 `#81`_.
+- PUT and PATCH for CSRF `#86`_.
+
+.. _`#77`: https://github.com/ajford/flask-wtf/issues/77
+.. _`#81`: https://github.com/ajford/flask-wtf/issues/81
+.. _`#86`: https://github.com/ajford/flask-wtf/issues/86
+
+
 Version 0.9.1
 -------------
 
