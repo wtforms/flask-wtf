@@ -73,7 +73,7 @@ def validate_csrf(data, secret_key=None, time_limit=None):
     if not data or '##' not in data:
         return False
 
-    expires, hmac_csrf = data.split('##')
+    expires, hmac_csrf = data.split('##', 1)
     try:
         expires = float(expires)
     except:
@@ -91,6 +91,9 @@ def validate_csrf(data, secret_key=None, time_limit=None):
         secret_key = current_app.config.get(
             'WTF_CSRF_SECRET_KEY', current_app.secret_key
         )
+
+    if 'csrf_token' not in session:
+        return False
 
     csrf_build = '%s%s' % (session['csrf_token'], expires)
     hmac_compare = hmac.new(

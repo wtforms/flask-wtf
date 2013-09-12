@@ -10,3 +10,7 @@ src/*
 cover/
 venv/
 _build
+*.sw[op]
+.coverage
+.tox
+*.egg

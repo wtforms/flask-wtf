@@ -52,6 +52,24 @@ class TestCSRF(TestCase):
         assert response.status_code == 200
         assert 'token missing' in to_unicode(response.data)
 
+    def test_invalid_csrf2(self):
+        # tests with bad token
+        response = self.client.post("/", data={
+            "name": "danny",
+            "csrf_token": "9999999999999##test"
+            # will work only if greater than time.time()
+        })
+        assert response.status_code == 400
+
+    def test_invalid_secure_csrf3(self):
+        # test with multiple separators
+        response = self.client.post("/", data={
+            "name": "danny",
+            "csrf_token": "1378915137.722##foo##bar##and"
+            # will work only if greater than time.time()
+        })
+        assert response.status_code == 400
+
     def test_valid_csrf(self):
         response = self.client.get("/")
         csrf_token = get_csrf_token(response.data)
