@@ -34,6 +34,10 @@ class Recaptcha(object):
         self.message = message
 
     def __call__(self, form, field):
+        config = current_app.config
+        if current_app.testing and 'RECAPTCHA_PRIVATE_KEY' not in config:
+            return True
+
         challenge = request.form.get('recaptcha_challenge_field', '')
         response = request.form.get('recaptcha_response_field', '')
         remote_ip = request.remote_addr
