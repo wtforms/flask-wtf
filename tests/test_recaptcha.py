@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from .base import TestCase, to_unicode
+from .base import TestCase
 from flask import Flask, render_template
 from flask_wtf import Form
 from flask_wtf.recaptcha import RecaptchaField
@@ -32,24 +32,23 @@ class TestRecaptcha(TestCase):
 
     def test_recaptcha(self):
         response = self.client.get('/')
-        assert 'http://api.recaptcha.net' in to_unicode(response.data)
+        assert b'http://api.recaptcha.net' in response.data
 
     def test_ssl_recaptcha(self):
         self.app.config['RECAPTCHA_USE_SSL'] = True
         response = self.client.get('/')
-        ret = to_unicode(response.data)
-        assert 'https://www.google.com/recaptcha/api/' in ret
+        assert b'https://www.google.com/recaptcha/api/' in response.data
 
     def test_invalid_recaptcha(self):
         response = self.client.post('/', data={})
-        assert 'Invalid word' in to_unicode(response.data)
+        assert b'Invalid word' in response.data
 
     def test_send_recaptcha_request(self):
         response = self.client.post('/', data={
             'recaptcha_challenge_field': 'test',
             'recaptcha_response_field': 'test'
         })
-        assert 'Invalid word' in to_unicode(response.data)
+        assert b'Invalid word' in response.data
 
     def test_testing(self):
         self.app.testing = True
@@ -57,7 +56,7 @@ class TestRecaptcha(TestCase):
             'recaptcha_challenge_field': 'test',
             'recaptcha_response_field': 'test'
         })
-        assert 'Invalid word' not in to_unicode(response.data)
+        assert b'Invalid word' not in response.data
 
     def test_no_private_key(self):
         self.app.config.pop('RECAPTCHA_PRIVATE_KEY', None)

@@ -50,7 +50,7 @@ class TestCSRF(TestCase):
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
-        assert 'token missing' in to_unicode(response.data)
+        assert b'token missing' in response.data
 
     def test_invalid_csrf2(self):
         # tests with bad token
@@ -78,7 +78,7 @@ class TestCSRF(TestCase):
             "name": "danny",
             "csrf_token": csrf_token
         })
-        assert "DANNY" in to_unicode(response.data)
+        assert b'DANNY' in response.data
 
     def test_invalid_secure_csrf(self):
         response = self.client.get("/", base_url='https://localhost/')
@@ -91,7 +91,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert "failed" in to_unicode(response.data)
+        assert b'failed' in response.data
 
         response = self.client.post(
             "/",
@@ -105,7 +105,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert "not match" in to_unicode(response.data)
+        assert b'not match' in response.data
 
         response = self.client.post(
             "/",
@@ -119,7 +119,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert "not match" in to_unicode(response.data)
+        assert b'not match' in response.data
 
         response = self.client.post(
             "/",
@@ -133,7 +133,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert "not match" in to_unicode(response.data)
+        assert b'not match' in response.data
 
     def test_valid_secure_csrf(self):
         response = self.client.get("/", base_url='https://localhost/')
@@ -167,7 +167,7 @@ class TestCSRF(TestCase):
             "name": "danny",
             "csrf_token": csrf_token
         })
-        assert "DANNY" in to_unicode(response.data)
+        assert b'DANNY' in response.data
 
     def test_validate_csrf(self):
         with self.app.test_request_context():

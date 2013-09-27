@@ -19,17 +19,17 @@ class TestValidateOnSubmit(TestCase):
 
     def test_not_submitted(self):
         response = self.client.get("/")
-        assert 'DANNY' not in to_unicode(response.data)
+        assert b'DANNY' not in response.data
 
     def test_submitted_not_valid(self):
         self.app.config['WTF_CSRF_ENABLED'] = False
         response = self.client.post("/", data={})
-        assert 'DANNY' not in to_unicode(response.data)
+        assert b'DANNY' not in response.data
 
     def test_submitted_and_valid(self):
         self.app.config['WTF_CSRF_ENABLED'] = False
         response = self.client.post("/", data={"name": "danny"})
-        assert 'DANNY' in to_unicode(response.data)
+        assert b'DANNY' in response.data
 
 
 class TestValidateWithoutSubmit(TestCase):
@@ -55,7 +55,7 @@ class TestHiddenTag(TestCase):
 
         response = self.client.get("/hidden/")
         assert to_unicode(response.data).count('type="hidden"') == 5
-        assert 'name="_method"' in to_unicode(response.data)
+        assert b'name="_method"' in response.data
 
 
 class TestCSRF(TestCase):
@@ -72,15 +72,15 @@ class TestCSRF(TestCase):
     def test_invalid_csrf(self):
 
         response = self.client.post("/", data={"name": "danny"})
-        assert 'DANNY' not in to_unicode(response.data)
-        assert "CSRF token missing" in to_unicode(response.data)
+        assert b'DANNY' not in response.data
+        assert b'CSRF token missing' in response.data
 
     def test_csrf_disabled(self):
 
         self.app.config['WTF_CSRF_ENABLED'] = False
 
         response = self.client.post("/", data={"name": "danny"})
-        assert 'DANNY' in to_unicode(response.data)
+        assert b'DANNY' in response.data
 
     def test_validate_twice(self):
 
@@ -102,7 +102,7 @@ class TestCSRF(TestCase):
 
         response = self.client.post("/", data={"name": "danny",
                                                "csrf_token": csrf_token})
-        assert "DANNY" in to_unicode(response.data)
+        assert b'DANNY' in response.data
 
     def test_double_csrf(self):
 
@@ -113,7 +113,7 @@ class TestCSRF(TestCase):
             "name": "danny",
             "csrf_token": csrf_token
         })
-        assert to_unicode(response.data) == "OK"
+        assert response.data == b'OK'
 
     def test_valid_csrf_data(self):
         with self.app.test_request_context():

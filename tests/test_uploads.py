@@ -12,7 +12,7 @@ from flask_wtf import Form
 from flask_wtf.file import FileField
 from flask_wtf.file import file_required, file_allowed
 
-from .base import TestCase, to_unicode
+from .base import TestCase
 
 
 class UploadSet(object):
@@ -106,7 +106,7 @@ class TestFileUpload(TestCase):
                 data={'upload': fp}
             )
 
-        assert "OK" in to_unicode(response.data)
+        assert b'OK' in response.data
 
     def test_missing_file(self):
         response = self.client.post(
@@ -114,7 +114,7 @@ class TestFileUpload(TestCase):
             data={'upload': "test"}
         )
 
-        assert "invalid" in to_unicode(response.data)
+        assert b'invalid' in response.data
 
     def test_invalid_file(self):
         with self.app.open_resource("flask.png") as fp:
@@ -123,7 +123,7 @@ class TestFileUpload(TestCase):
                 data={'upload': fp}
             )
 
-        assert "invalid" in to_unicode(response.data)
+        assert b'invalid' in response.data
 
     def test_invalid_file_2(self):
         response = self.client.post(
@@ -131,7 +131,7 @@ class TestFileUpload(TestCase):
             data={'upload': 'flask.png'}
         )
 
-        assert "flask.png</h3>" not in to_unicode(response.data)
+        assert b'flask.png</h3>' not in response.data
 
     def test_valid_txt_file(self):
         with self.app.open_resource("flask.txt") as fp:
@@ -140,7 +140,7 @@ class TestFileUpload(TestCase):
                 data={'upload': fp}
             )
 
-        assert "OK" in to_unicode(response.data)
+        assert b'OK' in response.data
 
     def test_invalid_image_file(self):
         with self.app.open_resource("flask.txt") as fp:
@@ -149,7 +149,7 @@ class TestFileUpload(TestCase):
                 data={'upload': fp}
             )
 
-        assert "invalid" in to_unicode(response.data)
+        assert b'invalid' in response.data
 
 
 class BrokenForm(Form):
