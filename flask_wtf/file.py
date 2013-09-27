@@ -66,10 +66,10 @@ class FileAllowed(object):
     def __call__(self, form, field):
         if not field.has_file():
             return
+
         if isinstance(self.upload_set, (tuple, list)):
-            field.data.filename
             ext = field.data.filename.rsplit('.', 1)[-1]
-            if ext in self.upload_set:
+            if ext.lower() in self.upload_set:
                 return
             raise ValidationError(self.message)
 
