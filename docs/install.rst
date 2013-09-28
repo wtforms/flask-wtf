@@ -33,19 +33,19 @@ Get the Code
 ------------
 
 Flask-WTF is actively developed on GitHub, where the code is
-`always available <https://github.com/ajford/flask-wtf>`_.
+`always available <https://github.com/lepture/flask-wtf>`_.
 
 You can either clone the public repository::
 
-    git clone git://github.com/ajford/flask-wtf.git
+    git clone git://github.com/lepture/flask-wtf.git
 
-Download the `tarball <https://github.com/ajford/flask-wtf/tarball/master>`_::
+Download the `tarball <https://github.com/lepture/flask-wtf/tarball/master>`_::
 
-    $ curl -OL https://github.com/ajford/flask-wtf/tarball/master
+    $ curl -OL https://github.com/lepture/flask-wtf/tarball/master
 
-Or, download the `zipball <https://github.com/ajford/flask-wtf/zipball/master>`_::
+Or, download the `zipball <https://github.com/lepture/flask-wtf/zipball/master>`_::
 
-    $ curl -OL https://github.com/ajford/flask-wtf/zipball/master
+    $ curl -OL https://github.com/lepture/flask-wtf/zipball/master
 
 
 Once you have a copy of the source, you can embed it in your Python package,

@@ -64,4 +64,4 @@ Legal information and changelog are here.
    license
 
 .. _Flask: http://flask.pocoo.org
-.. _GitHub: http://github.com/ajford/flask-wtf
+.. _GitHub: http://github.com/lepture/flask-wtf

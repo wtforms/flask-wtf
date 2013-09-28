@@ -13,9 +13,9 @@ Released 2013/9/11
 - No DateInput widget in html5 `#81`_.
 - PUT and PATCH for CSRF `#86`_.
 
-.. _`#77`: https://github.com/ajford/flask-wtf/issues/77
-.. _`#81`: https://github.com/ajford/flask-wtf/issues/81
-.. _`#86`: https://github.com/ajford/flask-wtf/issues/86
+.. _`#77`: https://github.com/lepture/flask-wtf/issues/77
+.. _`#81`: https://github.com/lepture/flask-wtf/issues/81
+.. _`#86`: https://github.com/lepture/flask-wtf/issues/86
 
 
 Version 0.9.1
@@ -25,7 +25,7 @@ Released 2013/8/21
 
 This is a patch version for backward compitable for Flask<0.10 `#82`_.
 
-.. _`#82`: https://github.com/ajford/flask-wtf/issues/82
+.. _`#82`: https://github.com/lepture/flask-wtf/issues/82
 
 Version 0.9.0
 -------------

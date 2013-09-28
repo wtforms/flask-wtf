@@ -12,4 +12,4 @@ People who send patches and suggestions:
 
 Find more contributors on GitHub_.
 
-.. _GitHub: http://github.com/ajford/flask-wtf/contributors
+.. _GitHub: http://github.com/lepture/flask-wtf/contributors

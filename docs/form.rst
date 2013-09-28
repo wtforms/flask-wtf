@@ -152,4 +152,4 @@ And it can be easily setup in the templates:
 
 We have an example for you: `recaptcha@github`_.
 
-.. _`recaptcha@github`: https://github.com/ajford/flask-wtf/tree/master/examples/recaptcha
+.. _`recaptcha@github`: https://github.com/lepture/flask-wtf/tree/master/examples/recaptcha

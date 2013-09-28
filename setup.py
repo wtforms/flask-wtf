@@ -10,7 +10,7 @@ Links
 
 * `documentation <https://flask-wtf.readthedocs.org>`_
 * `development version
-  <http://github.com/ajford/flask-wtf>`_
+  <http://github.com/lepture/flask-wtf>`_
 
 
 """
@@ -30,12 +30,12 @@ with open('flask_wtf/__init__.py') as f:
 setup(
     name='Flask-WTF',
     version=version,
-    url='http://github.com/ajford/flask-wtf',
+    url='http://github.com/lepture/flask-wtf',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
-    maintainer='Anthony J. Ford',
-    maintainer_email='ford.anthonyj@gmail.com',
+    maintainer='Hsiaoming Yang',
+    maintainer_email='me@lepture.com',
     description='Simple integration of Flask and WTForms',
     long_description=__doc__,
     packages=[
