@@ -63,7 +63,7 @@ customize the error response::
 
     @csrf.error_handler
     def csrf_error(reason):
-        return render_template('csrf_error.html', reason=reason)
+        return render_template('csrf_error.html', reason=reason), 400
 
 We strongly suggest that you protect all your views from CSRF. But there
 is a chance that you might exclude some view handlers, it can be done::
@@ -89,7 +89,7 @@ The suggest way is that you render the token in a ``<meta>`` tag:
 
 .. sourcecode:: html+jinja
 
-    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 And it is also possible to render it in the ``<script>`` tag:
 
