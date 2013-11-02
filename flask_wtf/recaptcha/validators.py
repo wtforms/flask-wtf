@@ -34,8 +34,7 @@ class Recaptcha(object):
         self.message = message
 
     def __call__(self, form, field):
-        config = current_app.config
-        if current_app.testing and 'RECAPTCHA_PRIVATE_KEY' not in config:
+        if current_app.testing:
             return True
 
         challenge = request.form.get('recaptcha_challenge_field', '')
@@ -51,10 +50,6 @@ class Recaptcha(object):
 
     def _validate_recaptcha(self, challenge, response, remote_addr):
         """Performs the actual validation."""
-
-        if current_app.testing:
-            return True
-
         try:
             private_key = current_app.config['RECAPTCHA_PRIVATE_KEY']
         except KeyError:
