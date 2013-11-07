@@ -13,7 +13,7 @@ import hmac
 import hashlib
 import time
 from flask import current_app, session, request, abort
-from ._compat import to_bytes
+from ._compat import to_bytes, string_types
 try:
     from urlparse import urlparse
 except ImportError:
@@ -193,7 +193,10 @@ class CsrfProtect(object):
             def some_view():
                 return
         """
-        view_location = '%s.%s' % (view.__module__, view.__name__)
+        if isinstance(view, string_types):
+            view_location = view
+        else:
+            view_location = '%s.%s' % (view.__module__, view.__name__)
         self._exempt_views.add(view_location)
         return view
 
