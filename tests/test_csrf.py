@@ -1,10 +1,12 @@
 from __future__ import with_statement
 
 import re
+import flask
 from flask import render_template
 from flask_wtf.csrf import CsrfProtect
 from flask_wtf.csrf import validate_csrf, generate_csrf
 from .base import TestCase, MyForm, to_unicode
+import simplejson as json
 
 csrf_token_input = re.compile(
     r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
@@ -74,10 +76,46 @@ class TestCSRF(TestCase):
         response = self.client.get("/")
         csrf_token = get_csrf_token(response.data)
 
-        response = self.client.post("/", data={
+        response = self.client.post("/", 
+            data={
+                "name": "danny",
+                "csrf_token": csrf_token
+            }
+        )
+
+        assert b'DANNY' in response.data
+
+    def test_invalid_csrf_json(self):
+        """Sending bad csrftoken in json data should fail"""
+        csrf_token = "foobar"
+
+        data={
             "name": "danny",
             "csrf_token": csrf_token
-        })
+        }
+        response = self.client.post("/", 
+            data = flask.json.dumps(data),
+            content_type = "application/json"
+        )
+
+        assert response.status_code == 400
+
+    def test_valid_csrf_json(self):
+        """Sending csrftoken in json data should succeed"""
+        response = self.client.get("/")
+        csrf_token = get_csrf_token(response.data)
+
+        data={
+            "name": "danny",
+            "csrf_token": csrf_token
+        }
+        response = self.client.post("/", 
+            data = flask.json.dumps(data),
+            content_type = "application/json"
+        )
+
+        assert response.status_code == 200
+
         assert b'DANNY' in response.data
 
     def test_invalid_secure_csrf(self):
