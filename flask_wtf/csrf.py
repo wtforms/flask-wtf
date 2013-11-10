@@ -158,6 +158,11 @@ class CsrfProtect(object):
             csrf_token = None
             if request.method in ('POST', 'PUT', 'PATCH'):
                 csrf_token = request.form.get('csrf_token')
+                if ( not csrf_token and 
+                     hasattr(request, 'json') and 
+                     request.json ):
+                    csrf_token = request.json.get('csrf_token')
+
             if not csrf_token:
                 # You can get csrf token from header
                 # The header name is the same as Django
