@@ -9,9 +9,13 @@
 """
 
 from flask import _request_ctx_stack
-from wtforms.ext.i18n.utils import messages_path
 from flask.ext.babel import get_locale
 from babel import support
+try:
+    from wtforms.i18n import messages_path
+except ImportError:
+    from wtforms.ext.i18n.utils import messages_path
+
 
 __all__ = ('Translations', 'translations')
 
