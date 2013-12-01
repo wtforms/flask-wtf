@@ -37,8 +37,12 @@ class Recaptcha(object):
         if current_app.testing:
             return True
 
-        challenge = request.form.get('recaptcha_challenge_field', '')
-        response = request.form.get('recaptcha_response_field', '')
+        if request.json:
+            challenge = request.json.get('recaptcha_challenge_field', '')
+            response = request.json.get('recaptcha_response_field', '')
+        else:
+            challenge = request.form.get('recaptcha_challenge_field', '')
+            response = request.form.get('recaptcha_response_field', '')
         remote_ip = request.remote_addr
 
         if not challenge or not response:
@@ -69,7 +73,7 @@ class Recaptcha(object):
 
         rv = [l.strip() for l in response.readlines()]
 
-        if rv and rv[0] == 'true':
+        if rv and rv[0] == to_bytes('true'):
             return True
 
         if len(rv) > 1:
