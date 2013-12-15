@@ -21,7 +21,7 @@ Features
 * Global csrf protection.
 * Recaptcha supporting.
 * File upload that works with Flask-Uploads.
-* Internationalization integeration.
+* Internationalization integration.
 
 User's Guide
 ------------
