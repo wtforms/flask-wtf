@@ -10,13 +10,6 @@ class FileField(_FileField):
     Provides a `has_file()` method to check if its data is a FileStorage
     instance with an actual file.
     """
-    @property
-    def file(self):
-        """
-        :deprecated: synonym for **data**
-        """
-        return self.data
-
     def has_file(self):
         '''Return True iff self.data is a FileStorage with file data'''
         if not isinstance(self.data, FileStorage):
