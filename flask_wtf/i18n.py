@@ -9,7 +9,7 @@
 """
 
 from flask import _request_ctx_stack
-from flask.ext.babel import get_locale
+from flask_babel import get_locale
 from babel import support
 try:
     from wtforms.i18n import messages_path
