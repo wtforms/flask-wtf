@@ -9,7 +9,7 @@ to the :doc:`install` section.
 Creating Forms
 --------------
 
-Flask-WTF provides you with the integration WTForms. For example::
+Flask-WTF provides your Flask application integration with WTForms. For example::
 
     from flask_wtf import Form
     from wtforms import TextField
