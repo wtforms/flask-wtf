@@ -80,6 +80,16 @@ class TestCSRF(TestCase):
         })
         assert b'DANNY' in response.data
 
+    def test_prefixed_csrf(self):
+        response = self.client.get('/')
+        csrf_token = get_csrf_token(response.data)
+
+        response = self.client.post('/', data={
+            'prefix-name': 'David',
+            'prefix-csrf_token': csrf_token,
+        })
+        assert response.status_code == 200
+
     def test_invalid_secure_csrf(self):
         response = self.client.get("/", base_url='https://localhost/')
         csrf_token = get_csrf_token(response.data)
