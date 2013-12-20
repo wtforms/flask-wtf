@@ -3,6 +3,28 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.9.4
+-------------
+
+Released 2013/12/20
+
+- Bugfix for csrf module when form has a prefix
+- Compatible support for wtforms2
+- Remove file API for FileField
+
+
+Version 0.9.3
+-------------
+
+Released 2013/10/02
+
+- Fix validation of recaptcha when app in testing mode `#89`_.
+- Bugfix for csrf module `#91`_
+
+.. _`#89`: https://github.com/lepture/flask-wtf/issues/89
+.. _`#91`: https://github.com/lepture/flask-wtf/issues/91
+
+
 Version 0.9.2
 -------------
 
