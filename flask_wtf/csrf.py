@@ -41,7 +41,7 @@ def generate_csrf(secret_key=None, time_limit=None):
         raise Exception('Must provide secret_key to use csrf.')
 
     if time_limit is None:
-        time_limit = current_app.config['WTF_CSRF_TIME_LIMIT']
+        time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
 
     if 'csrf_token' not in session:
         session['csrf_token'] = hashlib.sha1(os.urandom(64)).hexdigest()
@@ -80,7 +80,7 @@ def validate_csrf(data, secret_key=None, time_limit=None):
         return False
 
     if time_limit is None:
-        time_limit = current_app.config['WTF_CSRF_TIME_LIMIT']
+        time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
 
     if time_limit:
         now = time.time()
@@ -133,7 +133,6 @@ class CsrfProtect(object):
         app.jinja_env.globals['csrf_token'] = generate_csrf
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
-        app.config.setdefault('WTF_CSRF_TIME_LIMIT', 3600)
         
         @app.before_request
         def _csrf_protect():
