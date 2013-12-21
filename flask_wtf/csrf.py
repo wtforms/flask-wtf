@@ -131,13 +131,13 @@ class CsrfProtect(object):
 
     def init_app(self, app):
         app.jinja_env.globals['csrf_token'] = generate_csrf
-        strict = app.config.get('WTF_CSRF_SSL_STRICT', True)
-        csrf_enabled = app.config.get('WTF_CSRF_ENABLED', True)
-
+        app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
+        app.config.setdefault('WTF_CSRF_ENABLED', True)
+        
         @app.before_request
         def _csrf_protect():
             # many things come from django.middleware.csrf
-            if not csrf_enabled:
+            if not app.config['WTF_CSRF_ENABLED']:
                 return
 
             if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
@@ -173,7 +173,7 @@ class CsrfProtect(object):
                 reason = 'CSRF token missing or incorrect.'
                 return self._error_response(reason)
 
-            if request.is_secure and strict:
+            if request.is_secure and app.config['WTF_CSRF_SSL_STRICT']:
                 if not request.referrer:
                     reason = 'Referrer checking failed - no Referrer.'
                     return self._error_response(reason)
