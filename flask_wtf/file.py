@@ -1,7 +1,7 @@
 from werkzeug import FileStorage
 from wtforms import FileField as _FileField
 from wtforms import ValidationError
-from wtforms.validators import StopValidation
+from wtforms.validators import InputRequired, StopValidation
 
 
 class FileField(_FileField):
@@ -22,7 +22,7 @@ class FileField(_FileField):
         return self.data.filename not in [None, '', '<fdopen>']
 
 
-class FileRequired(object):
+class FileRequired(InputRequired):
     """
     Validates that field has a file.
 
@@ -30,9 +30,6 @@ class FileRequired(object):
 
     You can also use the synonym **file_required**.
     """
-
-    def __init__(self, message=None):
-        self.message = message
 
     def __call__(self, form, field):
         if not field.has_file():
