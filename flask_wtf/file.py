@@ -1,6 +1,7 @@
 from werkzeug import FileStorage
 from wtforms import FileField as _FileField
 from wtforms import ValidationError
+from wtforms.validators import StopValidation
 
 
 class FileField(_FileField):
@@ -39,7 +40,7 @@ class FileRequired(object):
                 message = field.gettext('This field is required.')
             else:
                 message = self.message
-            raise ValidationError(message)
+            raise StopValidation(message)
 
 file_required = FileRequired
 
