@@ -35,7 +35,11 @@ class FileRequired(object):
 
     def __call__(self, form, field):
         if not field.has_file():
-            raise ValidationError(self.message)
+            if self.message is None:
+                message = field.gettext('This field is required.')
+            else:
+                message = self.message
+            raise ValidationError(message)
 
 file_required = FileRequired
 
