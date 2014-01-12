@@ -14,3 +14,23 @@ and Recaptcha integration.
 For more information please refer to the online docs:
 
 https://flask-wtf.readthedocs.org
+
+
+This version was patch to support Are you a human from http://areyouahuman.com.
+
+You need to add : AYAH_PUBLISHER_KEY and AYAH_PUBLISHER_KEY to your flask conf.py for exemple.
+
+Example
+=======
+
+In form.py
+
+   from flask.ext.wtf import AreYouAHumanField
+   
+   [...]
+   
+   areyouahuman = AreYouAHumanField(_('Human ?'))
+   
+In your template with a macro jinja2 render_field
+
+   {{ render_field(form.areyouahuman) }}
