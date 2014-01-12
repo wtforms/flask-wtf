@@ -17,6 +17,8 @@ https://flask-wtf.readthedocs.org
 
 This version was patch to support Are you a human from http://areyouahuman.com.
 
+On the dashboard configuration from are you a human, you need to select game style : embedded.
+
 You need to add : AYAH_PUBLISHER_KEY and AYAH_PUBLISHER_KEY to your flask conf.py for exemple.
 
 Example
