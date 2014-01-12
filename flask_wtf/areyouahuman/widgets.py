@@ -23,11 +23,10 @@ __all__ = ["AreYouAHumanWidget"]
 
 class AreYouAHumanWidget(object):
 
-    def areyouahuman_html(self, server, query, options, html):
+    def areyouahuman_html(self, server, query, html):
         return Markup(html % dict(
             script_url='%schallenge?%s' % (server, query),
-            frame_url='%snoscript?%s' % (server, query),
-            options=json.dumps(options, cls=_JSONEncoder)
+            frame_url='%snoscript?%s' % (server, query)
         ))
 
     def __call__(self, field, error=None, **kwargs):
@@ -50,17 +49,9 @@ class AreYouAHumanWidget(object):
 
         server = current_app.config['AYAH_SERVER']
         publisher_url = ''.join([ 'https://', server, '/ws/script/', urllib2.quote(public_key, safe='')])
-        scoring_url = ''.join([ 'https://', server, '/ws/scoreGame'])
-        publisher_html = u''.join([ '<div id="AYAH"></div> <script type="text/javascript" language="JavaScript" src="', publisher_url, '"></script>'])
+        publisher_html = u''.join([ '<div id="AYAH"></div> \
+                                     <script type="text/javascript" language="JavaScript" \
+                                             src="', publisher_url, '"> \
+                                     </script>'])
 
-        options = { 'publisher_key': public_key,
-                    'scoring_key': scoring_key,
-                    'ws_host': server,
-                    'publisher_url': publisher_url,
-                    'publisher_html': publisher_html,
-                    'scoring_url': scoring_url
-        }
-
-        options.update(current_app.config.get('AYAH_OPTIONS', {}))
-
-        return self.areyouahuman_html(server, query, options, publisher_html)
+        return self.areyouahuman_html(server, query, publisher_html)
