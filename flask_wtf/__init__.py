@@ -15,5 +15,6 @@ from __future__ import absolute_import
 from .form import Form
 from .csrf import CsrfProtect
 from .recaptcha import *
+from .areyouahuman import *
 
 __version__ = '0.10.2'
