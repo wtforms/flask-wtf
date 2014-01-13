@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import current_app, Markup
-from werkzeug import url_encode
+from werkzeug import url_encode, url_quote
 from flask import json
 from .._compat import text_type
 JSONEncoder = json.JSONEncoder
-import urllib2
 
 try:
     from speaklater import _LazyString
@@ -48,7 +47,7 @@ class AreYouAHumanWidget(object):
         _ = field.gettext
 
         server = current_app.config['AYAH_SERVER']
-        publisher_url = ''.join([ 'https://', server, '/ws/script/', urllib2.quote(public_key, safe='')])
+        publisher_url = ''.join([ 'https://', server, '/ws/script/', url_quote(public_key, safe='')])
         publisher_html = u''.join([ '<div id="AYAH"></div> \
                                      <script type="text/javascript" language="JavaScript" \
                                              src="', publisher_url, '"> \
