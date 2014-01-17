@@ -35,7 +35,7 @@ File Uploads
 Flask-WTF provides you a :class:`FileField` to handle file uploading,
 it will automatically draw data from ``flask.request.files`` if the form
 is posted. The ``data`` attribute of :class:`FileField` will be an
-instance of Werkzeug FileStorage.
+instance of Werkzeug FileStorage. 
 
 For example::
 
@@ -50,6 +50,7 @@ For example::
         form = PhotoForm()
         if form.validate_on_submit():
             filename = secure_filename(form.photo.data.filename)
+            form.photo.data.save('uploads/' + filename)
         else:
             filename = None
         return render_template('upload.html', form=form, filename=filename)
