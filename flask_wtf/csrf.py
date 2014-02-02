@@ -130,9 +130,13 @@ class CsrfProtect(object):
             self.init_app(app)
 
     def init_app(self, app):
-        app.jinja_env.globals['csrf_token'] = generate_csrf
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
+
+        # expose csrf_token as a helper in all templates
+        @app.context_processor
+        def csrf_token():
+            return dict(csrf_token=generate_csrf)
         
         @app.before_request
         def _csrf_protect():

@@ -184,3 +184,11 @@ class TestCSRF(TestCase):
             assert not validate_csrf('ff##dd')
             csrf_token = generate_csrf()
             assert validate_csrf(csrf_token)
+
+    def test_csrf_token_helper(self):
+        @self.app.route("/token")
+        def withtoken():
+            return render_template("csrf.html")
+
+        response = self.client.get('/token')
+        assert re.compile('token: [a-zA-Z0-9#.]{3,}').search(response.data)
