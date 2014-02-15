@@ -137,7 +137,7 @@ class CsrfProtect(object):
         @app.context_processor
         def csrf_token():
             return dict(csrf_token=generate_csrf)
-        
+
         @app.before_request
         def _csrf_protect():
             # many things come from django.middleware.csrf
