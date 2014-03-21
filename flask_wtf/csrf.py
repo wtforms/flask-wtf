@@ -132,6 +132,7 @@ class CsrfProtect(object):
     def init_app(self, app):
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
+        app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])
 
         # expose csrf_token as a helper in all templates
         @app.context_processor
@@ -160,7 +161,7 @@ class CsrfProtect(object):
                     return
 
             csrf_token = None
-            if request.method in ('POST', 'PUT', 'PATCH'):
+            if request.method in app.config['WTF_CSRF_METHODS']:
                 # find the ``csrf_token`` field in the subitted form
                 # if the form had a prefix, the name will be ``{prefix}-csrf_token``
                 for key in request.form:
