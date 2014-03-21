@@ -3,6 +3,17 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.9.5
+-------------
+
+Released 2014/03/21
+
+- ``csrf_token`` for all template types `#112`_.
+- Make FileRequired a subclass of InputRequired `#108`_.
+
+.. _`#108`: https://github.com/lepture/flask-wtf/issues/108
+.. _`#112`: https://github.com/lepture/flask-wtf/issues/112
+
 Version 0.9.4
 -------------
 
