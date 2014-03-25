@@ -68,7 +68,8 @@ class FileAllowed(object):
                 return
             raise ValidationError(self.message)
 
-        if not self.upload_set.file_allowed(field.data, field.data.filename):
+        if not self.upload_set.file_allowed(field.data,
+                field.data.filename.lower()):
             raise ValidationError(self.message)
 
 file_allowed = FileAllowed
