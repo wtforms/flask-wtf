@@ -192,3 +192,11 @@ class TestCSRF(TestCase):
 
         response = self.client.get('/token')
         assert b'#' in response.data
+
+    def test_csrf_token_macro(self):
+        @self.app.route("/token")
+        def withtoken():
+            return render_template("import_csrf.html")
+
+        response = self.client.get('/token')
+        assert b'#' in response.data
