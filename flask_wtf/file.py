@@ -62,13 +62,15 @@ class FileAllowed(object):
         if not field.has_file():
             return
 
+        filename = field.data.filename.lower()
+
         if isinstance(self.upload_set, (tuple, list)):
-            ext = field.data.filename.rsplit('.', 1)[-1]
-            if ext.lower() in self.upload_set:
+            ext = filename.rsplit('.', 1)[-1]
+            if ext in self.upload_set:
                 return
             raise ValidationError(self.message)
 
-        if not self.upload_set.file_allowed(field.data, field.data.filename):
+        if not self.upload_set.file_allowed(field.data, filename):
             raise ValidationError(self.message)
 
 file_allowed = FileAllowed
