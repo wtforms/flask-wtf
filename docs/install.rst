@@ -16,17 +16,7 @@ or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
 
     $ easy_install Flask-WTF
 
-But, you really `shouldn't do that <http://www.pip-installer.org/en/latest/other-tools.html#pip-compared-to-easy-install>`_.
-
-
-
-Cheeseshop Mirror
------------------
-
-If the Cheeseshop is down, you can also install Flask-WTF from one of the
-mirrors. `Crate.io <http://crate.io>`_ is one of them::
-
-    $ pip install -i http://simple.crate.io/ Flask-WTF
+But, you really `shouldn't do that <https://python-packaging-user-guide.readthedocs.org/en/latest/technical.html#pip-vs-easy-install>`_.
 
 
 Get the Code
