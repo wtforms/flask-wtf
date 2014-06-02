@@ -81,4 +81,3 @@ class YandexCaptchaWidget(object):
         captcha_url = soup.find('url').get_text()
 
         return self.yandex_captcha_html(captcha_id, captcha_url, spam_id)
-    
