@@ -5,6 +5,7 @@ from wtforms import TextField, HiddenField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
 from flask_wtf._compat import text_type
+from unittest import TestCase
 
 
 def to_unicode(text):
@@ -37,7 +38,7 @@ class SimpleForm(Form):
     pass
 
 
-class TestCase(object):
+class TestCase(TestCase):
     def setUp(self):
         self.app = self.create_app()
         self.client = self.app.test_client()

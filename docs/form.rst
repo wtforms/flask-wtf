@@ -154,3 +154,48 @@ And it can be easily setup in the templates:
 We have an example for you: `recaptcha@github`_.
 
 .. _`recaptcha@github`: https://github.com/lepture/flask-wtf/tree/master/examples/recaptcha
+
+YandexCaptcha
+-------------
+
+.. module:: flask_wtf.yandex_captcha
+
+Flask-WTF also provides YandexCaptcha support through a :class:`YandexCaptchaField`::
+
+    from flask_wtf import Form, YandexCaptchaField
+    from wtforms import TextField
+
+    class SignupForm(Form):
+        username = TextField('Username')
+        recaptcha = YandexCaptchaField()
+
+This comes together with a number of configuration, which you have to
+implement them.
+
+==================================   ==========================================================
+YANDEX_CLEANWEB_API_KEY              **required** API key.
+YANDEX_CLEANWEB_CAPTCHA_OPTIONS      **optional** A dict of configuration options.
+                                     Default ``{}``.
+                                     http://api.yandex.ru/key/form.xml?service=cw
+YANDEX_CLEANWEB_CAPTCHA_PLACEHOLDER  **optional** Captcha input field placeholder.
+                                     Empty default.
+YANDEX_CLEANWEB_CAPTCHA_SCRIPT       **optional** JS script with additional handling code src.
+                                     Empty default.
+YANDEX_CLEANWEB_CAPTCHA_TYPE         YandexCaptcha type. Default ``std``.
+==================================   ==========================================================
+
+For testing your application, if ``app.testing`` is ``True``, yandex_captcha
+field will always be valid for you convenience.
+
+And it can be easily setup in the templates:
+
+.. sourcecode:: html+jinja
+
+    <form action="/" method="post">
+        {{ form.username }}
+        {{ form.yandex_captcha }}
+    </form>
+
+We have an example for you: `yandex_captcha@github`_.
+
+.. _`yandex_captcha@github`: https://github.com/lepture/flask-wtf/tree/master/examples/yandex_captcha

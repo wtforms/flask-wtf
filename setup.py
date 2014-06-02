@@ -40,14 +40,16 @@ setup(
     long_description=__doc__,
     packages=[
         'flask_wtf',
-        'flask_wtf.recaptcha'
+        'flask_wtf.recaptcha',
+        'flask_wtf.yandex_captcha'
     ],
     test_suite='nose.collector',
     zip_safe=False,
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms>=1.0.5,<2.0'
+        'WTForms>=1.0.5,<2.0',
+        'BeautifulSoup4>=4.3.2'
     ],
     tests_require=[
         'nose',
