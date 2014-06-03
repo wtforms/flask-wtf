@@ -30,18 +30,18 @@ class TestYandexCaptcha(TestCase):
 
     def test_yandex_captcha(self):
         response = self.client.get('/')
-        assert 'yandex_captcha_image' in response.data
+        assert b'yandex_captcha_image' in response.data
 
     def test_invalid_yandex_captcha(self):
         response = self.client.post('/', data={})
-        assert 'Invalid code' in response.data
+        assert b'Invalid code' in response.data
 
     def test_send_yandex_captcha_request(self):
         response = self.client.post('/', data={
             'yandex_captcha_challenge_field': 'wrong data',
             'yandex_captcha_response_field': 'wrong data'
         })
-        assert 'Invalid code' in response.data
+        assert b'Invalid code' in response.data
 
     def test_testing(self):
         self.app.testing = True
@@ -49,7 +49,7 @@ class TestYandexCaptcha(TestCase):
             'yandex_captcha_challenge_field': 'test',
             'yandex_captcha_response_field': 'test'
         })
-        assert 'OK' in response.data
+        assert b'OK' in response.data
 
     def test_no_api_key(self):
         self.app.config.pop('YANDEX_CLEANWEB_API_KEY', None)
