@@ -6,11 +6,15 @@ except ImportError:
     # Python 3
     from urllib import request as http
 
-from bs4 import BeautifulSoup
+import re
 from flask import current_app, Markup, json
 from werkzeug import url_encode
 from . import YANDEX_CLEANWEB_API_URL
 from .._compat import to_bytes
+
+PATTERN_SPAM_ID = re.compile('<id>(.*)</id>')
+PATTERN_CAPTCHA_ID = re.compile('<captcha>(.*)</captcha>')
+PATTERN_CAPTCHA_URL = re.compile('<url>(.*)</url>')
 
 
 YANDEX_CAPTCHA_HTML = u"""
@@ -62,9 +66,7 @@ class YandexCaptchaWidget(object):
 
         response = http.urlopen(YANDEX_CLEANWEB_API_URL + 'check-spam', to_bytes(data))
 
-        soup = BeautifulSoup(response.read())
-
-        spam_id = soup.find('id').get_text()
+        spam_id = PATTERN_SPAM_ID.findall(response.read())[0]
 
         ### getting captcha url ###
 
@@ -75,9 +77,9 @@ class YandexCaptchaWidget(object):
         })
         response = http.urlopen(YANDEX_CLEANWEB_API_URL + 'get-captcha', to_bytes(data))
 
-        soup = BeautifulSoup(response.read())
+        response = response.read()
 
-        captcha_id = soup.find('captcha').get_text()
-        captcha_url = soup.find('url').get_text()
+        captcha_id = PATTERN_CAPTCHA_ID.findall(response)[0]
+        captcha_url = PATTERN_CAPTCHA_URL.findall(response)[0]
 
         return self.yandex_captcha_html(captcha_id, captcha_url, spam_id)

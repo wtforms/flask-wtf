@@ -4,7 +4,7 @@ except ImportError:
     # Python 3
     from urllib import request as http
 
-from bs4 import BeautifulSoup
+import re
 from flask import request, current_app
 from wtforms import ValidationError
 from werkzeug import url_encode
@@ -14,6 +14,8 @@ from .._compat import to_bytes
 
 __all__ = ['YandexCaptcha']
 
+
+PATTERN_CHECK_CAPTCHA_RESULT_FAILED = re.compile('<check-captcha-result .*><failed>.*</failed></check-captcha-result>')
 
 class YandexCaptcha(object):
     """
@@ -62,22 +64,16 @@ class YandexCaptcha(object):
 
         if response.code != 200:
             if response.code in (403, 500):
-                soup = BeautifulSoup(response.read())
-
                 raise RuntimeError(
                     (
                         u'An error occurred during the request to Yandex '
-                        u'CleanWeb API (%s, %s)'
-                    ) % (
-                        soup.error.attrs['key'],
-                        soup.error.message.get_text()
+                        u'CleanWeb API'
                     )
                 )
             raise RuntimeError()
 
-        if BeautifulSoup(response.read()).find(
-                'check-captcha-result'
-        ).find('failed'):
+        response = response.read()
+        if PATTERN_CHECK_CAPTCHA_RESULT_FAILED.search(response):
             return False
 
         return True

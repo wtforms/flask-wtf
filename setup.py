@@ -48,8 +48,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms>=1.0.5,<2.0',
-        'BeautifulSoup4>=4.3.2'
+        'WTForms>=1.0.5,<2.0'
     ],
     tests_require=[
         'nose',
