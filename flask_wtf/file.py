@@ -50,27 +50,33 @@ class FileAllowed(object):
     :param upload_set: A list/tuple of extention names or an instance
                        of ``flask.ext.uploads.UploadSet``
     :param message: error message
+    :param stop_validation: if failure stops validation. default = False
 
     You can also use the synonym **file_allowed**.
     """
 
-    def __init__(self, upload_set, message=None):
+    def __init__(self, upload_set, message=None, stop_validation=False):
         self.upload_set = upload_set
         self.message = message
+        self.stop_validation = stop_validation
 
     def __call__(self, form, field):
         if not field.has_file():
             return
 
         filename = field.data.filename.lower()
+        if self.stop_validation:
+            Error = StopValidation
+        else:
+            Error = ValidationError
 
         if isinstance(self.upload_set, (tuple, list)):
             ext = filename.rsplit('.', 1)[-1]
             if ext in self.upload_set:
                 return
-            raise ValidationError(self.message)
+            raise Error(self.message)
 
         if not self.upload_set.file_allowed(field.data, filename):
-            raise ValidationError(self.message)
+            raise Error(self.message)
 
 file_allowed = FileAllowed
