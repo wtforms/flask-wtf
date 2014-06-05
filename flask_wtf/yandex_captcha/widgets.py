@@ -12,9 +12,9 @@ from werkzeug import url_encode
 from . import YANDEX_CLEANWEB_API_URL
 from .._compat import to_bytes
 
-PATTERN_SPAM_ID = re.compile('<id>(.*)</id>')
-PATTERN_CAPTCHA_ID = re.compile('<captcha>(.*)</captcha>')
-PATTERN_CAPTCHA_URL = re.compile('<url>(.*)</url>')
+PATTERN_SPAM_ID = re.compile(b'<id>(.*)</id>')
+PATTERN_CAPTCHA_ID = re.compile(b'<captcha>(.*)</captcha>')
+PATTERN_CAPTCHA_URL = re.compile(b'<url>(.*)</url>')
 
 
 YANDEX_CAPTCHA_HTML = u"""

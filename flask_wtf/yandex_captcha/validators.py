@@ -15,7 +15,7 @@ from .._compat import to_bytes
 __all__ = ['YandexCaptcha']
 
 
-PATTERN_CHECK_CAPTCHA_RESULT_FAILED = re.compile('<check-captcha-result .*><failed>.*</failed></check-captcha-result>')
+PATTERN_CHECK_CAPTCHA_RESULT_FAILED = re.compile(b'<check-captcha-result .*><failed>.*</failed></check-captcha-result>')
 
 class YandexCaptcha(object):
     """
