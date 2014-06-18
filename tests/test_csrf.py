@@ -185,6 +185,11 @@ class TestCSRF(TestCase):
             csrf_token = generate_csrf()
             assert validate_csrf(csrf_token)
 
+    def test_validate_not_expiring_csrf(self):
+        with self.app.test_request_context():
+            csrf_token = generate_csrf(time_limit=False)
+            assert validate_csrf(csrf_token, time_limit=False)
+
     def test_csrf_token_helper(self):
         @self.app.route("/token")
         def withtoken():
