@@ -1,6 +1,5 @@
 from werkzeug import FileStorage
 from wtforms import FileField as _FileField
-from wtforms import ValidationError
 from wtforms.validators import InputRequired, StopValidation
 
 
@@ -68,9 +67,12 @@ class FileAllowed(object):
             ext = filename.rsplit('.', 1)[-1]
             if ext in self.upload_set:
                 return
-            raise ValidationError(self.message)
+            message = '{} is not in the allowed extentions: {}'.format(
+                ext, self.upload_set)
+            raise StopValidation(self.message or message)
 
         if not self.upload_set.file_allowed(field.data, filename):
-            raise ValidationError(self.message)
+            raise StopValidation(self.message or
+                                 'File does not have an approved extension')
 
 file_allowed = FileAllowed
