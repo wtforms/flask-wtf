@@ -1,6 +1,5 @@
 from werkzeug import FileStorage
 from wtforms import FileField as _FileField
-from wtforms import ValidationError
 from wtforms.validators import InputRequired, StopValidation
 
 
@@ -68,9 +67,9 @@ class FileAllowed(object):
             ext = filename.rsplit('.', 1)[-1]
             if ext in self.upload_set:
                 return
-            raise ValidationError(self.message)
+            raise StopValidation(self.message)
 
         if not self.upload_set.file_allowed(field.data, filename):
-            raise ValidationError(self.message)
+            raise StopValidation(self.message)
 
 file_allowed = FileAllowed
