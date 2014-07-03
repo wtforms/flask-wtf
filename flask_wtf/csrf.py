@@ -138,6 +138,7 @@ class CsrfProtect(object):
             self.init_app(app)
 
     def init_app(self, app):
+        app.jinja_env.globals['csrf_token'] = generate_csrf
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
         app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])

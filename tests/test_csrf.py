@@ -214,3 +214,11 @@ class TestCSRF(TestCase):
         self.csrf.exempt(self.bp)
         response = self.client.post('/bar/foo')
         assert response.status_code == 200
+
+    def test_csrf_token_macro(self):
+        @self.app.route("/token")
+        def withtoken():
+            return render_template("import_csrf.html")
+
+        response = self.client.get('/token')
+        assert b'#' in response.data
