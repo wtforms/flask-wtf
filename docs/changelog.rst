@@ -3,6 +3,18 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.10.0
+--------------
+
+Release Date to be decided
+
+- Add configuration: WTF_CSRF_METHODS
+- Support WTForms 2.0 now
+- Fix csrf validation without time limit (time_limit=False)
+- CSRF exempt supports blueprint `#111`_.
+
+.. _`#111`: https://github.com/lepture/flask-wtf/issues/111
+
 Version 0.9.5
 -------------
 

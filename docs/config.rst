@@ -21,6 +21,8 @@ WTF_CSRF_TIME_LIMIT CSRF token expiring time. Default is **3600**
 WTF_CSRF_SSL_STRICT Strictly protection on SSL. This will check
                     the referrer, validate if it is from the same
                     origin. Default is True.
+WTF_CSRF_METHODS    CSRF protection on these request methods.
+                    Default is **['POST', 'PUT', 'PATCH']**
 =================== ===============================================
 
 
