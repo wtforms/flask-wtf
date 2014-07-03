@@ -3,6 +3,11 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.9.6
+-------------
+
+- Added support for YandexCaptcha.
+
 Version 0.9.5
 -------------
 

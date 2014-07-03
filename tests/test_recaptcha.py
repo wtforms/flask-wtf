@@ -10,7 +10,7 @@ RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
 
-class RecaptchaFrom(Form):
+class RecaptchaForm(Form):
     SECRET_KEY = "a poorly kept secret."
     recaptcha = RecaptchaField()
 
@@ -23,8 +23,8 @@ class TestRecaptcha(TestCase):
         app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 
         @app.route("/", methods=("GET", "POST"))
-        def inex():
-            form = RecaptchaFrom(csrf_enabled=False)
+        def index():
+            form = RecaptchaForm(csrf_enabled=False)
             if form.validate_on_submit():
                 return 'OK'
             return render_template("recaptcha.html", form=form)

@@ -40,7 +40,8 @@ setup(
     long_description=__doc__,
     packages=[
         'flask_wtf',
-        'flask_wtf.recaptcha'
+        'flask_wtf.recaptcha',
+        'flask_wtf.yandex_captcha'
     ],
     test_suite='nose.collector',
     zip_safe=False,

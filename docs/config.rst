@@ -38,3 +38,20 @@ RECAPTCHA_PRIVATE_KEY **required** A private key.
 RECAPTCHA_OPTIONS     **optional** A dict of configuration options.
                       https://www.google.com/recaptcha/admin/create
 ===================== ==============================================
+
+
+
+YandexCaptcha
+-------------
+
+==================================   ==========================================================
+YANDEX_CLEANWEB_API_KEY              **required** API key.
+YANDEX_CLEANWEB_CAPTCHA_OPTIONS      **optional** A dict of configuration options.
+                                     Default ``{}``.
+                                     http://api.yandex.ru/key/form.xml?service=cw
+YANDEX_CLEANWEB_CAPTCHA_PLACEHOLDER  **optional** Captcha input field placeholder.
+                                     Empty default.
+YANDEX_CLEANWEB_CAPTCHA_SCRIPT       **optional** JS script with additional handling code src.
+                                     Empty default.
+YANDEX_CLEANWEB_CAPTCHA_TYPE         YandexCaptcha type. Default ``std``.
+==================================   ==========================================================
