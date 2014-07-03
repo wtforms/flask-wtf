@@ -102,6 +102,11 @@ def validate_csrf(data, secret_key=None, time_limit=None):
         to_bytes(csrf_build),
         digestmod=hashlib.sha1
     ).hexdigest()
+
+    # Available since 2.7.7 and 3.3
+    if hasattr(hmac, 'compare_digest'):
+        return hmac.compare_digest(hmac_compare, hmac_csrf)
+
     return hmac_compare == hmac_csrf
 
 
