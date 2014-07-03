@@ -12,6 +12,7 @@ import os
 import hmac
 import hashlib
 import time
+from flask import Blueprint
 from flask import current_app, session, request, abort
 from ._compat import to_bytes, string_types
 try:
@@ -131,6 +132,7 @@ class CsrfProtect(object):
 
     def __init__(self, app=None):
         self._exempt_views = set()
+        self._exempt_blueprints = set()
 
         if app:
             self.init_app(app)
@@ -164,6 +166,8 @@ class CsrfProtect(object):
 
                 dest = '%s.%s' % (view.__module__, view.__name__)
                 if dest in self._exempt_views:
+                    return
+                if view.__module__ in self._exempt_blueprints:
                     return
 
             csrf_token = None
@@ -208,6 +212,9 @@ class CsrfProtect(object):
             def some_view():
                 return
         """
+        if isinstance(view, Blueprint):
+            self._exempt_blueprints.add(view.import_name)
+            return view
         if isinstance(view, string_types):
             view_location = view
         else:
