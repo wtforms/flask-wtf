@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 import re
+from flask import Blueprint
 from flask import render_template
 from flask_wtf.csrf import CsrfProtect
 from flask_wtf.csrf import validate_csrf, generate_csrf
@@ -37,6 +38,14 @@ class TestCSRF(TestCase):
                 "index.html", form=form, name=name
             )
 
+        bp = Blueprint('csrf', __name__)
+
+        @bp.route('/foo', methods=['GET', 'POST'])
+        def foo():
+            return 'foo'
+
+        app.register_blueprint(bp, url_prefix='/bar')
+        self.bp = bp
         self.app = app
         self.client = self.app.test_client()
 
@@ -197,3 +206,11 @@ class TestCSRF(TestCase):
 
         response = self.client.get('/token')
         assert b'#' in response.data
+
+    def test_csrf_blueprint(self):
+        response = self.client.post('/bar/foo')
+        assert response.status_code == 400
+
+        self.csrf.exempt(self.bp)
+        response = self.client.post('/bar/foo')
+        assert response.status_code == 200
