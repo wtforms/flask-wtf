@@ -47,7 +47,8 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms>=1.0.5'
+        'WTForms>=1.0.5',
+	'python-dateutil'
     ],
     tests_require=[
         'nose',
