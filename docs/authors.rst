@@ -1,7 +1,7 @@
 Authors
 =======
 
-Flask-WTF is created by Dan Jacob, and now is maitained by Hsiaoming Yang.
+Flask-WTF is created by Dan Jacob, and now is maintained by Hsiaoming Yang.
 
 Contributors
 ------------
