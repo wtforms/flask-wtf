@@ -6,7 +6,7 @@ Full list of changes between each Flask-WTF release.
 Version 0.10.0
 --------------
 
-Release Date to be decided
+Released 2014/07/16
 
 - Add configuration: WTF_CSRF_METHODS
 - Support WTForms 2.0 now
