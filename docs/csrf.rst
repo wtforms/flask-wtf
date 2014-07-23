@@ -110,7 +110,7 @@ Whenever you send a AJAX POST request, add the ``X-CSRFToken`` for it:
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
         }
