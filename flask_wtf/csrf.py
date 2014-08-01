@@ -154,7 +154,7 @@ class CsrfProtect(object):
             if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
                 return
 
-            if self._exempt_views:
+            if self._exempt_views or self._exempt_blueprints:
                 if not request.endpoint:
                     return
 
@@ -165,7 +165,7 @@ class CsrfProtect(object):
                 dest = '%s.%s' % (view.__module__, view.__name__)
                 if dest in self._exempt_views:
                     return
-                if view.__module__ in self._exempt_blueprints:
+                if request.blueprint in self._exempt_blueprints:
                     return
 
             csrf_token = None
@@ -211,7 +211,7 @@ class CsrfProtect(object):
                 return
         """
         if isinstance(view, Blueprint):
-            self._exempt_blueprints.add(view.import_name)
+            self._exempt_blueprints.add(view.name)
             return view
         if isinstance(view, string_types):
             view_location = view
