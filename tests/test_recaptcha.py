@@ -32,12 +32,8 @@ class TestRecaptcha(TestCase):
 
     def test_recaptcha(self):
         response = self.client.get('/')
-        assert b'http://api.recaptcha.net' in response.data
+        assert b'//www.google.com/recaptcha/api/' in response.data
 
-    def test_ssl_recaptcha(self):
-        self.app.config['RECAPTCHA_USE_SSL'] = True
-        response = self.client.get('/')
-        assert b'https://www.google.com/recaptcha/api/' in response.data
 
     def test_invalid_recaptcha(self):
         response = self.client.post('/', data={})
