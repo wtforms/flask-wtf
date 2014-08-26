@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
 from flask import Flask, render_template, jsonify
-from wtforms import TextField, HiddenField, SubmitField
+from wtforms import StringField, HiddenField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf import Form
 from flask_wtf._compat import text_type
@@ -15,7 +15,7 @@ def to_unicode(text):
 
 class MyForm(Form):
     SECRET_KEY = "a poorly kept secret."
-    name = TextField("Name", validators=[DataRequired()])
+    name = StringField("Name", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 

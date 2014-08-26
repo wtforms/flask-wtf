@@ -7,7 +7,7 @@ except ImportError:
 
 from flask import render_template, request
 
-from wtforms import TextField, FieldList
+from wtforms import StringField, FieldList
 from flask_wtf import Form
 from flask_wtf.file import FileField
 from flask_wtf.file import file_required, file_allowed
@@ -153,7 +153,7 @@ class TestFileUpload(TestCase):
 
 
 class BrokenForm(Form):
-    text_fields = FieldList(TextField())
+    text_fields = FieldList(StringField())
     file_fields = FieldList(FileField())
 
 text_data = [('text_fields-0', 'First input'),
