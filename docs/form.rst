@@ -130,12 +130,13 @@ Flask-WTF also provides Recaptcha support through a :class:`RecaptchaField`::
 This comes together with a number of configuration, which you have to
 implement them.
 
-===================== ==============================================
+===================== ===============================================
 RECAPTCHA_PUBLIC_KEY  **required** A public key.
 RECAPTCHA_PRIVATE_KEY **required** A private key.
+RECAPTCHA_API_SERVER  **optional** Specify your Recaptcha API server.
 RECAPTCHA_OPTIONS     **optional** A dict of configuration options.
                       https://www.google.com/recaptcha/admin/create
-===================== ==============================================
+===================== ===============================================
 
 For testing your application, if ``app.testing`` is ``True``, recaptcha
 field will always be valid for you convenience.
