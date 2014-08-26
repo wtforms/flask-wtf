@@ -64,15 +64,17 @@ class RecaptchaWidget(object):
         options = {
             'theme': 'clean',
             'custom_translations': {
-                'visual_challenge': _('Get a visual challenge'),
                 'audio_challenge': _('Get an audio challenge'),
-                'refresh_btn': _('Get a new challenge'),
-                'instructions_visual': _('Type the two words:'),
-                'instructions_audio': _('Type what you hear:'),
-                'help_btn': _('Help'),
-                'play_again': _('Play sound again'),
                 'cant_hear_this': _('Download sound as MP3'),
+                'help_btn': _('Help'),
+                'image_alt_text': _('reCAPTCHA challenge image'),
                 'incorrect_try_again': _('Incorrect. Try again.'),
+                'instructions_audio': _('Type what you hear'),
+                'instructions_visual': _('Type the text'),
+                'play_again': _('Play sound again'),
+                'privacy_and_terms': _('Privacy & Terms'),
+                'refresh_btn': _('Get a new challenge'),
+                'visual_challenge': _('Get a visual challenge'),
             }
         }
 
