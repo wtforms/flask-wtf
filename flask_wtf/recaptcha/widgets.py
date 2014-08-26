@@ -36,9 +36,12 @@ class RecaptchaWidget(object):
 
     def recaptcha_html(self, query, options):
         html = current_app.config.get('RECAPTCHA_HTML', RECAPTCHA_HTML)
+        server = current_app.config.get(
+            'RECAPTCHA_API_SERVER', RECAPTCHA_API_SERVER
+        )
         return Markup(html % dict(
-            script_url='%schallenge?%s' % (RECAPTCHA_API_SERVER, query),
-            frame_url='%snoscript?%s' % (RECAPTCHA_API_SERVER, query),
+            script_url='%schallenge?%s' % (server, query),
+            frame_url='%snoscript?%s' % (server, query),
             options=json.dumps(options, cls=_JSONEncoder)
         ))
 

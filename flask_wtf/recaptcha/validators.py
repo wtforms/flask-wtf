@@ -9,7 +9,7 @@ from wtforms import ValidationError
 from werkzeug import url_encode
 from .._compat import to_bytes
 
-RECAPTCHA_VERIFY_SERVER = 'http://api-verify.recaptcha.net/verify'
+RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/verify'
 
 __all__ = ["Recaptcha"]
 
