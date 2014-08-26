@@ -18,18 +18,14 @@ except:
     _JSONEncoder = JSONEncoder
 
 
-RECAPTCHA_API_SERVER = 'http://api.recaptcha.net/'
-RECAPTCHA_SSL_API_SERVER = 'https://www.google.com/recaptcha/api/'
+RECAPTCHA_API_SERVER = '//www.google.com/recaptcha/api/'
 RECAPTCHA_HTML = u'''
 <script type="text/javascript">var RecaptchaOptions = %(options)s;</script>
 <script type="text/javascript" src="%(script_url)s"></script>
 <noscript>
-  <div><iframe src="%(frame_url)s" height="300" width="500"></iframe></div>
-  <div>
-    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-    <input type="hidden" name="recaptcha_response_field"
-           value="manual_challenge" />
-  </div>
+  <iframe src="%(frame_url)s" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
 </noscript>
 '''
 
@@ -38,21 +34,16 @@ __all__ = ["RecaptchaWidget"]
 
 class RecaptchaWidget(object):
 
-    def recaptcha_html(self, server, query, options):
+    def recaptcha_html(self, query, options):
         html = current_app.config.get('RECAPTCHA_HTML', RECAPTCHA_HTML)
         return Markup(html % dict(
-            script_url='%schallenge?%s' % (server, query),
-            frame_url='%snoscript?%s' % (server, query),
+            script_url='%schallenge?%s' % (RECAPTCHA_API_SERVER, query),
+            frame_url='%snoscript?%s' % (RECAPTCHA_API_SERVER, query),
             options=json.dumps(options, cls=_JSONEncoder)
         ))
 
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
-
-        if current_app.config.get('RECAPTCHA_USE_SSL', False):
-            server = RECAPTCHA_SSL_API_SERVER
-        else:
-            server = RECAPTCHA_API_SERVER
 
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
@@ -84,4 +75,4 @@ class RecaptchaWidget(object):
 
         options.update(current_app.config.get('RECAPTCHA_OPTIONS', {}))
 
-        return self.recaptcha_html(server, query, options)
+        return self.recaptcha_html(query, options)

@@ -131,8 +131,6 @@ This comes together with a number of configuration, which you have to
 implement them.
 
 ===================== ==============================================
-RECAPTCHA_USE_SSL     Enable/disable recaptcha through ssl.
-                      Default is False.
 RECAPTCHA_PUBLIC_KEY  **required** A public key.
 RECAPTCHA_PRIVATE_KEY **required** A private key.
 RECAPTCHA_OPTIONS     **optional** A dict of configuration options.
