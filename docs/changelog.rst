@@ -3,6 +3,18 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.10.1
+--------------
+
+Released 2014/08/26
+
+- Update RECAPTCHA API SERVER URL via `#145`_.
+- Update requirement Werkzeug>=0.9.5
+- Fix CsrfProtect exempt for blueprints via `#143`_.
+
+.. _`#145`: https://github.com/lepture/flask-wtf/pull/145
+.. _`#143`: https://github.com/lepture/flask-wtf/pull/143
+
 Version 0.10.0
 --------------
 
