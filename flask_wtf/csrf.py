@@ -27,7 +27,8 @@ __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
 
 
 def generate_csrf(secret_key=None, time_limit=None):
-    """Generate csrf token code.
+    """
+    Generate csrf token code.
 
     :param secret_key: A secret key for mixing in the token,
                        default is Flask.secret_key.
@@ -64,7 +65,8 @@ def generate_csrf(secret_key=None, time_limit=None):
 
 
 def validate_csrf(data, secret_key=None, time_limit=None):
-    """Check if the given data is a valid csrf token.
+    """
+    Check if the given data is a valid csrf token.
 
     :param data: The csrf token value to be checked.
     :param secret_key: A secret key for mixing in the token,
@@ -109,7 +111,8 @@ def validate_csrf(data, secret_key=None, time_limit=None):
 
 
 class CsrfProtect(object):
-    """Enable csrf protect for Flask.
+    """
+    Enable csrf protect for Flask.
 
     Register it with::
 
@@ -199,7 +202,8 @@ class CsrfProtect(object):
             request.csrf_valid = True  # mark this request is csrf valid
 
     def exempt(self, view):
-        """A decorator that can exclude a view from csrf protection.
+        """
+        A decorator that can exclude a view from csrf protection.
 
         Remember to put the decorator above the `route`::
 
@@ -224,7 +228,8 @@ class CsrfProtect(object):
         return abort(400, reason)
 
     def error_handler(self, view):
-        """A decorator that set the error response handler.
+        """
+        A decorator that set the error response handler.
 
         It accepts one parameter `reason`::
 

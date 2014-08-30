@@ -28,8 +28,7 @@ RECAPTCHA_HTML = u'''
   <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
 </noscript>
 '''
-
-__all__ = ["RecaptchaWidget"]
+__all__ = ['RecaptchaWidget']
 
 
 class RecaptchaWidget(object):
@@ -51,7 +50,7 @@ class RecaptchaWidget(object):
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
-            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set")
+            raise RuntimeError('RECAPTCHA_PUBLIC_KEY config not set')
         query_options = dict(k=public_key)
 
         if field.recaptcha_error is not None:

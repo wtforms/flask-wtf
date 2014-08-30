@@ -21,7 +21,8 @@ __all__ = ('Translations', 'translations')
 
 
 def _get_translations():
-    """Returns the correct gettext translations.
+    """
+    Returns the correct gettext translations.
     Copy from flask-babel with some modifications.
     """
     ctx = _request_ctx_stack.top

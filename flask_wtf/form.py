@@ -18,10 +18,11 @@ except:
 
 
 class _Auto():
-    '''Placeholder for unspecified variables that should be set to defaults.
+    """
+    Placeholder for unspecified variables that should be set to defaults.
 
     Used when None is a valid option and should not be replaced by a default.
-    '''
+    """
     pass
 
 
@@ -84,7 +85,7 @@ class Form(SecureForm):
                 csrf_context = session
             if secret_key is None:
                 # It wasn't passed in, check if the class has a SECRET_KEY
-                secret_key = getattr(self, "SECRET_KEY", None)
+                secret_key = getattr(self, 'SECRET_KEY', None)
 
             self.SECRET_KEY = secret_key
         else:
@@ -109,7 +110,8 @@ class Form(SecureForm):
             raise ValidationError(field.gettext('CSRF token missing'))
 
     def validate_csrf_data(self, data):
-        """Check if the csrf data is valid.
+        """
+        Check if the csrf data is valid.
 
         .. versionadded: 0.9.0
 
@@ -123,7 +125,7 @@ class Form(SecureForm):
         method is **PUT** or **POST**.
         """
 
-        return request and request.method in ("PUT", "POST")
+        return request and request.method in ('PUT', 'POST')
 
     def hidden_tag(self, *fields):
         """

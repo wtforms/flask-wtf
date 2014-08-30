@@ -11,7 +11,7 @@ from .._compat import to_bytes
 
 RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/verify'
 
-__all__ = ["Recaptcha"]
+__all__ = ['Recaptcha']
 
 
 class Recaptcha(object):
@@ -57,7 +57,7 @@ class Recaptcha(object):
         try:
             private_key = current_app.config['RECAPTCHA_PRIVATE_KEY']
         except KeyError:
-            raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set")
+            raise RuntimeError('No RECAPTCHA_PRIVATE_KEY config set')
 
         data = url_encode({
             'privatekey': private_key,
