@@ -18,8 +18,7 @@ except:
 
 
 class _Auto():
-    """
-    Placeholder for unspecified variables that should be set to defaults.
+    """Placeholder for unspecified variables that should be set to defaults.
 
     Used when None is a valid option and should not be replaced by a default.
     """
@@ -36,8 +35,7 @@ def _is_hidden(field):
 
 
 class Form(SecureForm):
-    """
-    Flask-specific subclass of WTForms **SecureForm** class.
+    """Flask-specific subclass of WTForms **SecureForm** class.
 
     If formdata is not specified, this will use flask.request.form.
     Explicitly pass formdata = None to prevent this.
@@ -110,8 +108,7 @@ class Form(SecureForm):
             raise ValidationError(field.gettext('CSRF token missing'))
 
     def validate_csrf_data(self, data):
-        """
-        Check if the csrf data is valid.
+        """Check if the csrf data is valid.
 
         .. versionadded: 0.9.0
 
@@ -148,7 +145,7 @@ class Form(SecureForm):
             rv.append(text_type(field))
         rv.append(u"</div>")
 
-        return Markup(u"".join(rv))
+        return Markup(u''.join(rv))
 
     def validate_on_submit(self):
         """
