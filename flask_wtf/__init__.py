@@ -16,4 +16,4 @@ from .form import Form
 from .csrf import CsrfProtect
 from .recaptcha import *
 
-__version__ = '0.10.1'
+__version__ = '0.10.2'

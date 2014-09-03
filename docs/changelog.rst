@@ -3,6 +3,16 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.10.2
+--------------
+
+Released 2014/09/03
+
+- Update translation for reCaptcha via `#146`_.
+
+.. _`#146`: https://github.com/lepture/flask-wtf/pull/146
+
+
 Version 0.10.1
 --------------
 
