@@ -4,8 +4,7 @@ from wtforms.validators import InputRequired, StopValidation
 
 
 class FileField(_FileField):
-    """
-    Werkzeug-aware subclass of **wtforms.FileField**
+    """Werkzeug-aware subclass of **wtforms.FileField**
 
     Provides a `has_file()` method to check if its data is a FileStorage
     instance with an actual file.
@@ -22,8 +21,7 @@ class FileField(_FileField):
 
 
 class FileRequired(InputRequired):
-    """
-    Validates that field has a file.
+    """Validates that field has a file.
 
     :param message: error message
 
@@ -42,8 +40,7 @@ file_required = FileRequired
 
 
 class FileAllowed(object):
-    """
-    Validates that the uploaded file is allowed by the given
+    """Validates that the uploaded file is allowed by the given
     Flask-Uploads UploadSet.
 
     :param upload_set: A list/tuple of extention names or an instance

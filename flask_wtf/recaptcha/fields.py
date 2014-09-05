@@ -3,7 +3,7 @@ from wtforms.fields import Field
 from . import widgets
 from .validators import Recaptcha
 
-__all__ = ["RecaptchaField"]
+__all__ = ['RecaptchaField']
 
 
 class RecaptchaField(Field):
