@@ -2,7 +2,7 @@
 
 import werkzeug.datastructures
 
-from jinja2 import Markup
+from jinja2 import Markup, escape
 from flask import request, session, current_app
 from wtforms.fields import HiddenField
 from wtforms.widgets import HiddenInput
@@ -57,6 +57,7 @@ class Form(SecureForm):
                          csrf behavior is suppressed.
                          Default: WTF_CSRF_ENABLED config value
     """
+
     SECRET_KEY = None
     TIME_LIMIT = None
 
@@ -139,12 +140,21 @@ class Form(SecureForm):
         if not fields:
             fields = [f for f in self if _is_hidden(f)]
 
-        rv = [u'<div style="display:none;">']
+        name = current_app.config.get('WTF_HIDDEN_TAG', 'div')
+        attrs = current_app.config.get(
+            'WTF_HIDDEN_TAG_ATTRS', {'style': 'display:none;'})
+
+        tag_attrs = u' '.join(
+            u'%s="%s"' % (escape(k), escape(v)) for k, v in attrs.items())
+        tag_start = u'<%s %s>' % (escape(name), tag_attrs)
+        tag_end = u'</%s>' % escape(name)
+
+        rv = [tag_start]
         for field in fields:
             if isinstance(field, string_types):
                 field = getattr(self, field)
             rv.append(text_type(field))
-        rv.append(u"</div>")
+        rv.append(tag_end)
 
         return Markup(u"".join(rv))
 
