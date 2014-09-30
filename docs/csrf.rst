@@ -115,3 +115,17 @@ Whenever you send a AJAX POST request, add the ``X-CSRFToken`` for it:
             }
         }
     })
+
+Troubleshooting
+---------------
+
+When you define your forms, if you make `the mistake`_ of importing
+``Form`` from ``wtforms`` instead of from ``flask.ext.wtf``, most
+features besides CSRF protection will work (aside from
+``form.validate_on_submit()``), but CSRF protection will fail. Upon
+submitting forms, you’ll get
+``Bad Request``/``CSRF token missing or incorrect`` (and the
+``form.csrf_token`` in your template will produce no output). The
+problem is in your broken import statements, not your configuration.
+
+.. _the mistake: http://stackoverflow.com/a/20577177/884640
