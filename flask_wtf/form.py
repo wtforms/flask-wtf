@@ -13,8 +13,8 @@ from .csrf import generate_csrf, validate_csrf
 
 try:
     from .i18n import translations
-except:
-    translations = None
+except ImportError:
+    translations = None  # babel not installed
 
 
 class _Auto():

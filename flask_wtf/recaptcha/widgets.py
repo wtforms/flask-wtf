@@ -14,7 +14,7 @@ try:
             if isinstance(o, _LazyString):
                 return str(o)
             return JSONEncoder.default(self, o)
-except:
+except ImportError:
     _JSONEncoder = JSONEncoder
 
 

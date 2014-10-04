@@ -75,7 +75,10 @@ def validate_csrf(data, secret_key=None, time_limit=None):
     if not data or '##' not in data:
         return False
 
-    expires, hmac_csrf = data.split('##', 1)
+    try:
+        expires, hmac_csrf = data.split('##', 1)
+    except ValueError:
+        return False  # unpack error
 
     if time_limit is None:
         time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
@@ -83,7 +86,7 @@ def validate_csrf(data, secret_key=None, time_limit=None):
     if time_limit:
         try:
             expires = int(expires)
-        except:
+        except ValueError:
             return False
 
         now = int(time.time())
