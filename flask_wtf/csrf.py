@@ -49,7 +49,7 @@ def generate_csrf(secret_key=None, time_limit=None):
         session['csrf_token'] = hashlib.sha1(os.urandom(64)).hexdigest()
 
     if time_limit:
-        expires = time.time() + time_limit
+        expires = int(time.time() + time_limit)
         csrf_build = '%s%s' % (session['csrf_token'], expires)
     else:
         expires = ''
@@ -82,11 +82,11 @@ def validate_csrf(data, secret_key=None, time_limit=None):
 
     if time_limit:
         try:
-            expires = float(expires)
+            expires = int(expires)
         except:
             return False
 
-        now = time.time()
+        now = int(time.time())
         if now > expires:
             return False
 
