@@ -8,21 +8,7 @@ except ImportError:
 
 from flask import current_app, Markup
 from werkzeug import url_encode, url_quote
-from flask import json
 from .._compat import text_type
-
-JSONEncoder = json.JSONEncoder
-
-try:
-    from speaklater import _LazyString
-
-    class _JSONEncoder(JSONEncoder):
-        def default(self, o):
-            if isinstance(o, _LazyString):
-                return str(o)
-            return JSONEncoder.default(self, o)
-except:
-    _JSONEncoder = JSONEncoder
 
 __all__ = ["AreYouAHumanWidget"]
 

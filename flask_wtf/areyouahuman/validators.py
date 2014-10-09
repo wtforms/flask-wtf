@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
+
 try:
     import urllib2 as http
 except ImportError:
     # Python 3
     from urllib import request as http
 
-from flask import request, current_app
+from flask import request, current_app, json
 from wtforms import ValidationError
 from werkzeug import url_encode
 
@@ -41,7 +43,6 @@ class AreYouAHuman(object):
         response = http.urlopen(scoring_url, values)
         result = False
         if response.code == 200:
-            content = response.readline()
-            dict = eval(content)
-            result = (int(dict['status_code']) == 1)
+            content = json.loads(response.readline())
+            result = content['status_code']
         return result

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from wtforms.fields import Field
 
 from . import widgets
