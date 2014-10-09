@@ -1,13 +1,14 @@
 try:
     import urllib2 as http
+    from urlparse import urljoin
 except ImportError:
     # Python 3
     from urllib import request as http
+    from urllib.parse import urljoin
 
 from flask import request, current_app
 from wtforms import ValidationError
 from werkzeug import url_encode
-import urlparse
 
 __all__ = ["AreYouAHuman"]
 
@@ -37,7 +38,7 @@ class AreYouAHuman(object):
         server = config.get('WTF_AYAH_SERVER', 'ws.areyouahuman.com')
         data = {'scoring_key': config['WTF_AYAH_SCORING_KEY'],
                 'session_secret': challenge}
-        scoring_url = urlparse.urljoin('https://', server, '/ws/scoreGame')
+        scoring_url = urljoin('https://', server, '/ws/scoreGame')
         values = url_encode(data)
         response = http.urlopen(scoring_url, values)
         result = False
