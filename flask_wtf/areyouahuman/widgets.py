@@ -4,6 +4,8 @@ from flask import current_app, Markup
 from werkzeug import url_encode, url_quote
 from flask import json
 from .._compat import text_type
+import urlparse
+
 JSONEncoder = json.JSONEncoder
 
 try:
@@ -45,11 +47,10 @@ class AreYouAHumanWidget(object):
         query = url_encode(query_options)
 
         server = current_app.config['WTF_AYAH_SERVER']
-        publisher_url = ''.join(['https://', server, '/ws/script/',
-                                url_quote(public_key, safe='')])
-        publisher_html = u''.join(['<div id="AYAH"></div> \
-                                     <script type="text/javascript" \
-                                             src="', publisher_url, '"> \
-                                     </script>'])
+        publisher_url = urlparse.urljoin('https://', server, '/ws/script/',
+                                         url_quote(public_key, safe=''))
+        publisher_html = "<div id=\"AYAH\"></div> \
+                          <script type=\"text/javascript\" src=\"%s\"> \
+                          </script>".format(publisher_url)
 
         return self.areyouahuman_html(server, query, publisher_html)
