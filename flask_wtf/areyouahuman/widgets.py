@@ -42,7 +42,7 @@ class AreYouAHumanWidget(object):
         try:
             public_key = current_app.config['WTF_AYAH_PUBLISHER_KEY']
         except KeyError:
-            raise RuntimeError("AYAH_PUBLISHER_KEY/AYAH_SCORING_KEY \
+            raise RuntimeError("WTF_AYAH_PUBLISHER_KEY/WTF_AYAH_SCORING_KEY \
                                 config not set")
         query_options = dict(k=public_key)
 
@@ -52,10 +52,10 @@ class AreYouAHumanWidget(object):
         query = url_encode(query_options)
 
         server = current_app.config['WTF_AYAH_SERVER']
-        publisher_url = urljoin('https://', server, '/ws/script/',
+        publisher_url = urljoin("https://{}/ws/script/".format(server),
                                 url_quote(public_key, safe=''))
         publisher_html = "<div id=\"AYAH\"></div> \
-                          <script type=\"text/javascript\" src=\"%s\"> \
+                          <script type=\"text/javascript\" src=\"{}\"> \
                           </script>".format(publisher_url)
 
         return self.areyouahuman_html(server, query, publisher_html)
