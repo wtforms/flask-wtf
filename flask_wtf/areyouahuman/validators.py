@@ -7,9 +7,9 @@ except ImportError:
 from flask import request, current_app
 from wtforms import ValidationError
 from werkzeug import url_encode
-from .._compat import to_bytes
 
 __all__ = ["AreYouAHuman"]
+
 
 class AreYouAHuman(object):
     """Validates an are You a Human ?"""
@@ -19,7 +19,7 @@ class AreYouAHuman(object):
 
     def __call__(self, form, field):
         config = current_app.config
-        if current_app.testing and 'AYAH_PUBLISHER_KEY' not in config:
+        if current_app.testing and 'WTF_AYAH_PUBLISHER_KEY' not in config:
             return True
 
         challenge = request.form.get('session_secret', '')
@@ -33,10 +33,10 @@ class AreYouAHuman(object):
 
     def _validate_areyouahuman(self, challenge, remote_addr):
         config = current_app.config
-        server = config.get('AYAH_SERVER', 'ws.areyouahuman.com')
-        data = { 'scoring_key': config['AYAH_SCORING_KEY'],
-                 'session_secret': challenge }
-        scoring_url = ''.join([ 'https://', server, '/ws/scoreGame'])
+        server = config.get('WTF_AYAH_SERVER', 'ws.areyouahuman.com')
+        data = {'scoring_key': config['WTF_AYAH_SCORING_KEY'],
+                'session_secret': challenge}
+        scoring_url = ''.join(['https://', server, '/ws/scoreGame'])
         values = url_encode(data)
         response = http.urlopen(scoring_url, values)
         result = False

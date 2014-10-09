@@ -31,12 +31,12 @@ class AreYouAHumanWidget(object):
     def __call__(self, field, error=None, **kwargs):
         """Returns the areyouahuman input HTML."""
 
-        current_app.config['AYAH_SERVER'] = 'ws.areyouahuman.com'
+        current_app.config.setdefault('WTF_AYAH_SERVER', 'ws.areyouahuman.com')
         try:
-            public_key = current_app.config['AYAH_PUBLISHER_KEY']
-            scoring_key = current_app.config['AYAH_SCORING_KEY']
+            public_key = current_app.config['WTF_AYAH_PUBLISHER_KEY']
         except KeyError:
-            raise RuntimeError("AYAH_PUBLISHER_KEY/AYAH_SCORING_KEY config not set")
+            raise RuntimeError("AYAH_PUBLISHER_KEY/AYAH_SCORING_KEY \
+                                config not set")
         query_options = dict(k=public_key)
 
         if field.areyouahuman_error is not None:
@@ -44,12 +44,11 @@ class AreYouAHumanWidget(object):
 
         query = url_encode(query_options)
 
-        _ = field.gettext
-
-        server = current_app.config['AYAH_SERVER']
-        publisher_url = ''.join([ 'https://', server, '/ws/script/', url_quote(public_key, safe='')])
-        publisher_html = u''.join([ '<div id="AYAH"></div> \
-                                     <script type="text/javascript" language="JavaScript" \
+        server = current_app.config['WTF_AYAH_SERVER']
+        publisher_url = ''.join(['https://', server, '/ws/script/',
+                                url_quote(public_key, safe='')])
+        publisher_html = u''.join(['<div id="AYAH"></div> \
+                                     <script type="text/javascript" \
                                              src="', publisher_url, '"> \
                                      </script>'])
 
