@@ -139,6 +139,9 @@ class CsrfProtect(object):
 
     def init_app(self, app):
         app.jinja_env.globals['csrf_token'] = generate_csrf
+        app.config.setdefault(
+            'WTF_CSRF_HEADERS', ['X-CSRFToken', 'X-CSRF-Token']
+        )
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
         app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])
@@ -178,13 +181,10 @@ class CsrfProtect(object):
                 for key in request.form:
                     if key.endswith('csrf_token'):
                         csrf_token = request.form[key]
-            if not csrf_token:
-                # You can get csrf token from header
-                # The header name is the same as Django
-                csrf_token = request.headers.get('X-CSRFToken')
-            if not csrf_token:
-                # The header name is the same as Rails
-                csrf_token = request.headers.get('X-CSRF-Token')
+            for header_name in app.config['WTF_CSRF_HEADERS']:
+                if csrf_token is not None:
+                    break
+                csrf_token = request.headers.get(header_name)
             if not validate_csrf(csrf_token):
                 reason = 'CSRF token missing or incorrect.'
                 return self._error_response(reason)

@@ -170,6 +170,40 @@ class TestCSRF(TestCase):
         )
         assert response.status_code == 200
 
+    def test_empty_csrf_headers(self):
+        response = self.client.get("/", base_url='https://localhost/')
+        csrf_token = get_csrf_token(response.data)
+        self.app.config['WTF_CSRF_HEADERS'] = list()
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://localhost/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 400
+
+    def test_custom_csrf_headers(self):
+        response = self.client.get("/", base_url='https://localhost/')
+        csrf_token = get_csrf_token(response.data)
+        self.app.config['WTF_CSRF_HEADERS'] = ['X-XSRF-TOKEN']
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-XSRF-TOKEN': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://localhost/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 200
+
     def test_not_endpoint(self):
         response = self.client.post('/not-endpoint')
         assert response.status_code == 404
