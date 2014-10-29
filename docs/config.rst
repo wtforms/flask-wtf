@@ -14,6 +14,8 @@ WTF_CSRF_ENABLED     Disable/enable CSRF protection for forms.
                      Default is True.
 WTF_I18N_ENABLED     Disable/enable I18N support. This should work
                      together with Flask-Babel. Default is True.
+WTF_CSRF_HEADERS     CSRF token HTTP headers checked. Default is
+                     **['X-CSRFToken', 'X-CSRF-Token']**
 WTF_CSRF_SECRET_KEY  A random string for generating CSRF token.
                      Default is the same as SECRET_KEY.
 WTF_CSRF_TIME_LIMIT  CSRF token expiring time. Default is **3600**
