@@ -146,6 +146,22 @@ class CsrfProtect(object):
         app.config.setdefault('WTF_CSRF_ENABLED', True)
         app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])
 
+        def _get_csrf_token():
+            # find the ``csrf_token`` field in the subitted form
+            # if the form had a prefix, the name will be
+            # ``{prefix}-csrf_token``
+            for key in request.form:
+                if key.endswith('csrf_token'):
+                    csrf_token = request.form[key]
+                    if csrf_token:
+                        return csrf_token
+
+            for header_name in app.config['WTF_CSRF_HEADERS']:
+                csrf_token = request.headers.get(header_name)
+                if csrf_token:
+                    return csrf_token
+            return None
+
         # expose csrf_token as a helper in all templates
         @app.context_processor
         def csrf_token():
@@ -157,7 +173,7 @@ class CsrfProtect(object):
             if not app.config['WTF_CSRF_ENABLED']:
                 return
 
-            if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
+            if request.method not in app.config['WTF_CSRF_METHODS']:
                 return
 
             if self._exempt_views or self._exempt_blueprints:
@@ -174,18 +190,7 @@ class CsrfProtect(object):
                 if request.blueprint in self._exempt_blueprints:
                     return
 
-            csrf_token = None
-            if request.method in app.config['WTF_CSRF_METHODS']:
-                # find the ``csrf_token`` field in the subitted form
-                # if the form had a prefix, the name will be ``{prefix}-csrf_token``
-                for key in request.form:
-                    if key.endswith('csrf_token'):
-                        csrf_token = request.form[key]
-            for header_name in app.config['WTF_CSRF_HEADERS']:
-                if csrf_token is not None:
-                    break
-                csrf_token = request.headers.get(header_name)
-            if not validate_csrf(csrf_token):
+            if not validate_csrf(_get_csrf_token()):
                 reason = 'CSRF token missing or incorrect.'
                 return self._error_response(reason)
 
