@@ -3,6 +3,18 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.10.3
+--------------
+
+Released 2014/11/16
+
+- Add configuration: WTF_CSRF_HEADERS via `#159`_.
+- Support customize hidden tags via `#150`_.
+- And many more bug fixes
+
+.. _`#150`: https://github.com/lepture/flask-wtf/pull/150
+.. _`#159`: https://github.com/lepture/flask-wtf/pull/159
+
 Version 0.10.2
 --------------
 
