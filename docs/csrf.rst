@@ -80,12 +80,12 @@ AJAX
 Sending POST requests via AJAX is possible where there is no forms at all.
 This feature is only available since 0.9.0.
 
-Assume you have done ``CsrfProtect(app)``, you can get the csrf token via
+Assumimg you have done ``CsrfProtect(app)``, you can get the csrf token via
 ``{{ csrf_token() }}``. This method is available in every templates, that
-you don't have to worry if there is no forms for rendering the csrf token
+way you don't have to worry if there are no forms for rendering the csrf token
 field.
 
-The suggest way is that you render the token in a ``<meta>`` tag:
+The suggested way is that you render the token in a ``<meta>`` tag:
 
 .. sourcecode:: html+jinja
 
