@@ -81,7 +81,7 @@ Sending POST requests via AJAX is possible where there is no forms at all.
 This feature is only available since 0.9.0.
 
 Assumimg you have done ``CsrfProtect(app)``, you can get the csrf token via
-``{{ csrf_token() }}``. This method is available in every templates, that
+``{{ csrf_token() }}``. This method is available in every template, that
 way you don't have to worry if there are no forms for rendering the csrf token
 field.
 
