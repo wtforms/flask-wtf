@@ -20,10 +20,10 @@ class Recaptcha(object):
     """Validates a ReCaptcha."""
 
     _error_codes = {
-        'missing-input-secret':     'The secret parameter is missing.',
-        'invalid-input-secret':     'The secret parameter is invalid or malformed.',
-        'missing-input-response':   'The response parameter is missing.',
-        'invalid-input-response':   'The response parameter is invalid or malformed.',
+        'missing-input-secret': 'The secret parameter is missing.',
+        'invalid-input-secret': 'The secret parameter is invalid or malformed.',
+        'missing-input-response': 'The response parameter is missing.',
+        'invalid-input-response': 'The response parameter is invalid or malformed.',
     }
 
     def __init__(self, message=u'Invalid word. Please try again.'):
