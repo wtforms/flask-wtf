@@ -14,8 +14,8 @@ def to_bytes(text):
     return text
 
 
-def to_unicode(bytes, encoding='utf-8'):
-    """Decodes bytes to text if needed."""
-    if not isinstance(bytes, string_types):
-        bytes = bytes.decode(encoding)
-    return bytes
+def to_unicode(input_bytes, encoding='utf-8'):
+    """Decodes input_bytes to text if needed."""
+    if not isinstance(input_bytes, string_types):
+        input_bytes = input_bytes.decode(encoding)
+    return input_bytes
