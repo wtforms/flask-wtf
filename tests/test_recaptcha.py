@@ -34,14 +34,12 @@ class TestRecaptcha(TestCase):
         response = self.client.get('/')
         assert b'//www.google.com/recaptcha/api/' in response.data
 
-
     def test_invalid_recaptcha(self):
         response = self.client.post('/', data={})
         assert b'Invalid word' in response.data
 
     def test_send_recaptcha_request(self):
         response = self.client.post('/', data={
-            'recaptcha_challenge_field': 'test',
             'recaptcha_response_field': 'test'
         })
         assert b'Invalid word' in response.data
@@ -49,7 +47,6 @@ class TestRecaptcha(TestCase):
     def test_testing(self):
         self.app.testing = True
         response = self.client.post('/', data={
-            'recaptcha_challenge_field': 'test',
             'recaptcha_response_field': 'test'
         })
         assert b'Invalid word' not in response.data
@@ -57,7 +54,6 @@ class TestRecaptcha(TestCase):
     def test_no_private_key(self):
         self.app.config.pop('RECAPTCHA_PRIVATE_KEY', None)
         response = self.client.post('/', data={
-            'recaptcha_challenge_field': 'test',
             'recaptcha_response_field': 'test'
         })
         assert response.status_code == 500
