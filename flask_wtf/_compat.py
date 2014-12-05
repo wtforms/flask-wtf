@@ -12,3 +12,10 @@ def to_bytes(text):
     if isinstance(text, text_type):
         text = text.encode('utf-8')
     return text
+
+
+def from_bytes(bytes, encoding='utf-8'):
+    """Decodes bytes to text if needed."""
+    if not isinstance(bytes, string_types):
+        bytes = bytes.decode(encoding)
+    return bytes
