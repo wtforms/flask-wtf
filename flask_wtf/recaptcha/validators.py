@@ -7,7 +7,7 @@ except ImportError:
 from flask import request, current_app
 from wtforms import ValidationError
 from werkzeug import url_encode
-from .._compat import to_bytes, from_bytes
+from .._compat import to_bytes, to_unicode
 import json
 
 RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
@@ -64,7 +64,7 @@ class Recaptcha(object):
         if http_response.code != 200:
             return False
 
-        json_resp = json.loads(from_bytes(http_response.read()))
+        json_resp = json.loads(to_unicode(http_response.read()))
 
         if json_resp["success"]:
             return True
