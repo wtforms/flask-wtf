@@ -7,27 +7,23 @@ except ImportError:
 from flask import request, current_app
 from wtforms import ValidationError
 from werkzeug import url_encode
-from .._compat import to_bytes
+from .._compat import to_bytes, to_unicode
+import json
 
-RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/verify'
+RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
 
 __all__ = ["Recaptcha"]
 
 
 class Recaptcha(object):
+
     """Validates a ReCaptcha."""
 
     _error_codes = {
-        'invalid-site-public-key': 'The public key for reCAPTCHA is invalid',
-        'invalid-site-private-key': 'The private key for reCAPTCHA is invalid',
-        'invalid-referrer': (
-            'The public key for reCAPTCHA is not valid for '
-            'this domainin'
-        ),
-        'verify-params-incorrect': (
-            'The parameters passed to reCAPTCHA '
-            'verification are incorrect'
-        )
+        'missing-input-secret': 'The secret parameter is missing.',
+        'invalid-input-secret': 'The secret parameter is invalid or malformed.',
+        'missing-input-response': 'The response parameter is missing.',
+        'invalid-input-response': 'The response parameter is invalid or malformed.',
     }
 
     def __init__(self, message=u'Invalid word. Please try again.'):
@@ -38,21 +34,19 @@ class Recaptcha(object):
             return True
 
         if request.json:
-            challenge = request.json.get('recaptcha_challenge_field', '')
-            response = request.json.get('recaptcha_response_field', '')
+            response = request.json.get('g-recaptcha-response', '')
         else:
-            challenge = request.form.get('recaptcha_challenge_field', '')
-            response = request.form.get('recaptcha_response_field', '')
+            response = request.form.get('g-recaptcha-response', '')
         remote_ip = request.remote_addr
 
-        if not challenge or not response:
+        if not response:
             raise ValidationError(field.gettext(self.message))
 
-        if not self._validate_recaptcha(challenge, response, remote_ip):
+        if not self._validate_recaptcha(response, remote_ip):
             field.recaptcha_error = 'incorrect-captcha-sol'
             raise ValidationError(field.gettext(self.message))
 
-    def _validate_recaptcha(self, challenge, response, remote_addr):
+    def _validate_recaptcha(self, response, remote_addr):
         """Performs the actual validation."""
         try:
             private_key = current_app.config['RECAPTCHA_PRIVATE_KEY']
@@ -60,24 +54,22 @@ class Recaptcha(object):
             raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set")
 
         data = url_encode({
-            'privatekey': private_key,
+            'secret':     private_key,
             'remoteip':   remote_addr,
-            'challenge':  challenge,
             'response':   response
         })
 
-        response = http.urlopen(RECAPTCHA_VERIFY_SERVER, to_bytes(data))
+        http_response = http.urlopen(RECAPTCHA_VERIFY_SERVER, to_bytes(data))
 
-        if response.code != 200:
+        if http_response.code != 200:
             return False
 
-        rv = [l.strip() for l in response.readlines()]
+        json_resp = json.loads(to_unicode(http_response.read()))
 
-        if rv and rv[0] == to_bytes('true'):
+        if json_resp["success"]:
             return True
 
-        if len(rv) > 1:
-            error = rv[1]
+        for error in json_resp["error-codes"]:
             if error in self._error_codes:
                 raise RuntimeError(self._error_codes[error])
 
