@@ -3,6 +3,16 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.11
+------------
+
+Released 2015/01/21
+
+- Use the new reCAPTCHA API via `#164`_.
+
+.. _`#164`: https://github.com/lepture/flask-wtf/pull/164
+
+
 Version 0.10.3
 --------------
 
