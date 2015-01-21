@@ -26,7 +26,9 @@ class Recaptcha(object):
         'invalid-input-response': 'The response parameter is invalid or malformed.',
     }
 
-    def __init__(self, message=u'Invalid word. Please try again.'):
+    def __init__(self, message=None):
+        if message is None:
+            message = self._error_codes['missing-input-response']
         self.message = message
 
     def __call__(self, form, field):
@@ -71,6 +73,6 @@ class Recaptcha(object):
 
         for error in json_resp["error-codes"]:
             if error in self._error_codes:
-                raise RuntimeError(self._error_codes[error])
+                raise ValidationError(self._error_codes[error])
 
         return False

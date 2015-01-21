@@ -36,25 +36,26 @@ class TestRecaptcha(TestCase):
 
     def test_invalid_recaptcha(self):
         response = self.client.post('/', data={})
-        assert b'Invalid word' in response.data
+        assert b'missing' in response.data
 
     def test_send_recaptcha_request(self):
         response = self.client.post('/', data={
-            'recaptcha_response_field': 'test'
+            'g-recaptcha-response': 'test'
         })
-        assert b'Invalid word' in response.data
+        assert b'invalid' in response.data
 
     def test_testing(self):
         self.app.testing = True
         response = self.client.post('/', data={
-            'recaptcha_response_field': 'test'
+            'g-recaptcha-response': 'test'
         })
-        assert b'Invalid word' not in response.data
+        assert b'invalid' not in response.data
 
     def test_no_private_key(self):
+        self.app.testing = False
         self.app.config.pop('RECAPTCHA_PRIVATE_KEY', None)
         response = self.client.post('/', data={
-            'recaptcha_response_field': 'test'
+            'g-recaptcha-response': 'test'
         })
         assert response.status_code == 500
 
