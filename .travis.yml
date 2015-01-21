@@ -9,7 +9,7 @@ python:
 
 env:
     - WTFORMS=WTForms==1.0.5
-    - WTFORMS=WTForms==2.0.1
+    - WTFORMS=WTForms==2.0.2
 
 install:
     - pip install $WTFORMS
