@@ -13,16 +13,15 @@ RECAPTCHA_HTML = u'''
       <div style="width: 302px; height: 352px; position: absolute;">
         <iframe src="https://www.google.com/recaptcha/api/fallback?k=%(public_key)s"
                 frameborder="0" scrolling="no"
-                style="width: 302px; height:352px; border-style: none;">
+                style="width: 302px; height:352px; border: none;">
         </iframe>
       </div>
-      <div style="width: 250px; height: 80px; position: absolute; border-style: none;
+      <div style="width: 250px; height: 80px; position: absolute; border: none;
                   bottom: 21px; left: 25px; margin: 0px; padding: 0px; right: 25px;">
         <textarea id="g-recaptcha-response" name="g-recaptcha-response"
                   class="g-recaptcha-response"
                   style="width: 250px; height: 80px; border: 1px solid #c1c1c1;
-                         margin: 0px; padding: 0px; resize: none;" value="">
-        </textarea>
+                         margin: 0px; padding: 0px; resize: none;"></textarea>
       </div>
     </div>
   </div>
