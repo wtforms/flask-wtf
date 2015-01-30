@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 from .base import TestCase
+from flask import json
 from flask import Flask, render_template
 from flask_wtf import Form
 from flask_wtf.recaptcha import RecaptchaField
@@ -42,6 +43,11 @@ class TestRecaptcha(TestCase):
         response = self.client.post('/', data={
             'g-recaptcha-response': 'test'
         })
+        assert b'invalid' in response.data
+
+        response = self.client.post('/', data=json.dumps({
+            'g-recaptcha-response': 'test'
+        }), content_type='application/json')
         assert b'invalid' in response.data
 
     def test_testing(self):
