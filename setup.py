@@ -47,8 +47,8 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'Werkzeug>=0.9.5',
-        'WTForms>=1.0.5'
+        'Werkzeug',
+        'WTForms',
     ],
     tests_require=[
         'nose',

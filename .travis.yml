@@ -7,12 +7,7 @@ python:
     - "3.4"
     - "pypy"
 
-env:
-    - WTFORMS=WTForms==1.0.5
-    - WTFORMS=WTForms==2.0.2
-
 install:
-    - pip install $WTFORMS
     - pip install -r requirements.txt
 
 script:
