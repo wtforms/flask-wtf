@@ -11,24 +11,23 @@ from .._compat import to_bytes, to_unicode
 import json
 
 RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
+RECAPTCHA_ERROR_CODES = {
+    'missing-input-secret': 'The secret parameter is missing.',
+    'invalid-input-secret': 'The secret parameter is invalid or malformed.',
+    'missing-input-response': 'The response parameter is missing.',
+    'invalid-input-response': 'The response parameter is invalid or malformed.'
+}
+
 
 __all__ = ["Recaptcha"]
 
 
 class Recaptcha(object):
-
     """Validates a ReCaptcha."""
-
-    _error_codes = {
-        'missing-input-secret': 'The secret parameter is missing.',
-        'invalid-input-secret': 'The secret parameter is invalid or malformed.',
-        'missing-input-response': 'The response parameter is missing.',
-        'invalid-input-response': 'The response parameter is invalid or malformed.',
-    }
 
     def __init__(self, message=None):
         if message is None:
-            message = self._error_codes['missing-input-response']
+            message = RECAPTCHA_ERROR_CODES['missing-input-response']
         self.message = message
 
     def __call__(self, form, field):
@@ -72,7 +71,7 @@ class Recaptcha(object):
             return True
 
         for error in json_resp["error-codes"]:
-            if error in self._error_codes:
-                raise ValidationError(self._error_codes[error])
+            if error in RECAPTCHA_ERROR_CODES:
+                raise ValidationError(RECAPTCHA_ERROR_CODES[error])
 
         return False

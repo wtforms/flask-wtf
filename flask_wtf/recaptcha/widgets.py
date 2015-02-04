@@ -2,30 +2,14 @@
 
 from flask import current_app, Markup
 from flask import json
+from werkzeug import url_encode
 JSONEncoder = json.JSONEncoder
 
-RECAPTCHA_HTML = u'''
-<script src='https://www.google.com/recaptcha/api.js'></script>
-<div class="g-recaptcha" data-sitekey="%(public_key)s"></div>
-<noscript>
-  <div style="width: 302px; height: 352px;">
-    <div style="width: 302px; height: 352px; position: relative;">
-      <div style="width: 302px; height: 352px; position: absolute;">
-        <iframe src="https://www.google.com/recaptcha/api/fallback?k=%(public_key)s"
-                frameborder="0" scrolling="no"
-                style="width: 302px; height:352px; border: none;">
-        </iframe>
-      </div>
-      <div style="width: 250px; height: 80px; position: absolute; border: none;
-                  bottom: 21px; left: 25px; margin: 0px; padding: 0px; right: 25px;">
-        <textarea id="g-recaptcha-response" name="g-recaptcha-response"
-                  class="g-recaptcha-response"
-                  style="width: 250px; height: 80px; border: 1px solid #c1c1c1;
-                         margin: 0px; padding: 0px; resize: none;"></textarea>
-      </div>
-    </div>
-  </div>
-</noscript>
+RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
+
+RECAPTCHA_TEMPLATE = u'''
+<script src='%s' async defer></script>
+<div class="g-recaptcha" %s></div>
 '''
 
 __all__ = ["RecaptchaWidget"]
@@ -34,11 +18,18 @@ __all__ = ["RecaptchaWidget"]
 class RecaptchaWidget(object):
 
     def recaptcha_html(self, public_key):
-        html = current_app.config.get('RECAPTCHA_HTML', RECAPTCHA_HTML)
+        html = current_app.config.get('RECAPTCHA_HTML')
+        if html:
+            return Markup(html)
+        params = current_app.config.get('RECAPTCHA_PARAMETERS')
+        script = RECAPTCHA_SCRIPT
+        if params:
+            script += u'?' + url_encode(params)
 
-        return Markup(html % dict(
-            public_key=public_key
-        ))
+        attrs = current_app.config.get('RECAPTCHA_DATA_ATTRS', {})
+        attrs['sitekey'] = public_key
+        snippet = u' '.join([u'data-%s="%s"' % (k, attrs[k]) for k in attrs])
+        return Markup(RECAPTCHA_TEMPLATE % (script, snippet))
 
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
