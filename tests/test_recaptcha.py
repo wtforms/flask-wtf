@@ -33,7 +33,7 @@ class TestRecaptcha(TestCase):
 
     def test_recaptcha(self):
         response = self.client.get('/')
-        assert b'//www.google.com/recaptcha/api/' in response.data
+        assert b'//www.google.com/recaptcha/api.js' in response.data
 
     def test_invalid_recaptcha(self):
         response = self.client.post('/', data={})
