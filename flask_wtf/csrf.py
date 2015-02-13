@@ -138,29 +138,15 @@ class CsrfProtect(object):
             self.init_app(app)
 
     def init_app(self, app):
+        self._app = app
         app.jinja_env.globals['csrf_token'] = generate_csrf
         app.config.setdefault(
             'WTF_CSRF_HEADERS', ['X-CSRFToken', 'X-CSRF-Token']
         )
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
         app.config.setdefault('WTF_CSRF_ENABLED', True)
+        app.config.setdefault('WTF_CSRF_CHECK_DEFAULT', True)
         app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])
-
-        def _get_csrf_token():
-            # find the ``csrf_token`` field in the subitted form
-            # if the form had a prefix, the name will be
-            # ``{prefix}-csrf_token``
-            for key in request.form:
-                if key.endswith('csrf_token'):
-                    csrf_token = request.form[key]
-                    if csrf_token:
-                        return csrf_token
-
-            for header_name in app.config['WTF_CSRF_HEADERS']:
-                csrf_token = request.headers.get(header_name)
-                if csrf_token:
-                    return csrf_token
-            return None
 
         # expose csrf_token as a helper in all templates
         @app.context_processor
@@ -171,6 +157,9 @@ class CsrfProtect(object):
         def _csrf_protect():
             # many things come from django.middleware.csrf
             if not app.config['WTF_CSRF_ENABLED']:
+                return
+
+            if not app.config['WTF_CSRF_CHECK_DEFAULT']:
                 return
 
             if request.method not in app.config['WTF_CSRF_METHODS']:
@@ -190,21 +179,43 @@ class CsrfProtect(object):
                 if request.blueprint in self._exempt_blueprints:
                     return
 
-            if not validate_csrf(_get_csrf_token()):
-                reason = 'CSRF token missing or incorrect.'
+            self.protect()
+
+    def _get_csrf_token(self):
+        # find the ``csrf_token`` field in the subitted form
+        # if the form had a prefix, the name will be
+        # ``{prefix}-csrf_token``
+        for key in request.form:
+            if key.endswith('csrf_token'):
+                csrf_token = request.form[key]
+                if csrf_token:
+                    return csrf_token
+
+        for header_name in self._app.config['WTF_CSRF_HEADERS']:
+            csrf_token = request.headers.get(header_name)
+            if csrf_token:
+                return csrf_token
+        return None
+
+    def protect(self):
+        if request.method not in self._app.config['WTF_CSRF_METHODS']:
+            return
+
+        if not validate_csrf(self._get_csrf_token()):
+            reason = 'CSRF token missing or incorrect.'
+            return self._error_response(reason)
+
+        if request.is_secure and self._app.config['WTF_CSRF_SSL_STRICT']:
+            if not request.referrer:
+                reason = 'Referrer checking failed - no Referrer.'
                 return self._error_response(reason)
 
-            if request.is_secure and app.config['WTF_CSRF_SSL_STRICT']:
-                if not request.referrer:
-                    reason = 'Referrer checking failed - no Referrer.'
-                    return self._error_response(reason)
+            good_referrer = 'https://%s/' % request.host
+            if not same_origin(request.referrer, good_referrer):
+                reason = 'Referrer checking failed - origin does not match.'
+                return self._error_response(reason)
 
-                good_referrer = 'https://%s/' % request.host
-                if not same_origin(request.referrer, good_referrer):
-                    reason = 'Referrer checking failed - origin not match.'
-                    return self._error_response(reason)
-
-            request.csrf_valid = True  # mark this request is csrf valid
+        request.csrf_valid = True  # mark this request is csrf valid
 
     def exempt(self, view):
         """A decorator that can exclude a view from csrf protection.
