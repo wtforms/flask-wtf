@@ -38,6 +38,12 @@ class TestCSRF(TestCase):
                 "index.html", form=form, name=name
             )
 
+        @csrf.exempt
+        @app.route('/csrf-protect-method', methods=['GET', 'POST'])
+        def csrf_protect_method():
+            csrf.protect()
+            return 'protected'
+
         bp = Blueprint('csrf', __name__)
 
         @bp.route('/foo', methods=['GET', 'POST'])
@@ -169,6 +175,27 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 200
+
+    def test_valid_csrf_method(self):
+        response = self.client.get("/")
+        csrf_token = get_csrf_token(response.data)
+
+        response = self.client.post("/csrf-protect-method", data={
+            "csrf_token": csrf_token
+        })
+        assert response.status_code == 200
+
+    def test_invalid_csrf_method(self):
+        response = self.client.post("/csrf-protect-method", data={"name": "danny"})
+        assert response.status_code == 400
+
+        @self.csrf.error_handler
+        def invalid(reason):
+            return reason
+
+        response = self.client.post("/", data={"name": "danny"})
+        assert response.status_code == 200
+        assert b'token missing' in response.data
 
     def test_empty_csrf_headers(self):
         response = self.client.get("/", base_url='https://localhost/')
