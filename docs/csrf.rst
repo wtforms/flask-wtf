@@ -74,6 +74,16 @@ is a chance that you might exclude some view handlers, it can be done::
         # ...
         return 'ok'
 
+You can also disable CSRF protection in all views by default, by setting
+``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
+``csrf.protect()`` only when you need. This also enables you to do some
+pre-processing on the requests before checking for the CSRF token::
+
+    @app.before_request
+    def check_csrf():
+        if not is_oauth(request):
+            csrf.protect()
+
 AJAX
 ----
 
