@@ -153,15 +153,15 @@ class CsrfProtect(object):
         def csrf_token():
             return dict(csrf_token=generate_csrf)
 
+        if not app.config['WTF_CSRF_ENABLED']:
+            return
+
+        if not app.config['WTF_CSRF_CHECK_DEFAULT']:
+            return
+
         @app.before_request
         def _csrf_protect():
             # many things come from django.middleware.csrf
-            if not app.config['WTF_CSRF_ENABLED']:
-                return
-
-            if not app.config['WTF_CSRF_CHECK_DEFAULT']:
-                return
-
             if request.method not in app.config['WTF_CSRF_METHODS']:
                 return
 
