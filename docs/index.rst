@@ -5,13 +5,13 @@ Flask-WTF
 
 .. _WTForms: http://wtforms.simplecodes.com/docs/
 
-Current Version
----------------
-The current version of Flask-WTF is |release|.
+.. image:: https://pypip.in/wheel/flask-wtf/badge.svg?style=flat
+   :target: https://pypi.python.org/pypi/Flask-WTF/
+   :alt: Wheel Status
+.. image:: https://pypip.in/version/flask-wtf/badge.svg?style=flat
+   :target: https://pypi.python.org/pypi/Flask-WTF/
+   :alt: Latest Version
 
-View other versions of documentation at `Read the Docs`_.
-
-.. _`Read the Docs`: https://flask-wtf.readthedocs.org
 
 Features
 --------
