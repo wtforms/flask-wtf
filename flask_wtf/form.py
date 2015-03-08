@@ -2,8 +2,10 @@
 
 import werkzeug.datastructures
 
+from functools import wraps
 from jinja2 import Markup, escape
-from flask import request, session, current_app, redirect, render_template
+from flask import (request, session, current_app, redirect, render_template,
+                    url_for)
 from wtforms.fields import HiddenField
 from wtforms.widgets import HiddenInput
 from wtforms.validators import ValidationError
