@@ -121,10 +121,10 @@ class Form(SecureForm):
     def is_submitted(self):
         """
         Checks if form has been submitted. The default case is if the HTTP
-        method is **PUT** or **POST**.
+        method is **PUT**, **PATCH**, **POST** or **DELETE**.
         """
 
-        return request and request.method in ("PUT", "POST")
+        return request and request.method in ("PUT", "PATCH", "POST", "DELETE")
 
     def hidden_tag(self, *fields):
         """
