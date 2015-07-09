@@ -3,6 +3,15 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.12
+------------
+
+Released 2015/07/09
+
+- Abstract protect_csrf() into a separate method
+- Update reCAPTCHA configuration
+- Fix reCAPTCHA error handle
+
 Version 0.11
 ------------
 
