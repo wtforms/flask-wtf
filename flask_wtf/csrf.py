@@ -26,7 +26,7 @@ except ImportError:
 __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
 
 
-def generate_csrf(secret_key=None, time_limit=None):
+def generate_csrf(secret_key=None, time_limit=None, token_key='csrf_token', url_safe=False):
     """Generate csrf token code.
 
     :param secret_key: A secret key for mixing in the token,
@@ -45,25 +45,26 @@ def generate_csrf(secret_key=None, time_limit=None):
     if time_limit is None:
         time_limit = current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
 
-    if 'csrf_token' not in session:
-        session['csrf_token'] = hashlib.sha1(os.urandom(64)).hexdigest()
+    if token_key not in session:
+        session[token_key] = hashlib.sha1(os.urandom(64)).hexdigest()
 
     if time_limit:
         expires = int(time.time() + time_limit)
-        csrf_build = '%s%s' % (session['csrf_token'], expires)
+        csrf_build = '%s%s' % (session[token_key], expires)
     else:
         expires = ''
-        csrf_build = session['csrf_token']
+        csrf_build = session[token_key]
 
     hmac_csrf = hmac.new(
         to_bytes(secret_key),
         to_bytes(csrf_build),
         digestmod=hashlib.sha1
     ).hexdigest()
-    return '%s##%s' % (expires, hmac_csrf)
+    delimiter = '--' if url_safe else '##'
+    return '%s%s%s' % (expires, delimiter, hmac_csrf)
 
 
-def validate_csrf(data, secret_key=None, time_limit=None):
+def validate_csrf(data, secret_key=None, time_limit=None, token_key='csrf_token', url_safe=False):
     """Check if the given data is a valid csrf token.
 
     :param data: The csrf token value to be checked.
@@ -72,11 +73,12 @@ def validate_csrf(data, secret_key=None, time_limit=None):
     :param time_limit: Check if the csrf token is expired.
                        default is True.
     """
-    if not data or '##' not in data:
+    delimiter = '--' if url_safe else '##'
+    if not data or delimiter not in data:
         return False
 
     try:
-        expires, hmac_csrf = data.split('##', 1)
+        expires, hmac_csrf = data.split(delimiter, 1)
     except ValueError:
         return False  # unpack error
 
@@ -98,10 +100,10 @@ def validate_csrf(data, secret_key=None, time_limit=None):
             'WTF_CSRF_SECRET_KEY', current_app.secret_key
         )
 
-    if 'csrf_token' not in session:
+    if token_key not in session:
         return False
 
-    csrf_build = '%s%s' % (session['csrf_token'], expires)
+    csrf_build = '%s%s' % (session[token_key], expires)
     hmac_compare = hmac.new(
         to_bytes(secret_key),
         to_bytes(csrf_build),
