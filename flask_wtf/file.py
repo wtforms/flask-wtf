@@ -64,11 +64,11 @@ class FileAllowed(object):
         filename = field.data.filename.lower()
 
         if isinstance(self.upload_set, (tuple, list)):
-            ext = filename.rsplit('.', 1)[-1]
-            if ext in self.upload_set:
+            if any(filename.endswith('.' + x) for x in self.upload_set):
                 return
-            message = '{} is not in the allowed extentions: {}'.format(
-                ext, self.upload_set)
+            message = (
+                'File does not end with any of the allowed extentions: {}'
+            ).format(self.upload_set)
             raise StopValidation(self.message or message)
 
         if not self.upload_set.file_allowed(field.data, filename):
