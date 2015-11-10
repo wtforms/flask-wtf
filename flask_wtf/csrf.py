@@ -179,7 +179,7 @@ class CsrfProtect(object):
                 if request.blueprint in self._exempt_blueprints:
                     return
 
-            self.protect()
+            return self.protect()
 
     def _get_csrf_token(self):
         # find the ``csrf_token`` field in the subitted form
