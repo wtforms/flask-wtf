@@ -62,7 +62,7 @@ class Form(SecureForm):
     TIME_LIMIT = None
 
     def __init__(self, formdata=_Auto, obj=None, prefix='', csrf_context=None,
-                 secret_key=None, csrf_enabled=None, *args, **kwargs):
+                 secret_key=None, csrf_enabled=None, **kwargs):
 
         if csrf_enabled is None:
             csrf_enabled = current_app.config.get('WTF_CSRF_ENABLED', True)
@@ -91,9 +91,11 @@ class Form(SecureForm):
         else:
             csrf_context = {}
             self.SECRET_KEY = ''
-        super(Form, self).__init__(formdata, obj, prefix,
-                                   csrf_context=csrf_context,
-                                   *args, **kwargs)
+        super(Form, self).__init__(
+            formdata, obj, prefix,
+            csrf_context=csrf_context,
+            **kwargs
+        )
 
     def generate_csrf_token(self, csrf_context=None):
         if not self.csrf_enabled:
@@ -164,6 +166,14 @@ class Form(SecureForm):
         a shortcut, equivalent to ``form.is_submitted() and form.validate()``
         """
         return self.is_submitted() and self.validate()
+
+    @property
+    def data(self):
+        d = super(Form, self).data
+        # https://github.com/lepture/flask-wtf/issues/208
+        if self.csrf_enabled:
+            d.pop('csrf_token')
+        return d
 
     def _get_translations(self):
         if not current_app.config.get('WTF_I18N_ENABLED', True):
