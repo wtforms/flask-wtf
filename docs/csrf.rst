@@ -65,8 +65,8 @@ customize the error response::
     def csrf_error(reason):
         return render_template('csrf_error.html', reason=reason), 400
 
-We strongly suggest that you protect all your views from CSRF. But there
-is a chance that you might exclude some view handlers, it can be done::
+We strongly suggest that you protect all your views with CSRF. But if
+needed, you can exclude some views using a decorator::
 
     @csrf.exempt
     @app.route('/foo', methods=('GET', 'POST'))
@@ -87,10 +87,10 @@ pre-processing on the requests before checking for the CSRF token::
 AJAX
 ----
 
-Sending POST requests via AJAX is possible where there is no forms at all.
-This feature is only available since 0.9.0.
+Sending POST requests via AJAX is possible where there are no forms at all.
+This feature is available since 0.9.0.
 
-Assumimg you have done ``CsrfProtect(app)``, you can get the csrf token via
+Assuming you have done ``CsrfProtect(app)``, you can get the csrf token via
 ``{{ csrf_token() }}``. This method is available in every template, that
 way you don't have to worry if there are no forms for rendering the csrf token
 field.
