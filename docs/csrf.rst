@@ -74,6 +74,10 @@ needed, you can exclude some views using a decorator::
         # ...
         return 'ok'
 
+If needed, you can also exclude all the views from within a given Blueprint:
+
+    csrf.exempt(account_blueprint)
+    
 You can also disable CSRF protection in all views by default, by setting
 ``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
 ``csrf.protect()`` only when you need. This also enables you to do some
