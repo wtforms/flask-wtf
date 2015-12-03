@@ -283,3 +283,29 @@ class TestCSRF(TestCase):
 
         response = self.client.get('/token')
         assert b'#' in response.data
+
+    def test_csrf_custom_token_key(self):
+        with self.app.test_request_context():
+            # Generate a normal and a custom CSRF token
+            default_csrf_token = generate_csrf()
+            custom_csrf_token = generate_csrf(token_key='oauth_state')
+
+            # Verify they are different due to using different session keys
+            assert default_csrf_token != custom_csrf_token
+
+            # However, the custom key can validate as well
+            assert validate_csrf(custom_csrf_token, token_key='oauth_state')
+
+    def test_csrf_url_safe(self):
+        with self.app.test_request_context():
+            # Generate a normal and URL safe CSRF token
+            default_csrf_token = generate_csrf()
+            url_safe_csrf_token = generate_csrf(url_safe=True)
+
+            # Verify they are not the same and the URL one is truly URL safe
+            assert default_csrf_token != url_safe_csrf_token
+            assert '#' not in url_safe_csrf_token
+            assert re.match(r'^[a-f0-9]+--[a-f0-9]+$', url_safe_csrf_token)
+
+            # Verify we can validate our URL safe key
+            assert validate_csrf(url_safe_csrf_token, url_safe=True)
