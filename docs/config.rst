@@ -41,6 +41,8 @@ You have already learned these configuration at :ref:`recaptcha`.
 This table is only designed for a convience.
 
 ======================= ==============================================
+RECAPTCHA_DISABLE       Disable recaptcha widgets.
+                        Default is False
 RECAPTCHA_USE_SSL       Enable/disable recaptcha through ssl.
                         Default is False.
 RECAPTCHA_PUBLIC_KEY    **required** A public key.
