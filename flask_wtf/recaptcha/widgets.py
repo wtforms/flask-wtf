@@ -35,7 +35,7 @@ class RecaptchaWidget(object):
         """Returns the recaptcha input HTML."""
 
         if current_app.config.get('RECAPTCHA_DISABLE', False):
-	    return '<!-- disable recaptcha -->'
+            return '<!-- disable recaptcha -->'
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
