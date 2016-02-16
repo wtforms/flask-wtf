@@ -268,7 +268,4 @@ def same_origin(current_uri, compare_uri):
 
     if parsed_uri.hostname != parsed_compare.hostname:
         return False
-
-    if parsed_uri.port != parsed_compare.port:
-        return False
     return True
