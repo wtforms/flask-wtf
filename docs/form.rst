@@ -39,7 +39,7 @@ instance of Werkzeug FileStorage.
 
 For example::
 
-    from werkzeug import secure_filename
+    from werkzeug.utils import secure_filename
     from flask_wtf.file import FileField
 
     class PhotoForm(Form):
