@@ -16,10 +16,10 @@ Flask-WTF
 Features
 --------
 
-* Integration with wtforms.
-* Secure Form with csrf token.
-* Global csrf protection.
-* Recaptcha supporting.
+* Integration with WTForms.
+* Secure Form with CSRF token.
+* Global CSRF protection.
+* Recaptcha support.
 * File upload that works with Flask-Uploads.
 * Internationalization integration.
 
