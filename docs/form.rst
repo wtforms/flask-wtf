@@ -35,7 +35,7 @@ File Uploads
 Flask-WTF provides you a :class:`FileField` to handle file uploading,
 it will automatically draw data from ``flask.request.files`` if the form
 is posted. The ``data`` attribute of :class:`FileField` will be an
-instance of Werkzeug FileStorage. 
+instance of Werkzeug FileStorage.
 
 For example::
 
@@ -71,7 +71,7 @@ are :class:`FileRequired` and :class:`FileAllowed`.
 
 The :class:`FileAllowed` works well with Flask-Uploads, for example::
 
-    from flask.ext.uploads import UploadSet, IMAGES
+    from flask_uploads import UploadSet, IMAGES
     from flask_wtf import Form
     from flask_wtf.file import FileField, FileAllowed, FileRequired
 

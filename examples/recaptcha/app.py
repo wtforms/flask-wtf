@@ -1,8 +1,8 @@
 from flask import Flask, render_template, flash, session, redirect, url_for
 from wtforms import TextAreaField
 from wtforms.validators import DataRequired
-from flask.ext.wtf import Form
-from flask.ext.wtf.recaptcha import RecaptchaField
+from flask_wtf import Form
+from flask_wtf.recaptcha import RecaptchaField
 
 
 DEBUG = True

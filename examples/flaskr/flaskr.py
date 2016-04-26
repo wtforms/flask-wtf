@@ -14,10 +14,10 @@
 from __future__ import with_statement
 from flask import (Flask, session, redirect, url_for, abort,
                    render_template, flash)
-from flask.ext.wtf import Form
+from flask_wtf import Form
 from wtforms import TextField, TextAreaField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 # configuration
 DEBUG = True

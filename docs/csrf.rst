@@ -77,7 +77,7 @@ needed, you can exclude some views using a decorator::
 If needed, you can also exclude all the views from within a given Blueprint:
 
     csrf.exempt(account_blueprint)
-    
+
 You can also disable CSRF protection in all views by default, by setting
 ``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
 ``csrf.protect()`` only when you need. This also enables you to do some
@@ -134,7 +134,7 @@ Troubleshooting
 ---------------
 
 When you define your forms, if you make `the mistake`_ of importing
-``Form`` from ``wtforms`` instead of from ``flask.ext.wtf``, most
+``Form`` from ``wtforms`` instead of from ``flask_wtf``, most
 features besides CSRF protection will work (aside from
 ``form.validate_on_submit()``), but CSRF protection will fail. Upon
 submitting forms, you’ll get
