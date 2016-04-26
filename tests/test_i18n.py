@@ -15,7 +15,7 @@ class TestI18NCase(TestCase):
 
     def test_i18n_enabled(self):
         from flask import request
-        from flask.ext.babel import Babel
+        from flask_babel import Babel
         babel = Babel(self.app)
 
         @babel.localeselector

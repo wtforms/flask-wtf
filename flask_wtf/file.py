@@ -47,7 +47,7 @@ class FileAllowed(object):
     Flask-Uploads UploadSet.
 
     :param upload_set: A list/tuple of extention names or an instance
-                       of ``flask.ext.uploads.UploadSet``
+                       of ``flask_uploads.UploadSet``
     :param message: error message
 
     You can also use the synonym **file_allowed**.

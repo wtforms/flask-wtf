@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 from wtforms import TextField
 from wtforms.validators import DataRequired
-from flask.ext.wtf import Form
-from flask.ext.babel import Babel
-from flask.ext.babel import lazy_gettext as _
+from flask_wtf import Form
+from flask_babel import Babel
+from flask_babel import lazy_gettext as _
 
 
 class BabelForm(Form):
