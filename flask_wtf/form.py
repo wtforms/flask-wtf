@@ -160,6 +160,11 @@ class Form(SecureForm):
 
         return Markup(u"".join(rv))
 
+    def validate(self):
+        if not self.csrf_enabled:
+            return True
+        return Form.validate()
+
     def validate_on_submit(self):
         """
         Checks if form has been submitted and if so runs validate. This is
