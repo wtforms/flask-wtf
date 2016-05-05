@@ -24,7 +24,7 @@ class TestRecaptcha(TestCase):
         app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 
         @app.route("/", methods=("GET", "POST"))
-        def inex():
+        def index():
             form = RecaptchaFrom(csrf_enabled=False)
             if form.validate_on_submit():
                 return 'OK'
