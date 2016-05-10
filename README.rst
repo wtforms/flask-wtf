@@ -17,9 +17,30 @@ Flask-WTF
    :target: https://coveralls.io/r/lepture/flask-wtf
    :alt: Coverage Status
 
-Simple integration of Flask and WTForms, including CSRF, file upload
-and Recaptcha integration.
+Simple integration of Flask and WTForms, including CSRF, file upload, Recaptcha and are you a human integration.
 
 For more information please refer to the online docs:
 
 https://flask-wtf.readthedocs.org
+
+
+This version was patch to support Are you a human from http://areyouahuman.com.
+
+On the dashboard configuration from are you a human, you need to select game style : embedded.
+
+You need to add : AYAH_PUBLISHER_KEY and AYAH_PUBLISHER_KEY to your flask conf.py for exemple.
+
+Example
+=======
+
+In form.py
+
+   from flask.ext.wtf import AreYouAHumanField
+   
+   [...]
+   
+   areyouahuman = AreYouAHumanField(_('Human ?'))
+   
+In your template with a macro jinja2 render_field
+
+   {{ render_field(form.areyouahuman) }}
