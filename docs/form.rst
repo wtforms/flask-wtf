@@ -15,8 +15,8 @@ But if you want to disable the csrf protection, you can pass::
 
     form = Form(csrf_enabled=False)
 
-If you want to disable it globally, which you really shouldn't. But if
-you insist, it can be done with the configuration::
+You can disable it globally—though you really shouldn't—with the
+configuration::
 
     WTF_CSRF_ENABLED = False
 
