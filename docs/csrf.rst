@@ -61,9 +61,13 @@ But if the template has no forms, you still need a csrf token:
 Whenever a CSRF validation fails, it will return a 400 response. You can
 customize the error response::
 
+    from flask import abort
+    from werkzeug.wrappers import Response
+    
     @csrf.error_handler
     def csrf_error(reason):
-        return render_template('csrf_error.html', reason=reason), 400
+        abort(Response(render_template('csrf_error.html', reason=reason), 
+              status=400, content_type='text/html'))
 
 We strongly suggest that you protect all your views with CSRF. But if
 needed, you can exclude some views using a decorator::
