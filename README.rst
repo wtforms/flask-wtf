@@ -22,4 +22,4 @@ and Recaptcha integration.
 
 For more information please refer to the online docs:
 
-https://flask-wtf.readthedocs.org
+https://flask-wtf.readthedocs.io
