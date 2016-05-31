@@ -8,7 +8,7 @@ and Recaptcha integration.
 Links
 -----
 
-* `documentation <https://flask-wtf.readthedocs.org>`_
+* `documentation <https://flask-wtf.readthedocs.io>`_
 * `development version
   <http://github.com/lepture/flask-wtf>`_
 

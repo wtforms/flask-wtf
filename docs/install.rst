@@ -16,7 +16,7 @@ or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
 
     $ easy_install Flask-WTF
 
-But, you really `shouldn't do that <https://python-packaging-user-guide.readthedocs.org/en/latest/pip_easy_install/>`_.
+But, you really `shouldn't do that <https://python-packaging-user-guide.readthedocs.io/en/latest/pip_easy_install/>`_.
 
 
 Get the Code
