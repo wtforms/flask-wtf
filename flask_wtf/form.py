@@ -75,8 +75,8 @@ class Form(SecureForm):
                 if request.files:
                     formdata = formdata.copy()
                     formdata.update(request.files)
-                elif request.json:
-                    formdata = werkzeug.datastructures.MultiDict(request.json)
+                elif request.get_json():
+                    formdata = werkzeug.datastructures.MultiDict(request.get_json())
             else:
                 formdata = None
 
