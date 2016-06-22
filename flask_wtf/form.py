@@ -16,6 +16,8 @@ try:
 except ImportError:
     translations = None  # babel not installed
 
+SUBMIT_METHODS = set(('POST', 'PUT', 'PATCH', 'DELETE'))
+
 
 class _Auto():
     '''Placeholder for unspecified variables that should be set to defaults.
@@ -121,12 +123,11 @@ class Form(SecureForm):
         return validate_csrf(data, self.SECRET_KEY, self.TIME_LIMIT)
 
     def is_submitted(self):
-        """
-        Checks if form has been submitted. The default case is if the HTTP
-        method is **PUT**, **PATCH**, **POST** or **DELETE**.
+        """Consider the form submitted if there is an active request and
+        the method is ``POST``, ``PUT``, ``PATCH``, or ``DELETE``.
         """
 
-        return request and request.method in ("PUT", "PATCH", "POST", "DELETE")
+        return request and request.method in SUBMIT_METHODS
 
     def hidden_tag(self, *fields):
         """
@@ -161,9 +162,8 @@ class Form(SecureForm):
         return Markup(u"".join(rv))
 
     def validate_on_submit(self):
-        """
-        Checks if form has been submitted and if so runs validate. This is
-        a shortcut, equivalent to ``form.is_submitted() and form.validate()``
+        """Call :meth:`validate` only if the form is submitted.
+        This is a shortcut for ``form.is_submitted() and form.validate()``.
         """
         return self.is_submitted() and self.validate()
 
