@@ -172,7 +172,7 @@ class Form(SecureForm):
         d = super(Form, self).data
         # https://github.com/lepture/flask-wtf/issues/208
         if self.csrf_enabled:
-            d.pop('csrf_token')
+            d.pop('csrf_token', None)
         return d
 
     def _get_translations(self):
