@@ -1,4 +1,6 @@
 import sys
+import warnings
+
 if sys.version_info[0] == 3:
     text_type = str
     string_types = (str,)
@@ -19,3 +21,11 @@ def to_unicode(input_bytes, encoding='utf-8'):
     if not isinstance(input_bytes, string_types):
         input_bytes = input_bytes.decode(encoding)
     return input_bytes
+
+
+class FlaskWTFDeprecationWarning(DeprecationWarning):
+    pass
+
+
+warnings.simplefilter('always', FlaskWTFDeprecationWarning)
+warnings.filterwarnings('ignore', category=FlaskWTFDeprecationWarning, module='wtforms|flask_wtf')

@@ -12,7 +12,7 @@
 # flake8: noqa
 from __future__ import absolute_import
 
-from .form import Form
+from .form import FlaskForm, Form
 from .csrf import CsrfProtect
 from .recaptcha import *
 

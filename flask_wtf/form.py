@@ -1,14 +1,17 @@
 # coding: utf-8
+import warnings
 
 import werkzeug.datastructures
-
-from jinja2 import Markup, escape
 from flask import request, session, current_app
-from wtforms.fields import HiddenField
-from wtforms.widgets import HiddenInput
-from wtforms.validators import ValidationError
+from jinja2 import Markup, escape
+from wtforms.compat import with_metaclass
 from wtforms.ext.csrf.form import SecureForm
-from ._compat import text_type, string_types
+from wtforms.fields import HiddenField
+from wtforms.form import FormMeta
+from wtforms.validators import ValidationError
+from wtforms.widgets import HiddenInput
+
+from ._compat import text_type, string_types, FlaskWTFDeprecationWarning
 from .csrf import generate_csrf, validate_csrf
 
 try:
@@ -19,11 +22,11 @@ except ImportError:
 SUBMIT_METHODS = set(('POST', 'PUT', 'PATCH', 'DELETE'))
 
 
-class _Auto():
-    '''Placeholder for unspecified variables that should be set to defaults.
+class _Auto(object):
+    """Placeholder for unspecified variables that should be set to defaults.
 
     Used when None is a valid option and should not be replaced by a default.
-    '''
+    """
     pass
 
 
@@ -36,28 +39,27 @@ def _is_hidden(field):
     return False
 
 
-class Form(SecureForm):
-    """
-    Flask-specific subclass of WTForms **SecureForm** class.
+class FlaskForm(SecureForm):
+    """Flask-specific subclass of WTForms :class:`~wtforms.ext.csrf.form.SecureForm` class.
 
-    If formdata is not specified, this will use flask.request.form.
-    Explicitly pass formdata = None to prevent this.
+    If ``formdata`` is not specified, this will use :attr:`flask.request.form` and
+    :attr:`flask.request.files`.  Explicitly pass ``formdata=None`` to prevent this.
 
     :param csrf_context: a session or dict-like object to use when making
-                         CSRF tokens. Default: flask.session.
+        CSRF tokens. Default: :data:`flask.session`.
 
     :param secret_key: a secret key for building CSRF tokens. If this isn't
-                       specified, the form will take the first of these
-                       that is defined:
+        specified, the form will take the first of these
+        that is defined:
 
-                       * SECRET_KEY attribute on this class
-                       * WTF_CSRF_SECRET_KEY config of flask app
-                       * SECRET_KEY config of flask app
-                       * session secret key
+        * SECRET_KEY attribute on this class
+        * WTF_CSRF_SECRET_KEY config of Flask app
+        * SECRET_KEY config of Flask app
+        * session secret key
 
     :param csrf_enabled: whether to use CSRF protection. If False, all
-                         csrf behavior is suppressed.
-                         Default: WTF_CSRF_ENABLED config value
+        csrf behavior is suppressed.
+        Default: WTF_CSRF_ENABLED config value
     """
 
     SECRET_KEY = None
@@ -93,7 +95,7 @@ class Form(SecureForm):
         else:
             csrf_context = {}
             self.SECRET_KEY = ''
-        super(Form, self).__init__(
+        super(FlaskForm, self).__init__(
             formdata, obj, prefix,
             csrf_context=csrf_context,
             **kwargs
@@ -169,7 +171,7 @@ class Form(SecureForm):
 
     @property
     def data(self):
-        d = super(Form, self).data
+        d = super(FlaskForm, self).data
         # https://github.com/lepture/flask-wtf/issues/208
         if self.csrf_enabled:
             d.pop('csrf_token', None)
@@ -179,3 +181,19 @@ class Form(SecureForm):
         if not current_app.config.get('WTF_I18N_ENABLED', True):
             return None
         return translations
+
+
+class DeprecatedFormMeta(FormMeta):
+    def __init__(cls, name, bases, attrs):
+        warnings.warn(FlaskWTFDeprecationWarning(
+            '"flask_wtf.Form" has been renamed to "FlaskForm" '
+            'and will be removed in 1.0.'
+        ), stacklevel=2)
+        type.__init__(cls, name, bases, attrs)
+
+
+class Form(with_metaclass(DeprecatedFormMeta, FlaskForm)):
+    """
+    .. deprecated:: 0.13
+        Renamed to :class:`~flask_wtf.FlaskForm`.
+    """
