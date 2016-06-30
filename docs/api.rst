@@ -8,8 +8,10 @@ Forms and Fields
 
 .. module:: flask_wtf
 
-.. autoclass:: Form
-   :members:
+.. autoclass:: FlaskForm
+    :members:
+
+.. autoclass:: Form(...)
 
 .. autoclass:: RecaptchaField
 

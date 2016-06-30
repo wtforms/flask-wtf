@@ -8,7 +8,7 @@ except ImportError:
 from flask import render_template, request
 
 from wtforms import StringField, FieldList
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from flask_wtf.file import file_required, file_allowed
 
@@ -30,21 +30,21 @@ class UploadSet(object):
 images = UploadSet('images', ['jpg', 'png'])
 
 
-class FileUploadForm(Form):
+class FileUploadForm(FlaskForm):
     upload = FileField("Upload file")
 
 
-class MultipleFileUploadForm(Form):
+class MultipleFileUploadForm(FlaskForm):
     uploads = FieldList(FileField("upload"), min_entries=3)
 
 
-class ImageUploadForm(Form):
+class ImageUploadForm(FlaskForm):
     upload = FileField("Upload file",
                        validators=[file_required(),
                                    file_allowed(images)])
 
 
-class TextUploadForm(Form):
+class TextUploadForm(FlaskForm):
     upload = FileField("Upload file",
                        validators=[file_required(),
                                    file_allowed(['txt'])])
@@ -152,7 +152,7 @@ class TestFileUpload(TestCase):
         assert b'invalid' in response.data
 
 
-class BrokenForm(Form):
+class BrokenForm(FlaskForm):
     text_fields = FieldList(StringField())
     file_fields = FieldList(FileField())
 

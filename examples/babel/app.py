@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request
 from wtforms import TextField
 from wtforms.validators import DataRequired
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _
 
 
-class BabelForm(Form):
+class BabelForm(FlaskForm):
     name = TextField(_('Name'), validators=[DataRequired()])
 
 

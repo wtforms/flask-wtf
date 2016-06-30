@@ -3,7 +3,7 @@ from __future__ import with_statement
 from .base import TestCase
 from flask import json
 from flask import Flask, render_template
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
 
 
@@ -11,7 +11,7 @@ RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
 
-class RecaptchaFrom(Form):
+class RecaptchaFrom(FlaskForm):
     SECRET_KEY = "a poorly kept secret."
     recaptcha = RecaptchaField()
 

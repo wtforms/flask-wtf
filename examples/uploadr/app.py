@@ -1,9 +1,9 @@
 from flask import Flask, render_template
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import FieldList
 
-class FileUploadForm(Form):
+class FileUploadForm(FlaskForm):
     uploads = FieldList(FileField())
 
 DEBUG = True

@@ -3,7 +3,7 @@ from __future__ import with_statement
 from flask import Flask, render_template, jsonify
 from wtforms import StringField, HiddenField, SubmitField
 from wtforms.validators import DataRequired
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf._compat import text_type
 
 
@@ -13,13 +13,13 @@ def to_unicode(text):
     return text
 
 
-class MyForm(Form):
+class MyForm(FlaskForm):
     SECRET_KEY = "a poorly kept secret."
     name = StringField("Name", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
-class HiddenFieldsForm(Form):
+class HiddenFieldsForm(FlaskForm):
     SECRET_KEY = "a poorly kept secret."
     name = HiddenField()
     url = HiddenField()
@@ -32,7 +32,7 @@ class HiddenFieldsForm(Form):
         self.method.name = '_method'
 
 
-class SimpleForm(Form):
+class SimpleForm(FlaskForm):
     SECRET_KEY = "a poorly kept secret."
     pass
 
