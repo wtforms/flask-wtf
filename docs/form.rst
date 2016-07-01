@@ -92,24 +92,6 @@ to :class:`FileAllowed`::
             FileAllowed(['jpg', 'png'], 'Images only!')
         ])
 
-HTML5 Widgets
--------------
-
-.. note::
-
-    HTML5 widgets and fields are builtin of wtforms since 1.0.5. You
-    should consider import them from wtforms if possible.
-
-    We will drop html5 module in next release 0.9.3.
-
-You can import a number of HTML5 widgets from ``wtforms``::
-
-    from wtforms.fields.html5 import URLField
-    from wtforms.validators import url
-
-    class LinkForm(Form):
-        url = URLField(validators=[url()])
-
 
 .. _recaptcha:
 

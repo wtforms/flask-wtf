@@ -6,10 +6,11 @@ from flask_wtf._compat import FlaskWTFDeprecationWarning
 
 class TestForm(TestCase):
     def test_deprecated_form(self):
-        def define_deprecated_form():
-            class F(Form):
-                pass
-
         with warnings.catch_warnings():
             warnings.simplefilter('error', FlaskWTFDeprecationWarning)
-            self.assertRaises(FlaskWTFDeprecationWarning, define_deprecated_form)
+            self.assertRaises(FlaskWTFDeprecationWarning, type, 'F', (Form,), {})
+
+    def test_deprecated_html5(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', FlaskWTFDeprecationWarning)
+            self.assertRaises(FlaskWTFDeprecationWarning, __import__, 'flask_wtf.html5')
