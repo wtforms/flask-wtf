@@ -1,8 +1,6 @@
 Creating Forms
 ==============
 
-This part of the documentation covers the Form parts.
-
 Secure Form
 -----------
 
@@ -32,12 +30,10 @@ File Uploads
 
 .. module:: flask_wtf.file
 
-Flask-WTF provides you a :class:`FileField` to handle file uploading,
-it will automatically draw data from ``flask.request.files`` if the form
-is posted. The ``data`` attribute of :class:`FileField` will be an
-instance of Werkzeug FileStorage.
-
-For example::
+Flask-WTF provides :class:`FileField` to handle file uploading.
+It automatically draws data from ``flask.request.files`` when the form
+is posted. The field's ``data`` attribute is an instance of
+:class:`~werkzeug.datastructures.FileStorage`. ::
 
     from werkzeug.utils import secure_filename
     from flask_wtf.file import FileField
@@ -55,21 +51,34 @@ For example::
             filename = None
         return render_template('upload.html', form=form, filename=filename)
 
-.. note::
+Remember to set the ``enctype`` of the HTML form to
+``multipart/form-data``, otherwise ``request.files`` will be empty.
 
-    Remember to set the ``enctype`` of your HTML form to
-    ``multipart/form-data``, which means:
+.. sourcecode:: html
 
-    .. sourcecode:: html
+    <form method="POST" enctype="multipart/form-data">
+        ...
+    </form>
 
-        <form action="/upload/" method="POST" enctype="multipart/form-data">
-            ....
-        </form>
+Flask-WTF handles passing form data to the form for you.
+If you pass in the data explicitly, remember that ``request.form`` must
+be combined with ``request.files`` for the form to see the file data. ::
 
-More than that, Flask-WTF supports validation on file uploading. There
-are :class:`FileRequired` and :class:`FileAllowed`.
+    form = PhotoForm()
+    # is equivalent to:
 
-The :class:`FileAllowed` works well with Flask-Uploads, for example::
+    from flask import request
+    from werkzeug.datastructures import CombinedMultiDict
+    form = PhotoForm(CombinedMultiDict((request.files, request.form)))
+
+
+Validation
+~~~~~~~~~~
+
+Flask-WTF supports validating file uploads with
+:class:`FileRequired` and :class:`FileAllowed`.
+
+:class:`FileAllowed` works well with Flask-Uploads. ::
 
     from flask_uploads import UploadSet, IMAGES
     from flask_wtf import Form
@@ -83,8 +92,7 @@ The :class:`FileAllowed` works well with Flask-Uploads, for example::
             FileAllowed(images, 'Images only!')
         ])
 
-It can work without Flask-Uploads too. You need to pass the extensions
-to :class:`FileAllowed`::
+It can be used without Flask-Uploads by passing the extensions directly. ::
 
     class UploadForm(Form):
         upload = FileField('image', validators=[
