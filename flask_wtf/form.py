@@ -3,13 +3,12 @@ import warnings
 
 import werkzeug.datastructures
 from flask import request, session, current_app
-from jinja2 import Markup, escape
+from jinja2 import Markup
 from wtforms.compat import with_metaclass
 from wtforms.ext.csrf.form import SecureForm
-from wtforms.fields import HiddenField
 from wtforms.form import FormMeta
 from wtforms.validators import ValidationError
-from wtforms.widgets import HiddenInput
+from wtforms.widgets import HiddenInput, SubmitInput
 
 from ._compat import text_type, string_types, FlaskWTFDeprecationWarning
 from .csrf import generate_csrf, validate_csrf
@@ -28,15 +27,6 @@ class _Auto(object):
     Used when None is a valid option and should not be replaced by a default.
     """
     pass
-
-
-def _is_hidden(field):
-    """Detect if the field is hidden."""
-    if isinstance(field, HiddenField):
-        return True
-    if isinstance(field.widget, HiddenInput):
-        return True
-    return False
 
 
 class FlaskForm(SecureForm):
@@ -132,36 +122,37 @@ class FlaskForm(SecureForm):
         return request and request.method in SUBMIT_METHODS
 
     def hidden_tag(self, *fields):
+        """Render the form's hidden fields in one call.
+
+        A field is considered hidden if it uses the
+        :class:`~wtforms.widgets.HiddenInput` widget.
+
+        If ``fields`` are given, only render the given fields that
+        are hidden.  If a string is passed, render the field with that
+        name if it exists.
+
+        .. versionchanged:: 0.13
+
+           No longer wraps inputs in hidden div.
+           This is valid HTML 5.
+
+        .. versionchanged:: 0.13
+
+           Skip passed fields that aren't hidden.
+           Skip passed names that don't exist.
         """
-        Wraps hidden fields in a hidden DIV tag, in order to keep XHTML
-        compliance.
 
-        .. versionadded:: 0.3
+        def hidden_fields(fields):
+            for f in fields:
+                if isinstance(f, string_types):
+                    f = getattr(self, f, None)
 
-        :param fields: list of hidden field names. If not provided will render
-                       all hidden fields, including the CSRF field.
-        """
+                if f is None or not isinstance(f.widget, HiddenInput):
+                    continue
 
-        if not fields:
-            fields = [f for f in self if _is_hidden(f)]
+                yield f
 
-        name = current_app.config.get('WTF_HIDDEN_TAG', 'div')
-        attrs = current_app.config.get(
-            'WTF_HIDDEN_TAG_ATTRS', {'style': 'display:none;'})
-
-        tag_attrs = u' '.join(
-            u'%s="%s"' % (escape(k), escape(v)) for k, v in attrs.items())
-        tag_start = u'<%s %s>' % (escape(name), tag_attrs)
-        tag_end = u'</%s>' % escape(name)
-
-        rv = [tag_start]
-        for field in fields:
-            if isinstance(field, string_types):
-                field = getattr(self, field)
-            rv.append(text_type(field))
-        rv.append(tag_end)
-
-        return Markup(u"".join(rv))
+        return Markup(u'\n'.join(text_type(f) for f in hidden_fields(fields or self)))
 
     def validate_on_submit(self):
         """Call :meth:`validate` only if the form is submitted.

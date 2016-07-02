@@ -27,10 +27,6 @@ WTF_CSRF_SSL_STRICT     Strictly protection on SSL. This will check
                         origin. Default is True.
 WTF_CSRF_METHODS        CSRF protection on these request methods.
                         Default is **['POST', 'PUT', 'PATCH']**
-WTF_HIDDEN_TAG          HTML tag name of the hidden tag wrapper.
-                        Default is **div**
-WTF_HIDDEN_TAG_ATTRS    HTML tag attributes of the hidden tag wrapper.
-                        Default is **{'style': 'display:none;'}**
 ======================= ==============================================
 
 

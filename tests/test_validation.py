@@ -63,10 +63,7 @@ class TestCSRF(TestCase):
     def test_csrf_token(self):
 
         response = self.client.get("/")
-        snippet = (
-            '<div style="display:none;">'
-            '<input id="csrf_token" name="csrf_token" type="hidden" value'
-        )
+        snippet = '<input id="csrf_token" name="csrf_token" type="hidden" value'
         assert snippet in to_unicode(response.data)
 
     def test_invalid_csrf(self):

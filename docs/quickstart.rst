@@ -35,9 +35,8 @@ render this in your template:
         <input type="submit" value="Go">
     </form>
 
-However, in order to create valid XHTML/HTML the Form class has a method
-hidden_tag which renders any hidden fields, including the CSRF field,
-inside a hidden DIV tag:
+If your form has multiple hidden fields, you can render them in one
+block using :meth:`~flask_wtf.FlaskForm.hidden_tag`.
 
 .. sourcecode:: html+jinja
 
