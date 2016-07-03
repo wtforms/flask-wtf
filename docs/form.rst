@@ -6,12 +6,12 @@ Secure Form
 
 .. module:: flask_wtf
 
-Without any configuration, the :class:`Form` will be a session secure
+Without any configuration, the :class:`FlaskForm` will be a session secure
 form with csrf protection. We encourage you do nothing.
 
 But if you want to disable the csrf protection, you can pass::
 
-    form = Form(csrf_enabled=False)
+    form = FlaskForm(csrf_enabled=False)
 
 You can disable it globally—though you really shouldn't—with the
 configuration::
@@ -38,7 +38,7 @@ is posted. The field's ``data`` attribute is an instance of
     from werkzeug.utils import secure_filename
     from flask_wtf.file import FileField
 
-    class PhotoForm(Form):
+    class PhotoForm(FlaskForm):
         photo = FileField('Your photo')
 
     @app.route('/upload/', methods=('GET', 'POST'))
@@ -81,12 +81,12 @@ Flask-WTF supports validating file uploads with
 :class:`FileAllowed` works well with Flask-Uploads. ::
 
     from flask_uploads import UploadSet, IMAGES
-    from flask_wtf import Form
+    from flask_wtf import FlaskForm
     from flask_wtf.file import FileField, FileAllowed, FileRequired
 
     images = UploadSet('images', IMAGES)
 
-    class UploadForm(Form):
+    class UploadForm(FlaskForm):
         upload = FileField('image', validators=[
             FileRequired(),
             FileAllowed(images, 'Images only!')
@@ -94,7 +94,7 @@ Flask-WTF supports validating file uploads with
 
 It can be used without Flask-Uploads by passing the extensions directly. ::
 
-    class UploadForm(Form):
+    class UploadForm(FlaskForm):
         upload = FileField('image', validators=[
             FileRequired(),
             FileAllowed(['jpg', 'png'], 'Images only!')
@@ -110,10 +110,10 @@ Recaptcha
 
 Flask-WTF also provides Recaptcha support through a :class:`RecaptchaField`::
 
-    from flask_wtf import Form, RecaptchaField
+    from flask_wtf import FlaskForm, RecaptchaField
     from wtforms import TextField
 
-    class SignupForm(Form):
+    class SignupForm(FlaskForm):
         username = TextField('Username')
         recaptcha = RecaptchaField()
 

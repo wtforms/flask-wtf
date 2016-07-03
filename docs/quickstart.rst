@@ -11,11 +11,11 @@ Creating Forms
 
 Flask-WTF provides your Flask application integration with WTForms. For example::
 
-    from flask_wtf import Form
+    from flask_wtf import FlaskForm
     from wtforms import StringField
     from wtforms.validators import DataRequired
 
-    class MyForm(Form):
+    class MyForm(FlaskForm):
         name = StringField('name', validators=[DataRequired()])
 
 
