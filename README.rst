@@ -1,15 +1,6 @@
 Flask-WTF
 =========
 
-.. image:: https://img.shields.io/badge/flask-registered-green.svg?style=flat
-   :target: https://github.com/pocoo/metaflask
-   :alt: Meta Flask
-.. image:: https://pypip.in/wheel/flask-wtf/badge.svg?style=flat
-   :target: https://pypi.python.org/pypi/Flask-WTF/
-   :alt: Wheel Status
-.. image:: https://pypip.in/version/flask-wtf/badge.svg?style=flat
-   :target: https://pypi.python.org/pypi/Flask-WTF/
-   :alt: Latest Version
 .. image:: https://travis-ci.org/lepture/flask-wtf.svg?branch=master
    :target: https://travis-ci.org/lepture/flask-wtf
    :alt: Travis CI Status
@@ -17,9 +8,12 @@ Flask-WTF
    :target: https://coveralls.io/r/lepture/flask-wtf
    :alt: Coverage Status
 
-Simple integration of Flask and WTForms, including CSRF, file upload
-and Recaptcha integration.
+Simple integration of Flask and WTForms, including CSRF, file upload,
+and reCAPTCHA.
 
-For more information please refer to the online docs:
+Links
+-----
 
-https://flask-wtf.readthedocs.io
+* `Documentation <https://flask-wtf.readthedocs.io>`_
+* `PyPI <https://pypi.python.org/Flask-WTF>`_
+* `GitHub <https://github.com/lepture/flask-wtf>`_

@@ -12,8 +12,10 @@
 # flake8: noqa
 from __future__ import absolute_import
 
-from .form import FlaskForm, Form
+import pkg_resources
+
 from .csrf import CsrfProtect
+from .form import FlaskForm, Form
 from .recaptcha import *
 
-__version__ = '0.12'
+__version__ = pkg_resources.get_distribution('Flask-WTF').version

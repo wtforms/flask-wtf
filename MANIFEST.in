@@ -1,9 +1,9 @@
-include LICENSE 
-recursive-include tests *
+include AUTHORS LICENSE requirements.txt tox.ini
+graft tests
 recursive-exclude tests *.pyc
-recursive-exclude tests *.pyc
-recursive-include docs *
+recursive-exclude tests *.pyo
+graft docs
+prune docs/_build
+exclude docs/_themes/.git*
 recursive-exclude docs *.pyc
 recursive-exclude docs *.pyo
-prune docs/_build
-prune docs/_themes/.git
