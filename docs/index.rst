@@ -1,16 +1,11 @@
 Flask-WTF
-======================================
+=========
 
-**Flask-WTF** offers simple integration with WTForms_.
+Simple integration of `Flask`_ and `WTForms`_, including CSRF, file upload,
+and reCAPTCHA.
 
-.. _WTForms: http://wtforms.simplecodes.com/docs/
-
-.. image:: https://pypip.in/wheel/flask-wtf/badge.svg?style=flat
-   :target: https://pypi.python.org/pypi/Flask-WTF/
-   :alt: Wheel Status
-.. image:: https://pypip.in/version/flask-wtf/badge.svg?style=flat
-   :target: https://pypi.python.org/pypi/Flask-WTF/
-   :alt: Latest Version
+.. _Flask: https://palletsprojects.com/p/flask
+.. _WTForms: https://wtforms.readthedocs.io/
 
 
 Features
@@ -19,9 +14,9 @@ Features
 * Integration with WTForms.
 * Secure Form with CSRF token.
 * Global CSRF protection.
-* Recaptcha support.
+* reCAPTCHA support.
 * File upload that works with Flask-Uploads.
-* Internationalization integration.
+* Internationalization using Flask-Babel.
 
 User's Guide
 ------------
@@ -62,6 +57,3 @@ Legal information and changelog are here.
    changelog
    authors
    license
-
-.. _Flask: http://flask.pocoo.org
-.. _GitHub: http://github.com/lepture/flask-wtf
