@@ -1,7 +1,9 @@
 import sys
 import warnings
 
-if sys.version_info[0] == 3:
+PY2 = sys.version_info[0] == 2
+
+if not PY2:
     text_type = str
     string_types = (str,)
 else:
