@@ -1,10 +1,12 @@
 from __future__ import with_statement
 
 import re
+from flask import abort
 from flask import Blueprint
 from flask import render_template
 from flask_wtf.csrf import CsrfProtect
 from flask_wtf.csrf import validate_csrf, generate_csrf
+from werkzeug.wrappers import Response
 from .base import TestCase, MyForm, to_unicode
 
 csrf_token_input = re.compile(
@@ -61,10 +63,11 @@ class TestCSRF(TestCase):
 
         @self.csrf.error_handler
         def invalid(reason):
-            return reason
+            abort(Response("CSRF Error Handler: %s" % reason, status=200, content_type='text/html'))
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
+        assert b'CSRF Error Handler' in response.data
         assert b'token missing' in response.data
 
     def test_invalid_csrf2(self):
