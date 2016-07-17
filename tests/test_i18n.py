@@ -20,16 +20,20 @@ class TestI18NCase(TestCase):
 
         @babel.localeselector
         def get_locale():
-            return request.accept_languages.best_match(['en', 'zh'], 'en')
-
-        self.app.config['CSRF_ENABLED'] = False
+            return request.accept_languages.best_match(
+                ['en', 'ru'], default='en')
 
         response = self.client.post(
             "/",
-            headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
+            headers=[("Accept-Language", "ru")],
             data={}
         )
-        assert '\u8be5\u5b57\u6bb5\u662f' in to_unicode(response.data)
+        # Russian for 'This field is required':
+        assert '\u0414\u0430\u043d\u043d\u043e\u0435 ' \
+               '\u043f\u043e\u043b\u0435 ' \
+               '\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e' \
+               in to_unicode(response.data)
 
+        # If no `Accept-Language` is sent, use default (`en`):
         response = self.client.post("/", data={})
         assert b'This field is required.' in response.data

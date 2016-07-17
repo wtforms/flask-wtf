@@ -2,6 +2,9 @@ from werkzeug import FileStorage
 from wtforms import FileField as _FileField
 from wtforms.validators import InputRequired, StopValidation
 
+from .i18n import translations
+_ = translations.lazy_gettext
+
 
 class FileField(_FileField):
     """
@@ -66,13 +69,14 @@ class FileAllowed(object):
         if isinstance(self.upload_set, (tuple, list)):
             if any(filename.endswith('.' + x) for x in self.upload_set):
                 return
-            message = (
-                'File does not end with any of the allowed extentions: {}'
-            ).format(self.upload_set)
+            message = '{}: {}'.format(
+                _('File does not end with any of the allowed extentions'),
+                self.upload_set
+            )
             raise StopValidation(self.message or message)
 
         if not self.upload_set.file_allowed(field.data, filename):
             raise StopValidation(self.message or
-                                 'File does not have an approved extension')
+                                 _('File does not have an approved extension'))
 
 file_allowed = FileAllowed

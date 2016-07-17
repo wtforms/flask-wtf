@@ -1,21 +1,33 @@
+# -*- coding: utf-8 -*-
+
+import json
+
+from flask import request, current_app
+from wtforms import ValidationError
+from .._compat import to_bytes, to_unicode
+
 try:
     import urllib2 as http
 except ImportError:
     # Python 3
     from urllib import request as http
 
-from flask import request, current_app
-from wtforms import ValidationError
 from werkzeug import url_encode
-from .._compat import to_bytes, to_unicode
-import json
+
+from ..i18n import translations
+_ = translations.lazy_gettext
+
 
 RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
 RECAPTCHA_ERROR_CODES = {
-    'missing-input-secret': 'The secret parameter is missing.',
-    'invalid-input-secret': 'The secret parameter is invalid or malformed.',
-    'missing-input-response': 'The response parameter is missing.',
-    'invalid-input-response': 'The response parameter is invalid or malformed.'
+    'missing-input-secret':
+        _('The secret parameter is missing.'),
+    'invalid-input-secret':
+        _('The secret parameter is invalid or malformed.'),
+    'missing-input-response':
+        _('The response parameter is missing.'),
+    'invalid-input-response':
+        _('The response parameter is invalid or malformed.'),
 }
 
 

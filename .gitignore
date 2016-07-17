@@ -15,3 +15,4 @@ _build
 .tox
 *.egg
 .idea/
+.eggs/

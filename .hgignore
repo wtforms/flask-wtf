@@ -13,7 +13,6 @@ syntax: glob
 *.cfg
 *.tox
 
-
 *~
 
 
@@ -23,6 +22,8 @@ docs/output
 
 _uploads
 uploads
+
+.eggs
 
 .git
 .gitignore

@@ -17,6 +17,9 @@ setup(
     test_suite='nose.collector',
     zip_safe=False,
     platforms='any',
+    package_data={
+        'flask_wtf': ['locale/flask_wtf.pot', 'locale/*/*/*'],
+    },
     install_requires=[
         'Flask',
         'Werkzeug',
@@ -25,6 +28,7 @@ setup(
     tests_require=[
         'nose',
         'Flask-Babel',
+        'speaklater',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

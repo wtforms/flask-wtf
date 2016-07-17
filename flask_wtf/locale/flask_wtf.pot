@@ -1,0 +1,51 @@
+# Translations template for Flask-WTF.
+# Copyright (C) 2016 Flask-WTF Team
+# This file is distributed under the same license as the Flask-WTF project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Flask-WTF 0.13\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-07-17 14:18+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: flask_wtf/file.py:39
+msgid "This field is required."
+msgstr ""
+
+#: flask_wtf/file.py:73
+msgid "File does not end with any of the allowed extentions"
+msgstr ""
+
+#: flask_wtf/file.py:80
+msgid "File does not have an approved extension"
+msgstr ""
+
+#: flask_wtf/form.py:106
+msgid "CSRF token missing"
+msgstr ""
+
+#: flask_wtf/recaptcha/validators.py:24
+msgid "The secret parameter is missing."
+msgstr ""
+
+#: flask_wtf/recaptcha/validators.py:26
+msgid "The secret parameter is invalid or malformed."
+msgstr ""
+
+#: flask_wtf/recaptcha/validators.py:28
+msgid "The response parameter is missing."
+msgstr ""
+
+#: flask_wtf/recaptcha/validators.py:30
+msgid "The response parameter is invalid or malformed."
+msgstr ""
+

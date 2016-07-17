@@ -1,9 +1,13 @@
 include AUTHORS LICENSE requirements.txt tox.ini
+
 graft tests
 recursive-exclude tests *.pyc
 recursive-exclude tests *.pyo
+
 graft docs
 prune docs/_build
 exclude docs/_themes/.git*
 recursive-exclude docs *.pyc
 recursive-exclude docs *.pyo
+
+recursive-include flask_wtf/locale *
