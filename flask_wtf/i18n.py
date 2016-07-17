@@ -19,7 +19,7 @@ except ImportError:
     # Babel or speaklater is not found, so
     # we expect `make_lazy_string` to return just the value:
     support = None
-    make_lazy_string = lambda x, *args, **kwargs: x
+    make_lazy_string = lambda f, s, *args, **kwargs: f(s)
 
 try:
     from flask_babel import get_locale
