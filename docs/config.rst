@@ -21,7 +21,8 @@ WTF_CSRF_HEADERS        CSRF token HTTP headers checked. Default is
 WTF_CSRF_SECRET_KEY     A random string for generating CSRF token.
                         Default is the same as SECRET_KEY.
 WTF_CSRF_TIME_LIMIT     CSRF token expiring time. Default is **3600**
-                        seconds.
+                        seconds. If set to ``None``, the CSRF token
+                        is then bound to the life-time of the session.
 WTF_CSRF_SSL_STRICT     Strictly protection on SSL. This will check
                         the referrer, validate if it is from the same
                         origin. Default is True.
