@@ -3,6 +3,29 @@ Flask-WTF Changelog
 
 Full list of changes between each Flask-WTF release.
 
+Version 0.13
+------------
+
+Released 2016/09/29
+
+- ``Form`` is renamed to ``FlaskForm`` in order to avoid name collision with WTForms's base class.  Using ``Form`` will show a deprecation warning. (`#250`_)
+- ``hidden_tag`` no longer wraps the hidden inputs in a hidden div.  This is valid HTML5 and any modern HTML parser will behave correctly. (`#217`_, `#193`_)
+- ``flask_wtf.html5`` is deprecated.  Import directly from ``wtforms.fields.html5``. (`#251`_)
+- ``is_submitted`` is true for ``PATCH`` and ``DELETE`` in addition to ``POST`` and ``PUT``. (`#187`_)
+- ``generate_csrf`` takes a ``token_key`` parameter to specify the key stored in the session. (`#206`_)
+- ``generate_csrf`` takes a ``url_safe`` parameter to allow the token to be used in URLs. (`#206`_)
+- ``fom.data`` can be accessed multiple times without raising an exception. (`#248`_)
+- File extension with multiple parts (``.tar.gz``) can be used in the ``FileAllowed`` validator. (`#201`_)
+
+.. _`#187`: https://github.com/lepture/flask-wtf/pull/187
+.. _`#193`: https://github.com/lepture/flask-wtf/issues/193
+.. _`#201`: https://github.com/lepture/flask-wtf/issues/201
+.. _`#206`: https://github.com/lepture/flask-wtf/pull/206
+.. _`#217`: https://github.com/lepture/flask-wtf/issues/217
+.. _`#248`: https://github.com/lepture/flask-wtf/pull/248
+.. _`#250`: https://github.com/lepture/flask-wtf/pull/250
+.. _`#251`: https://github.com/lepture/flask-wtf/pull/251
+
 Version 0.12
 ------------
 
