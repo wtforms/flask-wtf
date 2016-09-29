@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-with open('README.rst') as f:
-    readme = f.read()
-
 setup(
     name='Flask-WTF',
-    version='0.13',
+    version='0.14',
     url='https://github.com/lepture/flask-wtf',
     license='BSD',
     author='Dan Jacob',

@@ -15,5 +15,5 @@ Links
 -----
 
 * `Documentation <https://flask-wtf.readthedocs.io>`_
-* `PyPI <https://pypi.python.org/Flask-WTF>`_
+* `PyPI <https://pypi.python.org/pypi/Flask-WTF>`_
 * `GitHub <https://github.com/lepture/flask-wtf>`_
