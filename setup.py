@@ -6,7 +6,7 @@ with open('README.rst') as f:
 
 setup(
     name='Flask-WTF',
-    version='0.13',
+    version='0.13.1',
     url='https://github.com/lepture/flask-wtf',
     license='BSD',
     author='Dan Jacob',
