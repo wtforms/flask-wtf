@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
+with open('README.rst') as f:
+    readme = f.read()
+
 setup(
     name='Flask-WTF',
     version='0.14',
@@ -11,7 +14,8 @@ setup(
     maintainer='Hsiaoming Yang',
     maintainer_email='me@lepture.com',
     description='Simple integration of Flask and WTForms.',
-    packages=find_packages(),
+    long_description=readme,
+    packages=find_packages(exclude=('tests',)),
     test_suite='nose.collector',
     zip_safe=False,
     platforms='any',

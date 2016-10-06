@@ -174,17 +174,15 @@ class FlaskForm(SecureForm):
         return translations
 
 
-class DeprecatedFormMeta(FormMeta):
-    def __init__(cls, name, bases, attrs):
-        warnings.warn(FlaskWTFDeprecationWarning(
-            '"flask_wtf.Form" has been renamed to "FlaskForm" '
-            'and will be removed in 1.0.'
-        ), stacklevel=2)
-        type.__init__(cls, name, bases, attrs)
-
-
-class Form(with_metaclass(DeprecatedFormMeta, FlaskForm)):
+class Form(FlaskForm):
     """
     .. deprecated:: 0.13
         Renamed to :class:`~flask_wtf.FlaskForm`.
     """
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn(FlaskWTFDeprecationWarning(
+            '"flask_wtf.Form" has been renamed to "FlaskForm" '
+            'and will be removed in 1.0.'
+        ), stacklevel=3)
+        super(Form, self).__init__(*args, **kwargs)

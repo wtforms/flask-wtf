@@ -1,7 +1,16 @@
 Flask-WTF Changelog
 ===================
 
-Full list of changes between each Flask-WTF release.
+Version 0.13.1
+--------------
+
+Released 2016/10/6
+
+- Deprecation warning for ``Form`` is shown during ``__init__`` instead of immediately when subclassing. (`#262`_)
+- Don't use ``pkg_resources`` to get version, for compatibility with GAE. (`#261`_)
+
+.. _`#261`: https://github.com/lepture/flask-wtf/issues/261
+.. _`#262`: https://github.com/lepture/flask-wtf/issues/262
 
 Version 0.13
 ------------
