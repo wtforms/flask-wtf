@@ -5,11 +5,12 @@ import re
 from .base import TestCase, MyForm, to_unicode
 
 csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
+    r'name="csrf_token" type="hidden" value="([0-9a-zA-Z\-._]*)"'
 )
 
 
 def get_csrf_token(data):
+    print(data)
     match = csrf_token_input.search(to_unicode(data))
     assert match
     return match.groups()[0]

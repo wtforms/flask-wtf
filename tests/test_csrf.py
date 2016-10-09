@@ -1,21 +1,19 @@
 from __future__ import with_statement
 
 import re
-from flask import Blueprint
-from flask import render_template
-from flask_wtf.csrf import CsrfProtect
-from flask_wtf.csrf import validate_csrf, generate_csrf
-from .base import TestCase, MyForm, to_unicode
 
-csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
-)
+from flask import Blueprint, render_template
+from flask_wtf.csrf import CsrfProtect, generate_csrf, validate_csrf
+
+from .base import MyForm, TestCase, to_unicode
+
+csrf_token_input = re.compile(r'name="csrf_token" type="hidden" value="([0-9a-zA-Z\-._]+)"')
 
 
 def get_csrf_token(data):
     match = csrf_token_input.search(to_unicode(data))
     assert match
-    return match.groups()[0]
+    return match.group(1)
 
 
 class TestCSRF(TestCase):
@@ -257,7 +255,7 @@ class TestCSRF(TestCase):
 
     def test_validate_not_expiring_csrf(self):
         with self.app.test_request_context():
-            csrf_token = generate_csrf(time_limit=False)
+            csrf_token = generate_csrf()
             assert validate_csrf(csrf_token, time_limit=False)
 
     def test_csrf_token_helper(self):
@@ -265,8 +263,9 @@ class TestCSRF(TestCase):
         def withtoken():
             return render_template("csrf.html")
 
-        response = self.client.get('/token')
-        assert b'#' in response.data
+        with self.client:
+            response = self.client.get('/token')
+            assert re.search(br'token: ([0-9a-zA-Z\-._]+)', response.data)
 
     def test_csrf_blueprint(self):
         response = self.client.post('/bar/foo')
@@ -282,7 +281,7 @@ class TestCSRF(TestCase):
             return render_template("import_csrf.html")
 
         response = self.client.get('/token')
-        assert b'#' in response.data
+        get_csrf_token(response.data)
 
     def test_csrf_custom_token_key(self):
         with self.app.test_request_context():
@@ -295,17 +294,3 @@ class TestCSRF(TestCase):
 
             # However, the custom key can validate as well
             assert validate_csrf(custom_csrf_token, token_key='oauth_state')
-
-    def test_csrf_url_safe(self):
-        with self.app.test_request_context():
-            # Generate a normal and URL safe CSRF token
-            default_csrf_token = generate_csrf()
-            url_safe_csrf_token = generate_csrf(url_safe=True)
-
-            # Verify they are not the same and the URL one is truly URL safe
-            assert default_csrf_token != url_safe_csrf_token
-            assert '#' not in url_safe_csrf_token
-            assert re.match(r'^[a-f0-9]+--[a-f0-9]+$', url_safe_csrf_token)
-
-            # Verify we can validate our URL safe key
-            assert validate_csrf(url_safe_csrf_token, url_safe=True)

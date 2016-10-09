@@ -1,16 +1,14 @@
 # coding: utf-8
 import warnings
 
-import werkzeug.datastructures
-from flask import request, session, current_app
+from flask import current_app, request, session
 from jinja2 import Markup
-from wtforms.compat import with_metaclass
+from werkzeug.datastructures import MultiDict
 from wtforms.ext.csrf.form import SecureForm
-from wtforms.form import FormMeta
 from wtforms.validators import ValidationError
-from wtforms.widgets import HiddenInput, SubmitInput
+from wtforms.widgets import HiddenInput
 
-from ._compat import text_type, string_types, FlaskWTFDeprecationWarning
+from ._compat import FlaskWTFDeprecationWarning, string_types, text_type
 from .csrf import generate_csrf, validate_csrf
 
 try:
@@ -70,7 +68,7 @@ class FlaskForm(SecureForm):
                     formdata = formdata.copy()
                     formdata.update(request.files)
                 elif request.get_json():
-                    formdata = werkzeug.datastructures.MultiDict(request.get_json())
+                    formdata = MultiDict(request.get_json())
             else:
                 formdata = None
 
@@ -94,25 +92,24 @@ class FlaskForm(SecureForm):
     def generate_csrf_token(self, csrf_context=None):
         if not self.csrf_enabled:
             return None
-        return generate_csrf(self.SECRET_KEY, self.TIME_LIMIT)
+
+        return generate_csrf(secret_key=self.SECRET_KEY)
 
     def validate_csrf_token(self, field):
         if not self.csrf_enabled:
             return True
-        if hasattr(request, 'csrf_valid') and request.csrf_valid:
+
+        if getattr(request, 'csrf_valid', False):
             # this is validated by CsrfProtect
             return True
-        if not validate_csrf(field.data, self.SECRET_KEY, self.TIME_LIMIT):
+
+        if not self.validate_csrf_data(field.data):
             raise ValidationError(field.gettext('CSRF token missing'))
 
     def validate_csrf_data(self, data):
-        """Check if the csrf data is valid.
+        """Check if the given data is a valid CSRF token."""
 
-        .. versionadded: 0.9.0
-
-        :param data: the csrf string to be validated.
-        """
-        return validate_csrf(data, self.SECRET_KEY, self.TIME_LIMIT)
+        return validate_csrf(data, secret_key=self.SECRET_KEY, time_limit=self.TIME_LIMIT)
 
     def is_submitted(self):
         """Consider the form submitted if there is an active request and
