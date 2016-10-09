@@ -146,20 +146,6 @@ class TestCSRF(TestCase):
         assert response.status_code == 400
         assert b'not match' in response.data
 
-        response = self.client.post(
-            "/",
-            data={"name": "danny"},
-            headers={
-                'X-CSRFToken': csrf_token,
-            },
-            environ_base={
-                'HTTP_REFERER': 'https://localhost:3000/',
-            },
-            base_url='https://localhost/',
-        )
-        assert response.status_code == 400
-        assert b'not match' in response.data
-
     def test_valid_secure_csrf(self):
         response = self.client.get("/", base_url='https://localhost/')
         csrf_token = get_csrf_token(response.data)
@@ -171,6 +157,19 @@ class TestCSRF(TestCase):
             },
             environ_base={
                 'HTTP_REFERER': 'https://localhost/',
+            },
+            base_url='https://localhost/',
+        )
+        assert response.status_code == 200
+        
+        response = self.client.post(
+            "/",
+            data={"name": "danny"},
+            headers={
+                'X-CSRFToken': csrf_token,
+            },
+            environ_base={
+                'HTTP_REFERER': 'https://localhost:3000/',
             },
             base_url='https://localhost/',
         )
