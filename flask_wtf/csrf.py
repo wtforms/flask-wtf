@@ -167,14 +167,14 @@ class CsrfProtect(object):
             if request.method not in app.config['WTF_CSRF_METHODS']:
                 return
 
+            if not request.endpoint:
+                return
+
+            view = app.view_functions.get(request.endpoint)
+            if not view:
+                return
+
             if self._exempt_views or self._exempt_blueprints:
-                if not request.endpoint:
-                    return
-
-                view = app.view_functions.get(request.endpoint)
-                if not view:
-                    return
-
                 dest = '%s.%s' % (view.__module__, view.__name__)
                 if dest in self._exempt_views:
                     return
