@@ -14,6 +14,7 @@ import warnings
 from functools import wraps
 
 from flask import Blueprint, current_app, request, session
+from flask import g
 from itsdangerous import BadData, URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import safe_str_cmp
@@ -39,11 +40,14 @@ def generate_csrf(secret_key=None, token_key='csrf_token'):
     :param secret_key: A secret key for mixing in the token, default is ``Flask.secret_key``.
     """
 
-    if token_key not in session:
-        session[token_key] = hashlib.sha1(os.urandom(64)).hexdigest()
+    if token_key not in g:
+        if token_key not in session:
+            session[token_key] = hashlib.sha1(os.urandom(64)).hexdigest()
 
-    s = URLSafeTimedSerializer(_get_secret_key(secret_key), salt='wtf-csrf-token')
-    return s.dumps(session[token_key])
+        s = URLSafeTimedSerializer(_get_secret_key(secret_key), salt='wtf-csrf-token')
+        setattr(g, token_key, s.dumps(session[token_key]))
+
+    return getattr(g, token_key)
 
 
 def validate_csrf(data, secret_key=None, time_limit=None, token_key='csrf_token'):
