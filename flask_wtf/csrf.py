@@ -10,12 +10,15 @@
 
 import hashlib
 import os
+import warnings
+from functools import wraps
 
-from flask import Blueprint, abort, current_app, request, session
+from flask import Blueprint, current_app, request, session
 from itsdangerous import BadData, URLSafeTimedSerializer
+from werkzeug.exceptions import BadRequest
 from werkzeug.security import safe_str_cmp
 
-from ._compat import string_types, urlparse
+from ._compat import FlaskWTFDeprecationWarning, string_types, urlparse
 
 __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
 
@@ -161,19 +164,16 @@ class CsrfProtect(object):
             return
 
         if not validate_csrf(self._get_csrf_token()):
-            reason = 'CSRF token missing or incorrect.'
-            return self._error_response(reason)
+            self._error_response('CSRF token missing or incorrect.')
 
         if request.is_secure and current_app.config['WTF_CSRF_SSL_STRICT']:
             if not request.referrer:
-                reason = 'Referrer checking failed - no Referrer.'
-                return self._error_response(reason)
+                self._error_response('Referrer checking failed - no Referrer.')
 
             good_referrer = 'https://%s/' % request.host
 
             if not same_origin(request.referrer, good_referrer):
-                reason = 'Referrer checking failed - origin does not match.'
-                return self._error_response(reason)
+                self._error_response('Referrer checking failed - origin does not match.')
 
         request.csrf_valid = True  # mark this request is csrf valid
 
@@ -203,7 +203,7 @@ class CsrfProtect(object):
         return view
 
     def _error_response(self, reason):
-        return abort(400, reason)
+        raise CSRFError(reason)
 
     def error_handler(self, view):
         """A decorator that set the error response handler.
@@ -217,8 +217,21 @@ class CsrfProtect(object):
         By default, it will return a 400 response.
         """
 
-        self._error_response = view
+        warnings.warn(FlaskWTFDeprecationWarning(
+            '"@csrf.error_handler" is deprecated. Use the standard Flask error '
+            'system with "@app.errorhandler(CSRFError)" instead.'
+        ), stacklevel=2)
+
+        @wraps(view)
+        def handler(reason):
+            raise CSRFError(response=current_app.make_response(view(reason)))
+
+        self._error_response = handler
         return view
+
+
+class CSRFError(BadRequest):
+    description = 'CSRF token missing or incorrect.'
 
 
 def same_origin(current_uri, compare_uri):
