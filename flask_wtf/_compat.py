@@ -6,9 +6,11 @@ PY2 = sys.version_info[0] == 2
 if not PY2:
     text_type = str
     string_types = (str,)
+    from urllib.parse import urlparse
 else:
     text_type = unicode
     string_types = (str, unicode)
+    from urlparse import urlparse
 
 
 def to_bytes(text):
