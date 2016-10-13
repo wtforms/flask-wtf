@@ -98,7 +98,9 @@ class CsrfProtect(object):
     def init_app(self, app):
         app.config.setdefault('WTF_CSRF_ENABLED', True)
         app.config.setdefault('WTF_CSRF_CHECK_DEFAULT', True)
-        app.config.setdefault('WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH'])
+        app.config['WTF_CSRF_METHODS'] = set(app.config.get(
+            'WTF_CSRF_METHODS', ['POST', 'PUT', 'PATCH', 'DELETE']
+        ))
         app.config.setdefault('WTF_CSRF_HEADERS', ['X-CSRFToken', 'X-CSRF-Token'])
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
 
@@ -125,14 +127,13 @@ class CsrfProtect(object):
             if not view:
                 return
 
-            if self._exempt_views or self._exempt_blueprints:
-                dest = '%s.%s' % (view.__module__, view.__name__)
+            if request.blueprint in self._exempt_blueprints:
+                return
 
-                if dest in self._exempt_views:
-                    return
+            dest = '%s.%s' % (view.__module__, view.__name__)
 
-                if request.blueprint in self._exempt_blueprints:
-                    return
+            if dest in self._exempt_views:
+                return
 
             self.protect()
 
