@@ -1,21 +1,13 @@
 from __future__ import with_statement
 
 import re
-from flask import Blueprint
-from flask import render_template
-from flask_wtf.csrf import CsrfProtect
-from flask_wtf.csrf import validate_csrf, generate_csrf
-from .base import TestCase, MyForm, to_unicode
+import warnings
 
-csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-z#A-Z-\.]*)"'
-)
+from flask import Blueprint, abort, render_template, request
+from flask_wtf._compat import FlaskWTFDeprecationWarning
+from flask_wtf.csrf import CsrfError, CsrfProtect, generate_csrf, validate_csrf
 
-
-def get_csrf_token(data):
-    match = csrf_token_input.search(to_unicode(data))
-    assert match
-    return match.groups()[0]
+from .base import MyForm, TestCase
 
 
 class TestCSRF(TestCase):
@@ -59,9 +51,9 @@ class TestCSRF(TestCase):
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.csrf.error_handler
-        def invalid(reason):
-            return reason
+        @self.app.errorhandler(CsrfError)
+        def handle_csrf_error(e):
+            return e, 200
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
@@ -86,8 +78,9 @@ class TestCSRF(TestCase):
         assert response.status_code == 400
 
     def test_valid_csrf(self):
-        response = self.client.get("/")
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/')
+            csrf_token = request.csrf_token
 
         response = self.client.post("/", data={
             "name": "danny",
@@ -96,8 +89,9 @@ class TestCSRF(TestCase):
         assert b'DANNY' in response.data
 
     def test_prefixed_csrf(self):
-        response = self.client.get('/')
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/')
+            csrf_token = request.csrf_token
 
         response = self.client.post('/', data={
             'prefix-name': 'David',
@@ -106,8 +100,9 @@ class TestCSRF(TestCase):
         assert response.status_code == 200
 
     def test_invalid_secure_csrf(self):
-        response = self.client.get("/", base_url='https://localhost/')
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/', base_url='https://localhost/')
+            csrf_token = request.csrf_token
 
         response = self.client.post(
             "/",
@@ -161,8 +156,10 @@ class TestCSRF(TestCase):
         assert b'not match' in response.data
 
     def test_valid_secure_csrf(self):
-        response = self.client.get("/", base_url='https://localhost/')
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/', base_url='https://localhost/')
+            csrf_token = request.csrf_token
+
         response = self.client.post(
             "/",
             data={"name": "danny"},
@@ -177,8 +174,9 @@ class TestCSRF(TestCase):
         assert response.status_code == 200
 
     def test_valid_csrf_method(self):
-        response = self.client.get("/")
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/')
+            csrf_token = request.csrf_token
 
         response = self.client.post("/csrf-protect-method", data={
             "csrf_token": csrf_token
@@ -189,17 +187,19 @@ class TestCSRF(TestCase):
         response = self.client.post("/csrf-protect-method", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.csrf.error_handler
-        def invalid(reason):
-            return reason
+        @self.app.errorhandler(CsrfError)
+        def handle_csrf_error(e):
+            return e, 200
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
         assert b'token missing' in response.data
 
     def test_empty_csrf_headers(self):
-        response = self.client.get("/", base_url='https://localhost/')
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/', base_url='https://localhost/')
+            csrf_token = request.csrf_token
+
         self.app.config['WTF_CSRF_HEADERS'] = list()
         response = self.client.post(
             "/",
@@ -215,8 +215,10 @@ class TestCSRF(TestCase):
         assert response.status_code == 400
 
     def test_custom_csrf_headers(self):
-        response = self.client.get("/", base_url='https://localhost/')
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/', base_url='https://localhost/')
+            csrf_token = request.csrf_token
+
         self.app.config['WTF_CSRF_HEADERS'] = ['X-XSRF-TOKEN']
         response = self.client.post(
             "/",
@@ -239,9 +241,10 @@ class TestCSRF(TestCase):
         self.app.testing = True
         self.client.post("/", data={"name": "danny"})
 
-    def test_csrf_exempt(self):
-        response = self.client.get("/csrf-exempt")
-        csrf_token = get_csrf_token(response.data)
+    def test_csrf_exempt_view_with_form(self):
+        with self.client:
+            self.client.get('/', base_url='https://localhost/')
+            csrf_token = request.csrf_token
 
         response = self.client.post("/csrf-exempt", data={
             "name": "danny",
@@ -257,7 +260,7 @@ class TestCSRF(TestCase):
 
     def test_validate_not_expiring_csrf(self):
         with self.app.test_request_context():
-            csrf_token = generate_csrf(time_limit=False)
+            csrf_token = generate_csrf()
             assert validate_csrf(csrf_token, time_limit=False)
 
     def test_csrf_token_helper(self):
@@ -265,8 +268,9 @@ class TestCSRF(TestCase):
         def withtoken():
             return render_template("csrf.html")
 
-        response = self.client.get('/token')
-        assert b'#' in response.data
+        with self.client:
+            response = self.client.get('/token')
+            assert re.search(br'token: ([0-9a-zA-Z\-._]+)', response.data)
 
     def test_csrf_blueprint(self):
         response = self.client.post('/bar/foo')
@@ -281,8 +285,9 @@ class TestCSRF(TestCase):
         def withtoken():
             return render_template("import_csrf.html")
 
-        response = self.client.get('/token')
-        assert b'#' in response.data
+        with self.client:
+            response = self.client.get('/token')
+            assert request.csrf_token in response.data.decode('utf8')
 
     def test_csrf_custom_token_key(self):
         with self.app.test_request_context():
@@ -296,16 +301,31 @@ class TestCSRF(TestCase):
             # However, the custom key can validate as well
             assert validate_csrf(custom_csrf_token, token_key='oauth_state')
 
-    def test_csrf_url_safe(self):
-        with self.app.test_request_context():
-            # Generate a normal and URL safe CSRF token
-            default_csrf_token = generate_csrf()
-            url_safe_csrf_token = generate_csrf(url_safe=True)
+    def test_old_error_handler(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', FlaskWTFDeprecationWarning)
 
-            # Verify they are not the same and the URL one is truly URL safe
-            assert default_csrf_token != url_safe_csrf_token
-            assert '#' not in url_safe_csrf_token
-            assert re.match(r'^[a-f0-9]+--[a-f0-9]+$', url_safe_csrf_token)
+            @self.csrf.error_handler
+            def handle_csrf_error(reason):
+                return 'caught csrf return'
 
-            # Verify we can validate our URL safe key
-            assert validate_csrf(url_safe_csrf_token, url_safe=True)
+            self.assertEqual(len(w), 1)
+            assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
+            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
+
+            rv = self.client.post('/', data={'name': 'david'})
+            assert b'caught csrf return' in rv.data
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', FlaskWTFDeprecationWarning)
+
+            @self.csrf.error_handler
+            def handle_csrf_error(reason):
+                abort(401, 'caught csrf abort')
+
+            self.assertEqual(len(w), 1)
+            assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
+            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
+
+            rv = self.client.post('/', data={'name': 'david'})
+            assert b'caught csrf abort' in rv.data

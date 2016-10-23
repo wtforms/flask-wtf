@@ -1,6 +1,36 @@
 Flask-WTF Changelog
 ===================
 
+Version 0.14
+------------
+
+In development
+
+- Use itsdangerous to sign CSRF tokens and check expiration instead of doing it
+  ourselves. (`#264`_)
+
+    - All tokens are URL safe, removing the ``url_safe`` parameter from
+      ``generate_csrf``. (`#206`_)
+    - All tokens store a timestamp, which is checked in ``validate_csrf``. The
+      ``time_limit`` parameter of ``generate_csrf`` is removed.
+
+- Remove the ``app`` attribute from ``CsrfProtect``, use ``current_app``.
+  (`#264`_)
+- ``CsrfProtect`` protects the ``DELETE`` method by default. (`#264`_)
+- The same CSRF token is generated for the lifetime of a request. It is exposed
+  as ``request.csrf_token`` for use during testing. (`#227`_, `#264`_)
+- ``CsrfProtect.error_handler`` is deprecated. (`#264`_)
+    - Handlers that return a response work in addition to those that raise an
+      error. The behavior was not clear in previous docs.
+    - (`#200`_, `#209`_, `#243`_, `#252`_)
+
+.. _`#200`: https://github.com/lepture/flask-wtf/issues/200
+.. _`#209`: https://github.com/lepture/flask-wtf/pull/209
+.. _`#227`: https://github.com/lepture/flask-wtf/issues/227
+.. _`#243`: https://github.com/lepture/flask-wtf/pull/243
+.. _`#252`: https://github.com/lepture/flask-wtf/pull/252
+.. _`#264`: https://github.com/lepture/flask-wtf/pull/264
+
 Version 0.13.1
 --------------
 
