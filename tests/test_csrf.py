@@ -6,7 +6,7 @@ import warnings
 from flask import Blueprint, render_template
 from flask import abort
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.csrf import CSRFError, CsrfProtect, generate_csrf, validate_csrf
+from flask_wtf.csrf import CsrfError, CsrfProtect, generate_csrf, validate_csrf
 
 from .base import MyForm, TestCase, to_unicode
 
@@ -60,7 +60,7 @@ class TestCSRF(TestCase):
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.app.errorhandler(CSRFError)
+        @self.app.errorhandler(CsrfError)
         def handle_csrf_error(e):
             return e, 200
 
@@ -190,7 +190,7 @@ class TestCSRF(TestCase):
         response = self.client.post("/csrf-protect-method", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.app.errorhandler(CSRFError)
+        @self.app.errorhandler(CsrfError)
         def handle_csrf_error(e):
             return e, 200
 
@@ -308,7 +308,7 @@ class TestCSRF(TestCase):
 
             self.assertEqual(len(w), 1)
             assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
-            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
+            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
 
             rv = self.client.post('/', data={'name': 'david'})
             assert b'caught csrf return' in rv.data
@@ -322,7 +322,7 @@ class TestCSRF(TestCase):
 
             self.assertEqual(len(w), 1)
             assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
-            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
+            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
 
             rv = self.client.post('/', data={'name': 'david'})
             assert b'caught csrf abort' in rv.data

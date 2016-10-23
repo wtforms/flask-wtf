@@ -207,7 +207,7 @@ class CsrfProtect(object):
         return view
 
     def _error_response(self, reason):
-        raise CSRFError(reason)
+        raise CsrfError(reason)
 
     def error_handler(self, view):
         """A decorator that set the error response handler.
@@ -223,18 +223,19 @@ class CsrfProtect(object):
 
         warnings.warn(FlaskWTFDeprecationWarning(
             '"@csrf.error_handler" is deprecated. Use the standard Flask error '
-            'system with "@app.errorhandler(CSRFError)" instead.'
+            'system with "@app.errorhandler(CsrfError)" instead.'
         ), stacklevel=2)
 
         @wraps(view)
         def handler(reason):
-            raise CSRFError(response=current_app.make_response(view(reason)))
+            response = current_app.make_response(view(reason))
+            raise CsrfError(response.get_data(as_text=True), response=response)
 
         self._error_response = handler
         return view
 
 
-class CSRFError(BadRequest):
+class CsrfError(BadRequest):
     description = 'CSRF token missing or incorrect.'
 
 
