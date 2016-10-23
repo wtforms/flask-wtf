@@ -1,18 +1,8 @@
 from __future__ import with_statement
 
-import re
+from flask import request
 
-from .base import TestCase, MyForm, to_unicode
-
-csrf_token_input = re.compile(
-    r'name="csrf_token" type="hidden" value="([0-9a-zA-Z\-._]*)"'
-)
-
-
-def get_csrf_token(data):
-    match = csrf_token_input.search(to_unicode(data))
-    assert match
-    return match.groups()[0]
+from .base import MyForm, TestCase, to_unicode
 
 
 class TestValidateOnSubmit(TestCase):
@@ -93,18 +83,20 @@ class TestCSRF(TestCase):
         assert response.status_code == 200
 
     def test_valid_csrf(self):
+        with self.client:
+            self.client.get('/')
+            csrf_token = request.csrf_token
 
-        response = self.client.get("/")
-        csrf_token = get_csrf_token(response.data)
-
-        response = self.client.post("/", data={"name": "danny",
-                                               "csrf_token": csrf_token})
+        response = self.client.post('/', data={
+            'name': 'danny',
+            'csrf_token': csrf_token
+        })
         assert b'DANNY' in response.data
 
     def test_double_csrf(self):
-
-        response = self.client.get("/")
-        csrf_token = get_csrf_token(response.data)
+        with self.client:
+            self.client.get('/')
+            csrf_token = request.csrf_token
 
         response = self.client.post("/two_forms/", data={
             "name": "danny",
@@ -114,6 +106,4 @@ class TestCSRF(TestCase):
 
     def test_valid_csrf_data(self):
         with self.app.test_request_context():
-            form = MyForm()
-            csrf_token = get_csrf_token(form.csrf_token())
-            assert form.validate_csrf_data(csrf_token)
+            assert MyForm().validate_csrf_data(request.csrf_token)
