@@ -34,9 +34,15 @@ def _get_secret_key(secret_key=None):
 
 
 def generate_csrf(secret_key=None, token_key='csrf_token'):
-    """Generate CSRF token code.
+    """Generate a CSRF token. The token is cached for a request, so multiple
+    calls to this function will generate the same token.
 
-    :param secret_key: A secret key for mixing in the token, default is ``Flask.secret_key``.
+    During testing, it might be useful to access the signed token in
+    ``request.csrf_token`` and the raw token in ``session['csrf_token']``.
+
+    :param secret_key: Used to securely sign the token. Default is
+        ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
+    :param token_key: key where token is stored in session for comparision.
     """
 
     if not hasattr(request, 'csrf_token'):
@@ -50,13 +56,15 @@ def generate_csrf(secret_key=None, token_key='csrf_token'):
 
 
 def validate_csrf(data, secret_key=None, time_limit=None, token_key='csrf_token'):
-    """Check if the given data is a valid CSRF token.
+    """Check if the given data is a valid CSRF token. This compares the given
+    signed token to the one stored in the session.
 
-    :param data: The csrf token value to be checked.
-    :param secret_key: A secret key for mixing in the token,
-                       default is Flask.secret_key.
-    :param time_limit: Check if the csrf token is expired.
-                       default is True.
+    :param data: The signed CSRF token to be checked.
+    :param secret_key: Used to securely sign the token. Default is
+        ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
+    :param time_limit: Number of seconds that the token is valid. Default is
+        ``WTF_CSRF_TIME_LIMIT`` or 3600 seconds (60 minutes).
+    :param token_key: key where token is stored in session for comparision.
     """
 
     if not data or token_key not in session:
@@ -76,22 +84,18 @@ def validate_csrf(data, secret_key=None, time_limit=None, token_key='csrf_token'
 
 
 class CsrfProtect(object):
-    """Enable csrf protect for Flask.
+    """Enable CSRF protection globally for a Flask app.
 
-    Register it with::
+    ::
 
         app = Flask(__name__)
-        CsrfProtect(app)
+        csrf = CsrfProtect(app)
 
-    And in the templates, add the token input::
+    Checks the ``csrf_token`` field sent with forms, or the ``X-CSRFToken``
+    header sent with JavaScript requests. Render the token in templates using
+    ``{{ csrf_token() }}``.
 
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-    If you need to send the token via AJAX, and there is no form::
-
-        <meta name="csrf_token" content="{{ csrf_token() }}" />
-
-    You can grab the csrf token with JavaScript, and send the token together.
+    See the :ref:`csrf` documentation.
     """
 
     def __init__(self, app=None):
@@ -115,7 +119,6 @@ class CsrfProtect(object):
 
         @app.before_request
         def _csrf_protect():
-            # many things come from django.middleware.csrf
             if not app.config['WTF_CSRF_ENABLED']:
                 return
 
@@ -181,16 +184,20 @@ class CsrfProtect(object):
         request.csrf_valid = True  # mark this request is csrf valid
 
     def exempt(self, view):
-        """A decorator that can exclude a view from csrf protection.
+        """Mark a view or blueprint to be excluded from CSRF protection.
 
-        Remember to put the decorator above the `route`::
+        ::
 
-            csrf = CsrfProtect(app)
-
-            @csrf.exempt
             @app.route('/some-view', methods=['POST'])
+            @csrf.exempt
             def some_view():
-                return
+                ...
+
+        ::
+
+            bp = Blueprint(...)
+            csrf.exempt(bp)
+
         """
 
         if isinstance(view, Blueprint):
@@ -209,20 +216,28 @@ class CsrfProtect(object):
         raise CsrfError(reason)
 
     def error_handler(self, view):
-        """A decorator that set the error response handler.
+        """Register a function that will generate the response for CSRF errors.
 
-        It accepts one parameter `reason`::
+        .. deprecated:: 0.14
+            Use the standard Flask error system with
+            ``@app.errorhandler(CsrfError)`` instead. This will be removed in
+            version 1.0.
+
+        The function will be passed one argument, ``reason``. By default it will
+        raise a :class:`~flask_wtf.csrf.CsrfError`. ::
 
             @csrf.error_handler
             def csrf_error(reason):
                 return render_template('error.html', reason=reason)
 
-        By default, it will return a 400 response.
+        Due to historical reasons, the function may either return a response
+        or raise an exception with :func:`flask.abort`.
         """
 
         warnings.warn(FlaskWTFDeprecationWarning(
             '"@csrf.error_handler" is deprecated. Use the standard Flask error '
-            'system with "@app.errorhandler(CsrfError)" instead.'
+            'system with "@app.errorhandler(CsrfError)" instead. This will be'
+            'removed in 1.0.'
         ), stacklevel=2)
 
         @wraps(view)
@@ -235,6 +250,13 @@ class CsrfProtect(object):
 
 
 class CsrfError(BadRequest):
+    """Raise if the client sends invalid CSRF data with the request.
+
+    Generates a 400 Bad Request response with the failure reason by default.
+    Customize the response by registering a handler with
+    :meth:`flask.Flask.errorhandler`.
+    """
+
     description = 'CSRF token missing or incorrect.'
 
 

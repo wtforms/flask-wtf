@@ -1,8 +1,6 @@
 Developer Interface
 ===================
 
-This part of the documentation covers all interfaces of Flask-WTF.
-
 Forms and Fields
 ----------------
 
@@ -34,6 +32,9 @@ CSRF Protection
 .. module:: flask_wtf.csrf
 
 .. autoclass:: CsrfProtect
+   :members:
+
+.. autoclass:: CsrfError
    :members:
 
 .. autofunction:: generate_csrf
