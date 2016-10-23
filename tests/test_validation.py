@@ -10,7 +10,6 @@ csrf_token_input = re.compile(
 
 
 def get_csrf_token(data):
-    print(data)
     match = csrf_token_input.search(to_unicode(data))
     assert match
     return match.groups()[0]

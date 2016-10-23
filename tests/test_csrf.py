@@ -2,8 +2,11 @@ from __future__ import with_statement
 
 import re
 
+import warnings
 from flask import Blueprint, render_template
-from flask_wtf.csrf import CsrfProtect, generate_csrf, validate_csrf
+from flask import abort
+from flask_wtf._compat import FlaskWTFDeprecationWarning
+from flask_wtf.csrf import CSRFError, CsrfProtect, generate_csrf, validate_csrf
 
 from .base import MyForm, TestCase, to_unicode
 
@@ -57,9 +60,9 @@ class TestCSRF(TestCase):
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.csrf.error_handler
-        def invalid(reason):
-            return reason
+        @self.app.errorhandler(CSRFError)
+        def handle_csrf_error(e):
+            return e, 200
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
@@ -187,9 +190,9 @@ class TestCSRF(TestCase):
         response = self.client.post("/csrf-protect-method", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.csrf.error_handler
-        def invalid(reason):
-            return reason
+        @self.app.errorhandler(CSRFError)
+        def handle_csrf_error(e):
+            return e, 200
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
@@ -294,3 +297,32 @@ class TestCSRF(TestCase):
 
             # However, the custom key can validate as well
             assert validate_csrf(custom_csrf_token, token_key='oauth_state')
+
+    def test_old_error_handler(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', FlaskWTFDeprecationWarning)
+
+            @self.csrf.error_handler
+            def handle_csrf_error(reason):
+                return 'caught csrf return'
+
+            self.assertEqual(len(w), 1)
+            assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
+            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
+
+            rv = self.client.post('/', data={'name': 'david'})
+            assert b'caught csrf return' in rv.data
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', FlaskWTFDeprecationWarning)
+
+            @self.csrf.error_handler
+            def handle_csrf_error(reason):
+                abort(401, 'caught csrf abort')
+
+            self.assertEqual(len(w), 1)
+            assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
+            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
+
+            rv = self.client.post('/', data={'name': 'david'})
+            assert b'caught csrf abort' in rv.data

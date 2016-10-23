@@ -1,10 +1,12 @@
 from __future__ import with_statement
 
-from flask import Flask, render_template, jsonify
-from wtforms import StringField, HiddenField, SubmitField
-from wtforms.validators import DataRequired
+from unittest import TestCase as _TestCase
+
+from flask import Flask, jsonify, render_template
 from flask_wtf import FlaskForm
 from flask_wtf._compat import text_type
+from wtforms import HiddenField, StringField, SubmitField
+from wtforms.validators import DataRequired
 
 
 def to_unicode(text):
@@ -37,7 +39,7 @@ class SimpleForm(FlaskForm):
     pass
 
 
-class TestCase(object):
+class TestCase(_TestCase):
     def setUp(self):
         self.app = self.create_app()
         self.client = self.app.test_client()
