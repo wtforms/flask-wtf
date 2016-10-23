@@ -45,14 +45,14 @@ def generate_csrf(secret_key=None, token_key='csrf_token'):
     :param token_key: key where token is stored in session for comparision.
     """
 
-    if not hasattr(request, 'csrf_token'):
+    if not getattr(request, token_key, None):
         if token_key not in session:
             session[token_key] = hashlib.sha1(os.urandom(64)).hexdigest()
 
         s = URLSafeTimedSerializer(_get_secret_key(secret_key), salt='wtf-csrf-token')
-        request.csrf_token = s.dumps(session[token_key])
+        setattr(request, token_key, s.dumps(session[token_key]))
 
-    return request.csrf_token
+    return getattr(request, token_key)
 
 
 def validate_csrf(data, secret_key=None, time_limit=None, token_key='csrf_token'):
