@@ -1,4 +1,4 @@
-from werkzeug import FileStorage
+from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
 from wtforms.validators import InputRequired, StopValidation
 
@@ -10,15 +10,12 @@ class FileField(_FileField):
     Provides a `has_file()` method to check if its data is a FileStorage
     instance with an actual file.
     """
+
     def has_file(self):
-        '''Return True iff self.data is a FileStorage with file data'''
-        if not isinstance(self.data, FileStorage):
-            return False
-        # filename == None => the field was present but no file was entered
-        # filename == '<fdopen>' is for a werkzeug hack:
-        #   large file uploads will get stored in a temporary file on disk and
-        #   show up as an extra FileStorage with name '<fdopen>'
-        return self.data.filename not in [None, '', '<fdopen>']
+        """Return True if self.data is a
+        :class:`~werkzeug.datastructures.FileStorage` object."""
+
+        return isinstance(self.data, FileStorage)
 
 
 class FileRequired(InputRequired):
