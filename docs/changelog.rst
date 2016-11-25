@@ -53,7 +53,7 @@ Released 2016/09/29
 - ``is_submitted`` is true for ``PATCH`` and ``DELETE`` in addition to ``POST`` and ``PUT``. (`#187`_)
 - ``generate_csrf`` takes a ``token_key`` parameter to specify the key stored in the session. (`#206`_)
 - ``generate_csrf`` takes a ``url_safe`` parameter to allow the token to be used in URLs. (`#206`_)
-- ``fom.data`` can be accessed multiple times without raising an exception. (`#248`_)
+- ``form.data`` can be accessed multiple times without raising an exception. (`#248`_)
 - File extension with multiple parts (``.tar.gz``) can be used in the ``FileAllowed`` validator. (`#201`_)
 
 .. _`#187`: https://github.com/lepture/flask-wtf/pull/187
