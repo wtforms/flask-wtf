@@ -151,6 +151,11 @@ class FlaskForm(SecureForm):
 
         return Markup(u'\n'.join(text_type(f) for f in hidden_fields(fields or self)))
 
+    def validate(self):
+        if not self.csrf_enabled:
+            return True
+        return Form.validate()
+
     def validate_on_submit(self):
         """Call :meth:`validate` only if the form is submitted.
         This is a shortcut for ``form.is_submitted() and form.validate()``.
