@@ -1,7 +1,8 @@
 from __future__ import with_statement
 
-from flask import request
+from flask import json, request
 
+from flask_wtf.csrf import generate_csrf
 from .base import MyForm, TestCase, to_unicode
 
 
@@ -21,22 +22,24 @@ class TestValidateOnSubmit(TestCase):
         response = self.client.post("/", data={"name": "danny"})
         assert b'DANNY' in response.data
 
+    def test_json_data(self):
+        self.app.config['WTF_CSRF_ENABLED'] = False
+        response = self.client.post(
+            '/', content_type='application/json',
+            data=json.dumps({'name': 'Flask-WTF'})
+        )
+        assert b'FLASK-WTF' in response.data
+
 
 class TestValidateWithoutSubmit(TestCase):
-
     def test_unsubmitted_valid(self):
         class obj:
-            name = "foo"
+            name = 'foo'
 
         with self.app.test_request_context():
-            assert MyForm(obj=obj, csrf_enabled=False).validate()
-            fake_session = {}
-            t = MyForm(csrf_context=fake_session).generate_csrf_token(
-                fake_session
-            )
-            assert MyForm(
-                obj=obj, csrf_token=t,
-                csrf_context=fake_session).validate()
+            assert MyForm(obj=obj, meta={'csrf': False}).validate()
+            t = generate_csrf()
+            assert MyForm(obj=obj, csrf_token=t).validate()
 
 
 class TestHiddenTag(TestCase):
@@ -60,7 +63,7 @@ class TestCSRF(TestCase):
 
         response = self.client.post("/", data={"name": "danny"})
         assert b'DANNY' not in response.data
-        assert b'CSRF token missing' in response.data
+        assert b'The CSRF token is missing.' in response.data
 
     def test_csrf_disabled(self):
 
@@ -103,7 +106,3 @@ class TestCSRF(TestCase):
             "csrf_token": csrf_token
         })
         assert response.data == b'OK'
-
-    def test_valid_csrf_data(self):
-        with self.app.test_request_context():
-            assert MyForm().validate_csrf_data(request.csrf_token)

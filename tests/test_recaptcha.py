@@ -1,10 +1,10 @@
 from __future__ import with_statement
 
-from .base import TestCase
-from flask import json
-from flask import Flask, render_template
+from flask import Flask, json, render_template
+
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
+from .base import TestCase
 
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
@@ -25,7 +25,7 @@ class TestRecaptcha(TestCase):
 
         @app.route("/", methods=("GET", "POST"))
         def index():
-            form = RecaptchaFrom(csrf_enabled=False)
+            form = RecaptchaFrom(meta={'csrf': False})
             if form.validate_on_submit():
                 return 'OK'
             return render_template("recaptcha.html", form=form)

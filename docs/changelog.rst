@@ -20,16 +20,33 @@ In development
 - The same CSRF token is generated for the lifetime of a request. It is exposed
   as ``request.csrf_token`` for use during testing. (`#227`_, `#264`_)
 - ``CsrfProtect.error_handler`` is deprecated. (`#264`_)
+
     - Handlers that return a response work in addition to those that raise an
       error. The behavior was not clear in previous docs.
     - (`#200`_, `#209`_, `#243`_, `#252`_)
 
+- Use ``Form.Meta`` instead of deprecated ``SecureForm`` for CSRF (and
+  everything else). (`#216`_, `#271`_)
+
+    - ``csrf_enabled`` parameter is still recognized but deprecated. All other
+      attributes and methods from ``SecureForm`` are removed. (`#271`_)
+
+- Provide ``WTF_CSRF_FIELD_NAME`` to configure the name of the CSRF token.
+  (`#271`_)
+- ``CsrfError`` is renamed to ``CSRFError``. (`#271`_)
+- ``validate_csrf`` raises ``wtforms.ValidationError`` with specifc messages
+  instead of returning ``True`` or ``False``. This breaks anything that was
+  calling the method directly. (`#239`_, `#271`_)
+
 .. _`#200`: https://github.com/lepture/flask-wtf/issues/200
 .. _`#209`: https://github.com/lepture/flask-wtf/pull/209
+.. _`#216`: https://github.com/lepture/flask-wtf/issues/216
 .. _`#227`: https://github.com/lepture/flask-wtf/issues/227
+.. _`#239`: https://github.com/lepture/flask-wtf/issues/239
 .. _`#243`: https://github.com/lepture/flask-wtf/pull/243
 .. _`#252`: https://github.com/lepture/flask-wtf/pull/252
 .. _`#264`: https://github.com/lepture/flask-wtf/pull/264
+.. _`#271`: https://github.com/lepture/flask-wtf/pull/271
 
 Version 0.13.1
 --------------

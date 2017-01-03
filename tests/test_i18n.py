@@ -5,7 +5,7 @@ from .base import TestCase, to_unicode
 
 class TestI18NCase(TestCase):
     def test_i18n_disabled(self):
-        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_CSRF_ENABLED'] = False
         response = self.client.post(
             "/",
             headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
@@ -22,7 +22,7 @@ class TestI18NCase(TestCase):
         def get_locale():
             return request.accept_languages.best_match(['en', 'zh'], 'en')
 
-        self.app.config['CSRF_ENABLED'] = False
+        self.app.config['WTF_CSRF_ENABLED'] = False
 
         response = self.client.post(
             "/",

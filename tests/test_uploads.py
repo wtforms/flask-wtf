@@ -170,7 +170,7 @@ class TestFileList(TestCase):
             assert len(request.files)  # the files have been added to the
                                        # request
 
-            f = BrokenForm(csrf_enabled=False)
+            f = BrokenForm(meta={'csrf': False})
 
             assert f.validate_on_submit()
             assert len(text_data) == len(f.text_fields)
