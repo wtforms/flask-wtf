@@ -34,7 +34,7 @@ CSRF Protection
 .. autoclass:: CsrfProtect
    :members:
 
-.. autoclass:: CsrfError
+.. autoclass:: CSRFError
    :members:
 
 .. autofunction:: generate_csrf

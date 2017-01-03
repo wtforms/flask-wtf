@@ -1,9 +1,11 @@
 import warnings
 from unittest import TestCase
-from flask_wtf import Form
-from flask_wtf._compat import FlaskWTFDeprecationWarning
+
 from wtforms.compat import with_metaclass
 from wtforms.form import FormMeta
+
+from flask_wtf import FlaskForm, Form
+from flask_wtf._compat import FlaskWTFDeprecationWarning
 
 
 class TestForm(TestCase):
@@ -28,3 +30,11 @@ class TestForm(TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter('error', FlaskWTFDeprecationWarning)
             self.assertRaises(FlaskWTFDeprecationWarning, __import__, 'flask_wtf.html5')
+
+    def test_deprecated_csrf_enabled(self):
+        class F(FlaskForm):
+            pass
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', FlaskWTFDeprecationWarning)
+            self.assertRaises(FlaskWTFDeprecationWarning, F, csrf_enabled=False)

@@ -4,9 +4,10 @@ import re
 import warnings
 
 from flask import Blueprint, abort, render_template, request
-from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.csrf import CsrfError, CsrfProtect, generate_csrf, validate_csrf
+from wtforms import ValidationError
 
+from flask_wtf._compat import FlaskWTFDeprecationWarning
+from flask_wtf.csrf import CSRFError, CsrfProtect, generate_csrf, validate_csrf
 from .base import MyForm, TestCase
 
 
@@ -51,13 +52,13 @@ class TestCSRF(TestCase):
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 400
 
-        @self.app.errorhandler(CsrfError)
+        @self.app.errorhandler(CSRFError)
         def handle_csrf_error(e):
             return e, 200
 
         response = self.client.post("/", data={"name": "danny"})
         assert response.status_code == 200
-        assert b'token missing' in response.data
+        assert b'The CSRF token is missing.' in response.data
 
     def test_invalid_csrf2(self):
         # tests with bad token
@@ -111,7 +112,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert b'failed' in response.data
+        assert b'The referrer header is missing.' in response.data
 
         response = self.client.post(
             "/",
@@ -125,7 +126,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert b'not match' in response.data
+        assert b'The referrer does not match the host.' in response.data
 
         response = self.client.post(
             "/",
@@ -139,7 +140,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert b'not match' in response.data
+        assert b'The referrer does not match the host.' in response.data
 
         response = self.client.post(
             "/",
@@ -153,7 +154,7 @@ class TestCSRF(TestCase):
             base_url='https://localhost/',
         )
         assert response.status_code == 400
-        assert b'not match' in response.data
+        assert b'The referrer does not match the host.' in response.data
 
     def test_valid_secure_csrf(self):
         with self.client:
@@ -182,18 +183,6 @@ class TestCSRF(TestCase):
             "csrf_token": csrf_token
         })
         assert response.status_code == 200
-
-    def test_invalid_csrf_method(self):
-        response = self.client.post("/csrf-protect-method", data={"name": "danny"})
-        assert response.status_code == 400
-
-        @self.app.errorhandler(CsrfError)
-        def handle_csrf_error(e):
-            return e, 200
-
-        response = self.client.post("/", data={"name": "danny"})
-        assert response.status_code == 200
-        assert b'token missing' in response.data
 
     def test_empty_csrf_headers(self):
         with self.client:
@@ -254,14 +243,14 @@ class TestCSRF(TestCase):
 
     def test_validate_csrf(self):
         with self.app.test_request_context():
-            assert not validate_csrf('ff##dd')
-            csrf_token = generate_csrf()
-            assert validate_csrf(csrf_token)
+            self.assertRaises(ValidationError, validate_csrf, None)
+            self.assertRaises(ValidationError, validate_csrf, 'invalid')
+            validate_csrf(generate_csrf())
 
     def test_validate_not_expiring_csrf(self):
         with self.app.test_request_context():
             csrf_token = generate_csrf()
-            assert validate_csrf(csrf_token, time_limit=False)
+            validate_csrf(csrf_token, time_limit=False)
 
     def test_csrf_token_helper(self):
         @self.app.route("/token")
@@ -296,10 +285,10 @@ class TestCSRF(TestCase):
             custom_csrf_token = generate_csrf(token_key='oauth_state')
 
             # Verify they are different due to using different session keys
-            assert default_csrf_token != custom_csrf_token
+            self.assertNotEqual(default_csrf_token, custom_csrf_token)
 
             # However, the custom key can validate as well
-            assert validate_csrf(custom_csrf_token, token_key='oauth_state')
+            validate_csrf(custom_csrf_token, token_key='oauth_state')
 
     def test_old_error_handler(self):
         with warnings.catch_warnings(record=True) as w:

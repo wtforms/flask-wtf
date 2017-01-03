@@ -77,7 +77,7 @@ For example, in jQuery you can configure all requests to send the token.
 Customize the error response
 ----------------------------
 
-When CSRF validation fails, it will raise a :class:`CsrfError`.
+When CSRF validation fails, it will raise a :class:`CSRFError`.
 By default this returns a response with the failure reason and a 400 code.
 You can customize the error response using Flask's
 :meth:`~flask.Flask.errorhandler`. ::

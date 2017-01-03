@@ -3,10 +3,11 @@ from __future__ import with_statement
 from unittest import TestCase as _TestCase
 
 from flask import Flask, jsonify, render_template
-from flask_wtf import FlaskForm
-from flask_wtf._compat import text_type
 from wtforms import HiddenField, StringField, SubmitField
 from wtforms.validators import DataRequired
+
+from flask_wtf import FlaskForm
+from flask_wtf._compat import text_type
 
 
 def to_unicode(text):
@@ -65,18 +66,18 @@ class TestCase(_TestCase):
         def simple():
             form = SimpleForm()
             form.validate()
-            assert form.csrf_enabled
+            assert form.meta.csrf
             assert not form.validate()
             return "OK"
 
         @app.route("/two_forms/", methods=("POST",))
         def two_forms():
             form = SimpleForm()
-            assert form.csrf_enabled
+            assert form.meta.csrf
             assert form.validate()
             assert form.validate()
             form2 = SimpleForm()
-            assert form2.csrf_enabled
+            assert form2.meta.csrf
             assert form2.validate()
             return "OK"
 

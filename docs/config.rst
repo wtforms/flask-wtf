@@ -1,47 +1,37 @@
 Configuration
 =============
 
-Here is the full table of all configurations.
-
-Forms and CSRF
---------------
-
-The full list of configuration for Flask-WTF. Usually, you don't need
-to configure any of them. It just works.
-
-======================= ==============================================
-WTF_CSRF_ENABLED        Disable/enable CSRF protection for forms.
-                        Default is True.
-WTF_CSRF_CHECK_DEFAULT  Enable CSRF checks for all views by default.
-                        Default is True.
-WTF_I18N_ENABLED        Disable/enable I18N support. This should work
-                        together with Flask-Babel. Default is True.
-WTF_CSRF_HEADERS        CSRF token HTTP headers checked. Default is
-                        **['X-CSRFToken', 'X-CSRF-Token']**
-WTF_CSRF_SECRET_KEY     A random string for generating CSRF token.
-                        Default is the same as SECRET_KEY.
-WTF_CSRF_TIME_LIMIT     CSRF token expiring time. Default is **3600**
-                        seconds. If set to ``None``, the CSRF token
-                        is then bound to the life-time of the session.
-WTF_CSRF_SSL_STRICT     Strictly protection on SSL. This will check
-                        the referrer, validate if it is from the same
-                        origin. Default is True.
-WTF_CSRF_METHODS        CSRF protection on these request methods.
-                        Default is **['POST', 'PUT', 'PATCH']**
-======================= ==============================================
-
+========================== =====================================================
+``WTF_CSRF_ENABLED``       Set to ``False`` to disable all CSRF protection.
+``WTF_CSRF_CHECK_DEFAULT`` When using the CSRF protection extension, this
+                           controls whether every view is protected by default.
+                           Default is ``True``.
+``WTF_CSRF_SECRET_KEY``    Random data for generating secure tokens. If this is
+                           not set then ``SECRET_KEY`` is used.
+``WTF_CSRF_METHODS``       HTTP methods to protect from CSRF. Default is
+                           ``{'POST', 'PUT', 'PATCH', 'DELETE'}``.
+``WTF_CSRF_FIELD_NAME``    Name of the form field and session key that holds the
+                           CSRF token.
+``WTF_CSRF_HEADERS``       HTTP headers to search for CSRF token when it is not
+                           provided in the form. Default is
+                           ``['X-CSRFToken', 'X-CSRF-Token']``.
+``WTF_CSRF_TIME_LIMIT``    Max age in seconds for CSRF tokens. Default is
+                           ``3600``. If set to ``None``, the CSRF token is valid
+                           for the life of the session.
+``WTF_CSRF_SSL_STRICT``    Whether to enforce the same origin policy by checking
+                           that the referrer matches the host. Only applies to
+                           HTTPS requests. Default is ``True``.
+``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support.
+========================== =====================================================
 
 Recaptcha
 ---------
 
-You have already learned these configuration at :ref:`recaptcha`.
-This table is only designed for a convience.
-
-======================= ==============================================
-RECAPTCHA_USE_SSL       Enable/disable recaptcha through ssl.
-                        Default is False.
-RECAPTCHA_PUBLIC_KEY    **required** A public key.
-RECAPTCHA_PRIVATE_KEY   **required** A private key.
-RECAPTCHA_OPTIONS       **optional** A dict of configuration options.
-                        https://www.google.com/recaptcha/admin/create
-======================= ==============================================
+========================= ==============================================
+``RECAPTCHA_USE_SSL``     Enable/disable recaptcha through SSL. Default is
+                          ``False``.
+``RECAPTCHA_PUBLIC_KEY``  **required** A public key.
+``RECAPTCHA_PRIVATE_KEY`` **required** A private key.
+                          https://www.google.com/recaptcha/admin/create
+``RECAPTCHA_OPTIONS``     **optional** A dict of configuration options.
+========================= ==============================================
