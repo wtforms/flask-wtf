@@ -1,0 +1,5 @@
+-e .
+flask-babel
+flask-uploads
+nose
+coverage

@@ -16,17 +16,11 @@ setup(
     description='Simple integration of Flask and WTForms.',
     long_description=readme,
     packages=find_packages(exclude=('tests',)),
-    test_suite='nose.collector',
     zip_safe=False,
     platforms='any',
     install_requires=[
         'Flask',
-        'Werkzeug',
         'WTForms',
-    ],
-    tests_require=[
-        'nose',
-        'Flask-Babel',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -43,6 +37,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',

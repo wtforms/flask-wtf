@@ -1,22 +1,24 @@
+sudo: false
 language: python
 
 python:
     - 2.6
     - 2.7
+    - pypy
     - 3.3
     - 3.4
     - 3.5
-    - pypy
+    - 3.6-dev
 
 install:
-    - pip install -r requirements.txt
+    - pip install -r test-requirements.txt
 
 script:
-    - nosetests
+    - nosetests tests
 
 after_success:
     - pip install coveralls
-    - coverage run --source=flask_wtf setup.py -q nosetests
+    - coverage run --source=flask_wtf -m nose tests
     - coveralls
 
 notifications:

@@ -1,5 +1,0 @@
--e .
-
-# for testing
-nose
-Flask-Babel

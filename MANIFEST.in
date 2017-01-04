@@ -1,4 +1,4 @@
-include AUTHORS LICENSE requirements.txt tox.ini
+include AUTHORS LICENSE test-requirements.txt tox.ini
 graft tests
 recursive-exclude tests *.pyc
 recursive-exclude tests *.pyo
