@@ -3,7 +3,7 @@ from __future__ import with_statement
 from flask import json, request
 
 from flask_wtf.csrf import generate_csrf
-from .base import MyForm, TestCase, to_unicode
+from .base import MyForm, TestCase, to_unicode, capture_logging
 
 
 class TestValidateOnSubmit(TestCase):
@@ -60,10 +60,15 @@ class TestCSRF(TestCase):
         assert snippet in to_unicode(response.data)
 
     def test_invalid_csrf(self):
+        from flask_wtf.csrf import logger
 
-        response = self.client.post("/", data={"name": "danny"})
+        with capture_logging(logger) as handler:
+            response = self.client.post("/", data={"name": "danny"})
+
         assert b'DANNY' not in response.data
         assert b'The CSRF token is missing.' in response.data
+        self.assertEqual(1, len(handler))
+        self.assertEqual('The CSRF token is missing.', handler[0].message)
 
     def test_csrf_disabled(self):
 
