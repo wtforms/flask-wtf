@@ -35,3 +35,10 @@ Recaptcha
                           https://www.google.com/recaptcha/admin/create
 ``RECAPTCHA_OPTIONS``     **optional** A dict of configuration options.
 ========================= ==============================================
+
+Logging
+-------
+
+CSRF errors are logged at the ``INFO`` level to the ``flask_wtf.csrf`` logger.
+You still need to configure logging in your application in order to see these
+messages.

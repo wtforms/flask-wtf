@@ -3,6 +3,7 @@ import os
 import warnings
 from functools import wraps
 
+import logging
 from flask import Blueprint, current_app, request, session
 from itsdangerous import BadData, SignatureExpired, URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
@@ -13,6 +14,7 @@ from wtforms.csrf.core import CSRF
 from ._compat import FlaskWTFDeprecationWarning, string_types, urlparse
 
 __all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
+logger = logging.getLogger(__name__)
 
 
 def generate_csrf(secret_key=None, token_key=None):
@@ -133,12 +135,16 @@ class _FlaskFormCSRF(CSRF):
         )
 
     def validate_csrf_token(self, form, field):
-        validate_csrf(
-            field.data,
-            self.meta.csrf_secret,
-            self.meta.csrf_time_limit,
-            self.meta.csrf_field_name
-        )
+        try:
+            validate_csrf(
+                field.data,
+                self.meta.csrf_secret,
+                self.meta.csrf_time_limit,
+                self.meta.csrf_field_name
+            )
+        except ValidationError as e:
+            logger.info(e.args[0])
+            raise
 
 
 class CsrfProtect(object):
@@ -238,6 +244,7 @@ class CsrfProtect(object):
         try:
             validate_csrf(self._get_csrf_token())
         except ValidationError as e:
+            logger.info(e.args[0])
             self._error_response(e.args[0])
 
         if request.is_secure and current_app.config['WTF_CSRF_SSL_STRICT']:

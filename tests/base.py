@@ -1,7 +1,9 @@
 from __future__ import with_statement
 
+from contextlib import contextmanager
 from unittest import TestCase as _TestCase
 
+import logging
 from flask import Flask, jsonify, render_template
 from wtforms import HiddenField, StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -38,6 +40,35 @@ class HiddenFieldsForm(FlaskForm):
 class SimpleForm(FlaskForm):
     SECRET_KEY = "a poorly kept secret."
     pass
+
+
+class CaptureHandler(logging.Handler):
+    def __init__(self):
+        self.records = []
+        logging.Handler.__init__(self, logging.DEBUG)
+
+    def emit(self, record):
+        self.records.append(record)
+
+    def __iter__(self):
+        return iter(self.records)
+
+    def __len__(self):
+        return len(self.records)
+
+    def __getitem__(self, item):
+        return self.records[item]
+
+
+@contextmanager
+def capture_logging(logger):
+    handler = CaptureHandler()
+
+    try:
+        logger.addHandler(handler)
+        yield handler
+    finally:
+        logger.removeHandler(handler)
 
 
 class TestCase(_TestCase):
