@@ -31,8 +31,10 @@ CSRF Protection
 
 .. module:: flask_wtf.csrf
 
-.. autoclass:: CsrfProtect
+.. autoclass:: CSRFProtect
    :members:
+
+.. autoclass:: CsrfProtect(...)
 
 .. autoclass:: CSRFError
    :members:

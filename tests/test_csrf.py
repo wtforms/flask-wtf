@@ -7,7 +7,7 @@ from flask import Blueprint, abort, render_template, request
 from wtforms import ValidationError
 
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.csrf import CSRFError, CsrfProtect, generate_csrf, validate_csrf
+from flask_wtf.csrf import CSRFError, CSRFProtect, generate_csrf, validate_csrf
 from .base import MyForm, TestCase
 
 
@@ -15,7 +15,7 @@ class TestCSRF(TestCase):
     def setUp(self):
         app = self.create_app()
         app.config['WTF_CSRF_SECRET_KEY'] = "a poorly kept secret."
-        csrf = CsrfProtect(app)
+        csrf = CSRFProtect(app)
         self.csrf = csrf
 
         @csrf.exempt

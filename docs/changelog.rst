@@ -33,12 +33,15 @@ In development
 
 - Provide ``WTF_CSRF_FIELD_NAME`` to configure the name of the CSRF token.
   (`#271`_)
-- ``CsrfError`` is renamed to ``CSRFError``. (`#271`_)
 - ``validate_csrf`` raises ``wtforms.ValidationError`` with specific messages
   instead of returning ``True`` or ``False``. This breaks anything that was
   calling the method directly. (`#239`_, `#271`_)
 
     - CSRF errors are logged as well as raised. (`#239`_)
+
+- ``CsrfProtect`` is renamed to ``CSRFProtect``. A deprecation warning is issued
+  when using the old name. ``CsrfError`` is renamed to ``CSRFError`` without
+  deprecation. (`#271`_)
 
 .. _`#200`: https://github.com/lepture/flask-wtf/issues/200
 .. _`#209`: https://github.com/lepture/flask-wtf/pull/209
