@@ -13,7 +13,7 @@ from wtforms.csrf.core import CSRF
 
 from ._compat import FlaskWTFDeprecationWarning, string_types, urlparse
 
-__all__ = ('generate_csrf', 'validate_csrf', 'CsrfProtect')
+__all__ = ('generate_csrf', 'validate_csrf', 'CSRFProtect')
 logger = logging.getLogger(__name__)
 
 
@@ -147,7 +147,7 @@ class _FlaskFormCSRF(CSRF):
             raise
 
 
-class CsrfProtect(object):
+class CSRFProtect(object):
     """Enable CSRF protection globally for a Flask app.
 
     ::
@@ -322,6 +322,20 @@ class CsrfProtect(object):
 
         self._error_response = handler
         return view
+
+
+class CsrfProtect(CSRFProtect):
+    """
+    .. deprecated:: 0.14
+        Renamed to :class:`~flask_wtf.csrf.CSRFProtect`.
+    """
+
+    def __init__(self, app=None):
+        warnings.warn(FlaskWTFDeprecationWarning(
+            '"flask_wtf.CsrfProtect" has been renamed to "CSRFProtect" '
+            'and will be removed in 1.0.'
+        ), stacklevel=2)
+        super(CsrfProtect, self).__init__(app=app)
 
 
 class CSRFError(BadRequest):

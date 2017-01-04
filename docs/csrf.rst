@@ -5,7 +5,7 @@
 CSRF Protection
 ===============
 
-Any view using :class:`flask_wtf.FlaskForm` to process the request is already
+Any view using :class:`~flask_wtf.FlaskForm` to process the request is already
 getting CSRF protection. If you have views that don't use ``FlaskForm`` or make
 AJAX requests, use the provided CSRF extension to protect those requests as
 well.
@@ -14,15 +14,15 @@ Setup
 -----
 
 To enable CSRF protection globally for a Flask app, register the
-:class:`CsrfProtect` extension. ::
+:class:`CSRFProtect` extension. ::
 
-    from flask_wtf.csrf import CsrfProtect
+    from flask_wtf.csrf import CSRFProtect
 
-    csrf = CsrfProtect(app)
+    csrf = CSRFProtect(app)
 
 Like other Flask extensions, you can apply it lazily::
 
-    csrf = CsrfProtect()
+    csrf = CSRFProtect()
 
     def create_app():
         app = Flask(__name__)
@@ -82,7 +82,7 @@ By default this returns a response with the failure reason and a 400 code.
 You can customize the error response using Flask's
 :meth:`~flask.Flask.errorhandler`. ::
 
-    from flask_wtf.csrf import CsrfError
+    from flask_wtf.csrf import CSRFError
 
     @app.errorhandler(CsrfError)
     def handle_csrf_error(e):
@@ -106,7 +106,7 @@ You can exclude all the views of a blueprint. ::
 
 You can disable CSRF protection in all views by default, by setting
 ``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
-``csrf.protect()`` only when you need. This also enables you to do some
+:meth:`~flask_wtf.csrf.CSRFProtect.protect` only when you need. This also enables you to do some
 pre-processing on the requests before checking for the CSRF token. ::
 
     @app.before_request
