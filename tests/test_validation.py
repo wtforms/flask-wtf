@@ -1,9 +1,9 @@
 from __future__ import with_statement
 
-from flask import json, request
+from flask import g, json
 
 from flask_wtf.csrf import generate_csrf
-from .base import MyForm, TestCase, to_unicode, capture_logging
+from .base import MyForm, TestCase, capture_logging, to_unicode
 
 
 class TestValidateOnSubmit(TestCase):
@@ -93,7 +93,7 @@ class TestCSRF(TestCase):
     def test_valid_csrf(self):
         with self.client:
             self.client.get('/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post('/', data={
             'name': 'danny',
@@ -104,7 +104,7 @@ class TestCSRF(TestCase):
     def test_double_csrf(self):
         with self.client:
             self.client.get('/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post("/two_forms/", data={
             "name": "danny",

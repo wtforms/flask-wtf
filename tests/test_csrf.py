@@ -4,6 +4,7 @@ import re
 import warnings
 
 from flask import Blueprint, abort, render_template, request
+from flask import g
 from wtforms import ValidationError
 
 from flask_wtf._compat import FlaskWTFDeprecationWarning
@@ -81,7 +82,7 @@ class TestCSRF(TestCase):
     def test_valid_csrf(self):
         with self.client:
             self.client.get('/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post("/", data={
             "name": "danny",
@@ -92,7 +93,7 @@ class TestCSRF(TestCase):
     def test_prefixed_csrf(self):
         with self.client:
             self.client.get('/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post('/', data={
             'prefix-name': 'David',
@@ -103,7 +104,7 @@ class TestCSRF(TestCase):
     def test_invalid_secure_csrf(self):
         with self.client:
             self.client.get('/', base_url='https://localhost/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post(
             "/",
@@ -159,7 +160,7 @@ class TestCSRF(TestCase):
     def test_valid_secure_csrf(self):
         with self.client:
             self.client.get('/', base_url='https://localhost/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post(
             "/",
@@ -177,7 +178,7 @@ class TestCSRF(TestCase):
     def test_valid_csrf_method(self):
         with self.client:
             self.client.get('/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post("/csrf-protect-method", data={
             "csrf_token": csrf_token
@@ -187,7 +188,7 @@ class TestCSRF(TestCase):
     def test_empty_csrf_headers(self):
         with self.client:
             self.client.get('/', base_url='https://localhost/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         self.app.config['WTF_CSRF_HEADERS'] = list()
         response = self.client.post(
@@ -206,7 +207,7 @@ class TestCSRF(TestCase):
     def test_custom_csrf_headers(self):
         with self.client:
             self.client.get('/', base_url='https://localhost/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         self.app.config['WTF_CSRF_HEADERS'] = ['X-XSRF-TOKEN']
         response = self.client.post(
@@ -233,7 +234,7 @@ class TestCSRF(TestCase):
     def test_csrf_exempt_view_with_form(self):
         with self.client:
             self.client.get('/', base_url='https://localhost/')
-            csrf_token = request.csrf_token
+            csrf_token = g.csrf_token
 
         response = self.client.post("/csrf-exempt", data={
             "name": "danny",
@@ -276,7 +277,7 @@ class TestCSRF(TestCase):
 
         with self.client:
             response = self.client.get('/token')
-            assert request.csrf_token in response.data.decode('utf8')
+            assert g.csrf_token in response.data.decode('utf8')
 
     def test_csrf_custom_token_key(self):
         with self.app.test_request_context():

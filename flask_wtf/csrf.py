@@ -1,10 +1,10 @@
 import hashlib
+import logging
 import os
 import warnings
 from functools import wraps
 
-import logging
-from flask import Blueprint, current_app, request, session
+from flask import Blueprint, current_app, g, request, session
 from itsdangerous import BadData, SignatureExpired, URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import safe_str_cmp
@@ -39,14 +39,14 @@ def generate_csrf(secret_key=None, token_key=None):
         message='A field name is required to use CSRF.'
     )
 
-    if not getattr(request, field_name, None):
+    if field_name not in g:
         if field_name not in session:
             session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
 
         s = URLSafeTimedSerializer(secret_key, salt='wtf-csrf-token')
-        setattr(request, field_name, s.dumps(session[field_name]))
+        setattr(g, field_name, s.dumps(session[field_name]))
 
-    return getattr(request, field_name)
+    return g.get(field_name)
 
 
 def validate_csrf(data, secret_key=None, time_limit=None, token_key=None):
@@ -135,6 +135,10 @@ class _FlaskFormCSRF(CSRF):
         )
 
     def validate_csrf_token(self, form, field):
+        if g.get('csrf_valid', False):
+            # already validated by CSRFProtect
+            return
+
         try:
             validate_csrf(
                 field.data,
@@ -256,7 +260,7 @@ class CSRFProtect(object):
             if not same_origin(request.referrer, good_referrer):
                 self._error_response('The referrer does not match the host.')
 
-        request.csrf_valid = True  # mark this request as csrf valid
+        request.csrf_valid = True  # mark this request as CSRF valid
 
     def exempt(self, view):
         """Mark a view or blueprint to be excluded from CSRF protection.
