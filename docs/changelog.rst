@@ -42,6 +42,8 @@ In development
 - ``CsrfProtect`` is renamed to ``CSRFProtect``. A deprecation warning is issued
   when using the old name. ``CsrfError`` is renamed to ``CSRFError`` without
   deprecation. (`#271`_)
+- ``FileField`` is deprecated because it no longer provides functionality over
+  the provided validators. Use ``wtforms.FileField`` directly.
 
 .. _`#200`: https://github.com/lepture/flask-wtf/issues/200
 .. _`#209`: https://github.com/lepture/flask-wtf/pull/209
