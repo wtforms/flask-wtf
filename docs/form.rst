@@ -30,27 +30,6 @@ File Uploads
 
 .. module:: flask_wtf.file
 
-Flask-WTF provides :class:`FileField` to handle file uploading.
-It automatically draws data from ``flask.request.files`` when the form
-is posted. The field's ``data`` attribute is an instance of
-:class:`~werkzeug.datastructures.FileStorage`. ::
-
-    from werkzeug.utils import secure_filename
-    from flask_wtf.file import FileField
-
-    class PhotoForm(FlaskForm):
-        photo = FileField('Your photo')
-
-    @app.route('/upload/', methods=('GET', 'POST'))
-    def upload():
-        form = PhotoForm()
-        if form.validate_on_submit():
-            filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save('uploads/' + filename)
-        else:
-            filename = None
-        return render_template('upload.html', form=form, filename=filename)
-
 Remember to set the ``enctype`` of the HTML form to
 ``multipart/form-data``, otherwise ``request.files`` will be empty.
 

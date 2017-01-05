@@ -2,7 +2,6 @@
 
 import os
 import sys
-import warnings
 from datetime import datetime
 
 from pkg_resources import get_distribution
@@ -340,5 +339,6 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'flask': ('http://flask.pocoo.org/docs/latest/', None),
     'werkzeug': ('http://werkzeug.pocoo.org/docs/latest/', None),
-    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None)
+    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None),
+    'flask_uploads': ('https://pythonhosted.org/Flask-Uploads', None),
 }
