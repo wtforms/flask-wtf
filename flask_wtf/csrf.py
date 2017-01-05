@@ -22,7 +22,7 @@ def generate_csrf(secret_key=None, token_key=None):
     calls to this function will generate the same token.
 
     During testing, it might be useful to access the signed token in
-    ``request.csrf_token`` and the raw token in ``session['csrf_token']``.
+    ``g.csrf_token`` and the raw token in ``session['csrf_token']``.
 
     :param secret_key: Used to securely sign the token. Default is
         ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
@@ -255,12 +255,12 @@ class CSRFProtect(object):
             if not request.referrer:
                 self._error_response('The referrer header is missing.')
 
-            good_referrer = 'https://%s/' % request.host
+            good_referrer = 'https://{0}/'.format(request.host)
 
             if not same_origin(request.referrer, good_referrer):
                 self._error_response('The referrer does not match the host.')
 
-        request.csrf_valid = True  # mark this request as CSRF valid
+        g.csrf_valid = True  # mark this request as CSRF valid
 
     def exempt(self, view):
         """Mark a view or blueprint to be excluded from CSRF protection.
