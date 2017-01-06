@@ -4,6 +4,7 @@ from flask import current_app, request
 from flask import session
 from jinja2 import Markup
 from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
+from werkzeug.utils import cached_property
 from wtforms import Form
 from wtforms.meta import DefaultMeta
 from wtforms.widgets import HiddenInput
@@ -33,14 +34,23 @@ class FlaskForm(Form):
         csrf_class = _FlaskFormCSRF
         csrf_context = session  # not used, provided for custom csrf_class
 
-        def __init__(self):
-            config = current_app.config.get
-            self.csrf = config('WTF_CSRF_ENABLED', True)
-            self.csrf_secret = config(
+        @cached_property
+        def csrf(self):
+            return current_app.config.get('WTF_CSRF_ENABLED', True)
+
+        @cached_property
+        def csrf_secret(self):
+            return current_app.config.get(
                 'WTF_CSRF_SECRET_KEY', current_app.secret_key
             )
-            self.csrf_field_name = config('WTF_CSRF_FIELD_NAME', 'csrf_token')
-            self.csrf_time_limit = config('WTF_CSRF_TIME_LIMIT', 3600)
+
+        @cached_property
+        def csrf_field_name(self):
+            return current_app.config.get('WTF_CSRF_FIELD_NAME', 'csrf_token')
+
+        @cached_property
+        def csrf_time_limit(self):
+            return current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
 
         def wrap_formdata(self, form, formdata):
             if formdata is _Auto:
