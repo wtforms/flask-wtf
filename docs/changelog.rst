@@ -4,7 +4,7 @@ Flask-WTF Changelog
 Version 0.14
 ------------
 
-In development
+Released 2017-01-06
 
 - Use itsdangerous to sign CSRF tokens and check expiration instead of doing it
   ourselves. (`#264`_)
@@ -43,7 +43,7 @@ In development
   when using the old name. ``CsrfError`` is renamed to ``CSRFError`` without
   deprecation. (`#271`_)
 - ``FileField`` is deprecated because it no longer provides functionality over
-  the provided validators. Use ``wtforms.FileField`` directly.
+  the provided validators. Use ``wtforms.FileField`` directly. (`#272`_)
 
 .. _`#200`: https://github.com/lepture/flask-wtf/issues/200
 .. _`#209`: https://github.com/lepture/flask-wtf/pull/209
@@ -54,6 +54,7 @@ In development
 .. _`#252`: https://github.com/lepture/flask-wtf/pull/252
 .. _`#264`: https://github.com/lepture/flask-wtf/pull/264
 .. _`#271`: https://github.com/lepture/flask-wtf/pull/271
+.. _`#272`: https://github.com/lepture/flask-wtf/pull/272
 
 Version 0.13.1
 --------------
