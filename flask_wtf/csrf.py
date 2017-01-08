@@ -299,11 +299,11 @@ class CSRFProtect(object):
 
         .. deprecated:: 0.14
             Use the standard Flask error system with
-            ``@app.errorhandler(CsrfError)`` instead. This will be removed in
+            ``@app.errorhandler(CSRFError)`` instead. This will be removed in
             version 1.0.
 
         The function will be passed one argument, ``reason``. By default it will
-        raise a :class:`~flask_wtf.csrf.CsrfError`. ::
+        raise a :class:`~flask_wtf.csrf.CSRFError`. ::
 
             @csrf.error_handler
             def csrf_error(reason):
@@ -315,7 +315,7 @@ class CSRFProtect(object):
 
         warnings.warn(FlaskWTFDeprecationWarning(
             '"@csrf.error_handler" is deprecated. Use the standard Flask error '
-            'system with "@app.errorhandler(CsrfError)" instead. This will be'
+            'system with "@app.errorhandler(CSRFError)" instead. This will be'
             'removed in 1.0.'
         ), stacklevel=2)
 
