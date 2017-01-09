@@ -16,4 +16,4 @@ from .csrf import CSRFProtect, CsrfProtect
 from .form import FlaskForm, Form
 from .recaptcha import *
 
-__version__ = '0.14'
+__version__ = '0.14.1'
