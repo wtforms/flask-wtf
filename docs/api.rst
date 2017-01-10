@@ -19,7 +19,8 @@ Forms and Fields
 
 .. module:: flask_wtf.file
 
-.. autoclass:: FileField(...)
+.. autoclass:: FileField
+    :members: has_file
 
 .. autoclass:: FileAllowed
 
