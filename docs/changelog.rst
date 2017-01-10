@@ -4,6 +4,8 @@ Flask-WTF Changelog
 Version 0.14.1
 --------------
 
+Released 2017-01-10
+
 - Fix bug where the file validators would incorrectly identify an empty file as
   valid data. (`#276`_, `#277`_)
 
