@@ -301,7 +301,7 @@ class TestCSRF(TestCase):
 
             self.assertEqual(len(w), 1)
             assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
-            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
+            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
 
             rv = self.client.post('/', data={'name': 'david'})
             assert b'caught csrf return' in rv.data
@@ -315,7 +315,7 @@ class TestCSRF(TestCase):
 
             self.assertEqual(len(w), 1)
             assert issubclass(w[0].category, FlaskWTFDeprecationWarning)
-            assert 'app.errorhandler(CsrfError)' in str(w[0].message)
+            assert 'app.errorhandler(CSRFError)' in str(w[0].message)
 
             rv = self.client.post('/', data={'name': 'david'})
             assert b'caught csrf abort' in rv.data

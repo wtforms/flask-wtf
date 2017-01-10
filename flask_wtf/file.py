@@ -1,34 +1,34 @@
 import warnings
-
 from collections import Iterable
+
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
 from wtforms.validators import DataRequired, StopValidation
 
-from flask_wtf._compat import FlaskWTFDeprecationWarning
+from ._compat import FlaskWTFDeprecationWarning
 
 
 class FileField(_FileField):
-    """
-    Werkzeug-aware subclass of **wtforms.FileField**
+    """Werkzeug-aware subclass of **wtforms.FileField**"""
 
-    .. deprecated:: 0.14
-        ``has_file`` was simplified and merged into the validators.
-        This subclass is no longer needed and will be removed in 1.0.
-    """
+    def process_formdata(self, valuelist):
+        valuelist = (x for x in valuelist if isinstance(x, FileStorage) and x)
+        data = next(valuelist, None)
 
-    def __new__(cls, *args, **kwargs):
-        warnings.warn(FlaskWTFDeprecationWarning(
-            'The "FileField" subclass is no longer necessary and will be '
-            'removed in 1.0. Use "wtforms.FileField" directly instead.'
-        ), stacklevel=2)
-        return super(FileField, cls).__new__(cls, *args, **kwargs)
+        if data is not None:
+            self.data = data
+        else:
+            self.raw_data = ()
 
     def has_file(self):
-        """Return True if self.data is a
+        """Return ``True`` if ``self.data`` is a
         :class:`~werkzeug.datastructures.FileStorage` object."""
 
-        return isinstance(self.data, FileStorage)
+        warnings.warn(FlaskWTFDeprecationWarning(
+            '"has_file" is deprecated and will be removed in 1.0. The data is '
+            'checked during processing instead.'
+        ))
+        return bool(self.data)
 
 
 class FileRequired(DataRequired):
@@ -41,7 +41,7 @@ class FileRequired(DataRequired):
     """
 
     def __call__(self, form, field):
-        if not isinstance(field.data, FileStorage):
+        if not (isinstance(field.data, FileStorage) and field.data):
             if self.message is None:
                 message = field.gettext('This field is required.')
             else:
@@ -68,7 +68,7 @@ class FileAllowed(object):
         self.message = message
 
     def __call__(self, form, field):
-        if not isinstance(field.data, FileStorage):
+        if not (isinstance(field.data, FileStorage) and field.data):
             return
 
         filename = field.data.filename.lower()
