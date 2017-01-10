@@ -1,6 +1,22 @@
 Flask-WTF Changelog
 ===================
 
+Version 0.14.1
+--------------
+
+- Fix bug where the file validators would incorrectly identify an empty file as
+  valid data. (`#276`_, `#277`_)
+
+    - ``FileField`` is no longer deprecated. The data is checked during
+      processing and only set if it's a valid file.
+    - ``has_file`` *is* deprecated; it's now equivalent to ``bool(field.data)``.
+    - ``FileRequired`` and ``FileAllowed`` work with both the Flask-WTF and
+      WTForms ``FileField`` classes.
+    - The ``Optional`` validator now works with ``FileField``.
+
+.. _#276: https://github.com/lepture/flask-wtf/issues/276
+.. _#277: https://github.com/lepture/flask-wtf/pull/277
+
 Version 0.14
 ------------
 
