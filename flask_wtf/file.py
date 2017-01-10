@@ -9,7 +9,7 @@ from ._compat import FlaskWTFDeprecationWarning
 
 
 class FileField(_FileField):
-    """Werkzeug-aware subclass of **wtforms.FileField**"""
+    """Werkzeug-aware subclass of :class:`wtforms.fields.FileField`."""
 
     def process_formdata(self, valuelist):
         valuelist = (x for x in valuelist if isinstance(x, FileStorage) and x)
@@ -22,7 +22,12 @@ class FileField(_FileField):
 
     def has_file(self):
         """Return ``True`` if ``self.data`` is a
-        :class:`~werkzeug.datastructures.FileStorage` object."""
+        :class:`~werkzeug.datastructures.FileStorage` object.
+
+        .. deprecated:: 0.14.1
+            ``data`` is no longer set if the input is not a non-empty
+            ``FileStorage``. Check ``form.data is not None`` instead.
+        """
 
         warnings.warn(FlaskWTFDeprecationWarning(
             '"has_file" is deprecated and will be removed in 1.0. The data is '

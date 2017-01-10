@@ -1,6 +1,16 @@
 Flask-WTF Changelog
 ===================
 
+Version 0.14.2
+--------------
+
+Released 2017-01-10
+
+- Fix bug where ``FlaskForm`` assumed ``meta`` argument was not ``None`` if it
+  was passed. (`#278`_)
+
+.. _#278: https://github.com/lepture/flask-wtf/issues/278
+
 Version 0.14.1
 --------------
 
