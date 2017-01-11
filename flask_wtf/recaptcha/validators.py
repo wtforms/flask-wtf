@@ -4,11 +4,13 @@ except ImportError:
     # Python 3
     from urllib import request as http
 
-from flask import request, current_app
-from wtforms import ValidationError
-from werkzeug import url_encode
-from .._compat import to_bytes, to_unicode
 import json
+
+from flask import current_app, request
+from werkzeug import url_encode
+from wtforms import ValidationError
+
+from .._compat import to_bytes, to_unicode
 
 RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
 RECAPTCHA_ERROR_CODES = {

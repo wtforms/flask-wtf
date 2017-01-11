@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from flask import current_app, Markup
-from flask import json
+from flask import Markup, current_app, json
 from werkzeug import url_encode
+
 JSONEncoder = json.JSONEncoder
 
 RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
-
 RECAPTCHA_TEMPLATE = u'''
 <script src='%s' async defer></script>
 <div class="g-recaptcha" %s></div>
 '''
 
-__all__ = ["RecaptchaWidget"]
+__all__ = ['RecaptchaWidget']
 
 
 class RecaptchaWidget(object):
@@ -37,6 +36,6 @@ class RecaptchaWidget(object):
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
-            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set")
+            raise RuntimeError('RECAPTCHA_PUBLIC_KEY config not set')
 
         return self.recaptcha_html(public_key)

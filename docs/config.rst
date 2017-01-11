@@ -32,7 +32,7 @@ Recaptcha
                           ``False``.
 ``RECAPTCHA_PUBLIC_KEY``  **required** A public key.
 ``RECAPTCHA_PRIVATE_KEY`` **required** A private key.
-                          https://www.google.com/recaptcha/admin/create
+                          https://www.google.com/recaptcha/admin
 ``RECAPTCHA_OPTIONS``     **optional** A dict of configuration options.
 ========================= ==============================================
 

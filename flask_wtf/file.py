@@ -47,12 +47,10 @@ class FileRequired(DataRequired):
 
     def __call__(self, form, field):
         if not (isinstance(field.data, FileStorage) and field.data):
-            if self.message is None:
-                message = field.gettext('This field is required.')
-            else:
-                message = self.message
+            raise StopValidation(self.message or field.gettext(
+                'This field is required.'
+            ))
 
-            raise StopValidation(message)
 
 file_required = FileRequired
 
@@ -90,5 +88,6 @@ class FileAllowed(object):
             raise StopValidation(self.message or field.gettext(
                 'File does not have an approved extension.'
             ))
+
 
 file_allowed = FileAllowed

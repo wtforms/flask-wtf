@@ -15,3 +15,5 @@ _build
 .tox
 *.egg
 .idea/
+htmlcov/
+.cache/

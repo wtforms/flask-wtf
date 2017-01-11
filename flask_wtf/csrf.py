@@ -118,7 +118,7 @@ def _get_config(
         value = current_app.config.get(config_name, default)
 
     if required and value is None:
-        raise KeyError(message)
+        raise RuntimeError(message)
 
     return value
 
@@ -205,15 +205,11 @@ class CSRFProtect(object):
             if not request.endpoint:
                 return
 
-            view = app.view_functions.get(request.endpoint)
-
-            if not view:
-                return
-
             if request.blueprint in self._exempt_blueprints:
                 return
 
-            dest = '%s.%s' % (view.__module__, view.__name__)
+            view = app.view_functions.get(request.endpoint)
+            dest = '{0}.{1}'.format(view.__module__, view.__name__)
 
             if dest in self._exempt_views:
                 return
@@ -221,11 +217,14 @@ class CSRFProtect(object):
             self.protect()
 
     def _get_csrf_token(self):
-        # find the ``csrf_token`` field in the subitted form
-        # if the form had a prefix, the name will be
-        # ``{prefix}-csrf_token``
+        # find the token in the form data
         field_name = current_app.config['WTF_CSRF_FIELD_NAME']
+        base_token = request.form.get(field_name)
 
+        if base_token:
+            return base_token
+
+        # if the form has a prefix, the name will be {prefix}-csrf_token
         for key in request.form:
             if key.endswith(field_name):
                 csrf_token = request.form[key]
@@ -233,6 +232,7 @@ class CSRFProtect(object):
                 if csrf_token:
                     return csrf_token
 
+        # find the token in the headers
         for header_name in current_app.config['WTF_CSRF_HEADERS']:
             csrf_token = request.headers.get(header_name)
 
@@ -286,7 +286,7 @@ class CSRFProtect(object):
         if isinstance(view, string_types):
             view_location = view
         else:
-            view_location = '%s.%s' % (view.__module__, view.__name__)
+            view_location = '.'.join((view.__module__, view.__name__))
 
         self._exempt_views.add(view_location)
         return view
@@ -302,8 +302,8 @@ class CSRFProtect(object):
             ``@app.errorhandler(CSRFError)`` instead. This will be removed in
             version 1.0.
 
-        The function will be passed one argument, ``reason``. By default it will
-        raise a :class:`~flask_wtf.csrf.CSRFError`. ::
+        The function will be passed one argument, ``reason``. By default it
+        will raise a :class:`~flask_wtf.csrf.CSRFError`. ::
 
             @csrf.error_handler
             def csrf_error(reason):
@@ -314,15 +314,15 @@ class CSRFProtect(object):
         """
 
         warnings.warn(FlaskWTFDeprecationWarning(
-            '"@csrf.error_handler" is deprecated. Use the standard Flask error '
-            'system with "@app.errorhandler(CSRFError)" instead. This will be'
-            'removed in 1.0.'
+            '"@csrf.error_handler" is deprecated. Use the standard Flask '
+            'error system with "@app.errorhandler(CSRFError)" instead. This '
+            'will be removed in 1.0.'
         ), stacklevel=2)
 
         @wraps(view)
         def handler(reason):
             response = current_app.make_response(view(reason))
-            raise CSRFError(response.get_data(as_text=True), response=response)
+            raise CSRFError(response=response)
 
         self._error_response = handler
         return view

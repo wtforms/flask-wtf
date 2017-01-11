@@ -1,7 +1,6 @@
 import warnings
 
-from flask import current_app, request
-from flask import session
+from flask import current_app, request, session
 from jinja2 import Markup
 from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
 from werkzeug.utils import cached_property

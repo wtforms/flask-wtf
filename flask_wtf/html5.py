@@ -1,7 +1,6 @@
-# coding: utf-8
-# flake8: noqa
 import warnings
-from flask_wtf._compat import FlaskWTFDeprecationWarning
+
+from ._compat import FlaskWTFDeprecationWarning
 
 warnings.warn(FlaskWTFDeprecationWarning(
     '"flask_wtf.html5" will be removed in 1.0.  '

@@ -8,18 +8,24 @@ python:
     - 3.3
     - 3.4
     - 3.5
-    - 3.6-dev
+    - 3.6
+env:
+    - TOXENV=py,coverage-report
+
+matrix:
+    include:
+        - python: 3.6
+          env: TOXENV=py-babelex,coverage-report
+        - python: 3.6
+          env: TOXENV=py-no-babel,coverage-report
+        - python: 3.6
+          env: TOXENV=docs-html
 
 install:
-    - pip install -r test-requirements.txt
+    - pip install tox
 
 script:
-    - nosetests tests
-
-after_success:
-    - pip install coveralls
-    - coverage run --source=flask_wtf -m nose tests
-    - coveralls
+    - tox
 
 notifications:
     email: false

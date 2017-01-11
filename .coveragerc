@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = flask_wtf
+
+[paths]
+source =
+    flask_wtf
+    .tox/*/lib/python*/site-packages/flask_wtf
+    .tox/pypy/site-packages/flask_wtf
