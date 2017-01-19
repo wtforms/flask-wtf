@@ -10,14 +10,14 @@ python:
     - 3.5
     - 3.6
 env:
-    - TOXENV=py,coverage-report
+    - TOXENV=py,codecov
 
 matrix:
     include:
         - python: 3.6
-          env: TOXENV=py-babelex,coverage-report
+          env: TOXENV=py-babelex,codecov
         - python: 3.6
-          env: TOXENV=py-no-babel,coverage-report
+          env: TOXENV=py-no-babel,codecov
         - python: 3.6
           env: TOXENV=docs-html
 

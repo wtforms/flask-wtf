@@ -82,14 +82,13 @@ def test_validate_on_submit(app, client):
 
 
 def test_no_validate_on_get(app, client):
-    @app.route('/', methods=['POST'])
+    @app.route('/', methods=['GET', 'POST'])
     def index():
         form = BasicForm()
         assert not form.validate_on_submit()
         assert 'name' not in form.errors
-        assert form.name.data == 'get'
 
-    client.get('/', data={'name': 'get'})
+    client.get('/')
 
 
 def test_hidden_tag(req_ctx):

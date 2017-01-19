@@ -1,14 +1,10 @@
 import pytest
-from flask import Flask as _Flask, Response, json
+from flask import Flask as _Flask
 
 
 class Flask(_Flask):
     testing = True
     secret_key = __name__
-
-    class response_class(Response):
-        def get_json(self):
-            return json.loads(self.data)
 
     def make_response(self, rv):
         if rv is None:
