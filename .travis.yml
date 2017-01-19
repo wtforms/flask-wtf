@@ -27,5 +27,8 @@ install:
 script:
     - tox
 
+cache:
+    - pip
+
 notifications:
     email: false
