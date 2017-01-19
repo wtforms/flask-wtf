@@ -114,7 +114,7 @@ todo_include_todos = False
 # a list of builtin themes.
 
 try:
-    __import__('flask_theme_support')
+    __import__('flask_sphinx_themes')
     html_theme = 'flask'
     html_theme_options = {
         'index_logo': 'flask-wtf.png',
@@ -122,12 +122,12 @@ try:
     }
 except ImportError:
     print('-' * 72)
-    print('Flask theme not found.  Run "git submodule update --init" to get it.')
+    print('Flask theme not found. Run "pip install flask-sphinx-themes" to get it.')
     print('-' * 72)
     html_theme = 'default'
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['_themes']
+# html_theme_path = ['_themes']
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
