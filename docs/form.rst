@@ -44,6 +44,7 @@ field. It will check that the file is a non-empty instance of
 
     @app.route('/upload', methods=['GET', 'POST'])
     def upload():
+        form = PhotoForm()
         if form.validate_on_submit():
             f = form.photo.data
             filename = secure_filename(f.filename)
