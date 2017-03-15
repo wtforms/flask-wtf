@@ -40,11 +40,18 @@ def generate_csrf(secret_key=None, token_key=None):
     )
 
     if field_name not in g:
+        s = URLSafeTimedSerializer(secret_key, salt='wtf-csrf-token')
+
         if field_name not in session:
             session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
 
-        s = URLSafeTimedSerializer(secret_key, salt='wtf-csrf-token')
-        setattr(g, field_name, s.dumps(session[field_name]))
+        try:
+            token = s.dumps(session[field_name])
+        except TypeError:
+            session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
+            token = s.dumps(session[field_name])
+
+        setattr(g, field_name, token)
 
     return g.get(field_name)
 
