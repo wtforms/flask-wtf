@@ -11,7 +11,7 @@ form with csrf protection. We encourage you do nothing.
 
 But if you want to disable the csrf protection, you can pass::
 
-    form = FlaskForm(meta={'csrf_enabled': False})
+    form = FlaskForm(meta={'csrf': False})
 
 You can disable it globally—though you really shouldn't—with the
 configuration::

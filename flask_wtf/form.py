@@ -79,7 +79,7 @@ class FlaskForm(Form):
         if csrf_enabled is not None:
             warnings.warn(FlaskWTFDeprecationWarning(
                 '"csrf_enabled" is deprecated and will be removed in 1.0. '
-                'Set "meta.csrf" instead.'
+                "Pass meta={'csrf': False} instead."
             ), stacklevel=3)
             kwargs['meta'] = kwargs.get('meta') or {}
             kwargs['meta'].setdefault('csrf', csrf_enabled)
