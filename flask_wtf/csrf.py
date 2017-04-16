@@ -190,7 +190,7 @@ class CSRFProtect(object):
         ))
         app.config.setdefault('WTF_CSRF_FIELD_NAME', 'csrf_token')
         app.config.setdefault(
-            'WTF_CSRF_HEADERS', ['X-CSRFToken', 'X-CSRF-Token']
+            'WTF_CSRF_HEADERS', ['X-CSRFToken', 'X-CSRF-Token', 'X-XSRF-Token', ]
         )
         app.config.setdefault('WTF_CSRF_TIME_LIMIT', 3600)
         app.config.setdefault('WTF_CSRF_SSL_STRICT', True)
