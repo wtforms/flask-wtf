@@ -72,8 +72,9 @@ class Recaptcha(object):
         if json_resp["success"]:
             return True
 
-        for error in json_resp.get("error-codes", []):
-            if error in RECAPTCHA_ERROR_CODES:
-                raise ValidationError(RECAPTCHA_ERROR_CODES[error])
+        if "error-codes" in json_resp:
+            for error in json_resp.get("error-codes", []):
+                if error in RECAPTCHA_ERROR_CODES:
+                    raise ValidationError(RECAPTCHA_ERROR_CODES[error])
 
         return False
