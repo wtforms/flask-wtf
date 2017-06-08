@@ -221,7 +221,7 @@ class CSRFProtect(object):
             if dest in self._exempt_views:
                 return
 
-            self.protect()
+            return self.protect()
 
     def _get_csrf_token(self):
         # find the token in the form data
