@@ -28,12 +28,14 @@ Recaptcha
 ---------
 
 ========================= ==============================================
-``RECAPTCHA_USE_SSL``     Enable/disable recaptcha through SSL. Default is
-                          ``False``.
 ``RECAPTCHA_PUBLIC_KEY``  **required** A public key.
 ``RECAPTCHA_PRIVATE_KEY`` **required** A private key.
                           https://www.google.com/recaptcha/admin
-``RECAPTCHA_OPTIONS``     **optional** A dict of configuration options.
+``RECAPTCHA_PARAMETERS``  **optional** A dict of configuration options.
+``RECAPTCHA_HTML``        **optional** Override default HTML template
+                          for Recaptcha.
+``RECAPTCHA_DATA_ATTRS``  **optional** A dict of ``data-`` attrs to use
+                          for Recaptcha div
 ========================= ==============================================
 
 Logging
