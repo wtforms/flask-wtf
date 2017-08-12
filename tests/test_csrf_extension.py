@@ -1,5 +1,5 @@
 import pytest
-from flask import Blueprint, abort, g, render_template_string, request
+from flask import Blueprint, abort, render_template_string, request
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
@@ -115,7 +115,7 @@ def test_same_origin(client):
 def test_form_csrf_short_circuit(app, client):
     @app.route('/skip', methods=['POST'])
     def skip():
-        assert g.get('csrf_valid')
+        assert request.csrf_valid
         # don't pass the token, then validate the form
         # this would fail if CSRFProtect didn't run
         form = FlaskForm(None)
