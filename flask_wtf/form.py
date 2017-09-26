@@ -17,7 +17,7 @@ except ImportError:
     translations = None  # babel not installed
 
 
-SUBMIT_METHODS = set(('POST', 'PUT', 'PATCH', 'DELETE'))
+SUBMIT_METHODS = {'POST', 'PUT', 'PATCH', 'DELETE'}
 _Auto = object()
 
 
