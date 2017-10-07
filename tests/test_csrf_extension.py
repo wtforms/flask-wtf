@@ -1,5 +1,5 @@
 import pytest
-from flask import Blueprint, abort, g, render_template_string, request
+from flask import Blueprint, abort, render_template_string, request
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
@@ -59,6 +59,27 @@ def test_protect(app, client, app_ctx):
     assert client.post('/', headers={'X-CSRF-Token': token}).status_code == 200
 
 
+def test_multiple_requests_to_same_app(app, client, app_ctx):
+    # Client starts off with no cookies
+    assert not client.cookie_jar
+    response = client.get('/')
+    # Now a session should be generated that csrf_token is stored in and the
+    # cookie sent.
+    assert client.cookie_jar
+    # Verify csrf_token from the session works
+    token = response.headers['X-CSRF-Token']
+    assert client.post('/', data={'csrf_token': token}).status_code == 200
+
+    # Second client but same app context, that is important.
+    client2 = app.test_client()
+    response = client2.get('/')
+    # Now a session should be generated that csrf_token is stored in and the
+    # cookie sent.
+    assert client2.cookie_jar
+    token = response.headers['X-CSRF-Token']
+    assert client2.post('/', data={'csrf_token': token}).status_code == 200
+
+
 def test_same_origin(client):
     token = client.get('/').headers['X-CSRF-Token']
     response = client.post('/', base_url='https://localhost', headers={
@@ -94,7 +115,7 @@ def test_same_origin(client):
 def test_form_csrf_short_circuit(app, client):
     @app.route('/skip', methods=['POST'])
     def skip():
-        assert g.get('csrf_valid')
+        assert request.csrf_valid
         # don't pass the token, then validate the form
         # this would fail if CSRFProtect didn't run
         form = FlaskForm(None)

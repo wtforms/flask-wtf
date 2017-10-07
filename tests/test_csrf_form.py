@@ -1,5 +1,5 @@
 import pytest
-from flask import g, session
+from flask import g, session, request
 from wtforms import ValidationError
 
 from flask_wtf import FlaskForm
@@ -23,13 +23,13 @@ def test_csrf_requires_secret_key(app, req_ctx):
 def test_token_stored_by_generate(req_ctx):
     generate_csrf()
     assert 'csrf_token' in session
-    assert 'csrf_token' in g
+    assert request.csrf_token
 
 
 def test_custom_token_key(req_ctx):
     generate_csrf(token_key='oauth_token')
     assert 'oauth_token' in session
-    assert 'oauth_token' in g
+    assert request.oauth_token
 
 
 def test_token_cached(req_ctx):
@@ -72,13 +72,15 @@ def test_form_csrf(app, client, app_ctx):
 
         return f.csrf_token.current_token
 
-    response = client.get('/')
-    assert response.get_data(as_text=True) == g.csrf_token
+    with client:
+        response = client.get('/')
+        csrf_token = response.get_data(as_text=True)
+        assert csrf_token == request.csrf_token
 
     response = client.post('/')
     assert response.get_data(as_text=True) == 'The CSRF token is missing.'
 
-    response = client.post('/', data={'csrf_token': g.csrf_token})
+    response = client.post('/', data={'csrf_token': csrf_token})
     assert response.get_data(as_text=True) == 'good'
 
 
