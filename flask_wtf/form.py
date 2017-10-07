@@ -70,7 +70,8 @@ class FlaskForm(Form):
         def get_translations(self, form):
             if not current_app.config.get('WTF_I18N_ENABLED', True):
                 return None
-
+            if current_app.config.get('FLASKWTF_USE_WTF_I18N', False):
+                return super().get_translations(form)
             return translations
 
     def __init__(self, formdata=_Auto, **kwargs):
