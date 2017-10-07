@@ -21,7 +21,7 @@ setup(
     install_requires=[
         'Flask',
         'WTForms',
-        'itsdangerous'
+        'itsdangerous',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
