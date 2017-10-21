@@ -1,10 +1,11 @@
 import pytest
+import os
 from werkzeug.datastructures import FileStorage, MultiDict
 from wtforms import FileField as BaseFileField
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.file import FileAllowed, FileField, FileRequired
+from flask_wtf.file import FileAllowed, FileField, FileRequired, FileMaxSize
 
 
 @pytest.fixture
@@ -75,6 +76,35 @@ def test_file_allowed_uploadset(app, form):
     f = form(file=FileStorage(filename='test.png'))
     assert not f.validate()
     assert f.file.errors[0] == 'File does not have an approved extension.'
+
+
+def test_file_max_size(form):
+    form.file.kwargs['validators'] = [FileMaxSize(180)]
+
+    test_file_small = open('small-file.test', "wb+")
+    test_file_small.write(b"\0")
+    test_file_small.seek(0)
+
+
+    test_file_big = open('big-file.test', "wb+")
+    test_file_big.seek(180 * 1024 + 1)
+    test_file_big.write(b"\0")
+    test_file_big.seek(0)
+
+
+    f = form()
+    assert f.validate()
+
+    f = form(file=FileStorage(stream=test_file_small))
+    assert f.validate()
+    test_file_small.close()
+    os.remove('small-file.test')
+
+    f = form(file=FileStorage(stream=test_file_big))
+    assert not f.validate()
+    assert f.file.errors[0] == 'File should be smaller than 180 Kb.'
+    test_file_big.close()
+    os.remove('big-file.test')
 
 
 def test_validate_base_field(req_ctx):
