@@ -15,6 +15,13 @@ class RecaptchaForm(FlaskForm):
     recaptcha = RecaptchaField()
 
 
+class RecaptchaNonceForm(FlaskForm):
+    class Meta:
+        csrf = False
+
+    recaptcha = RecaptchaField(nonce='foobar')
+
+
 @pytest.fixture
 def app(app):
     app.testing = False
@@ -51,6 +58,12 @@ def test_render_has_js():
     f = RecaptchaForm()
     render = f.recaptcha()
     assert 'https://www.google.com/recaptcha/api.js' in render
+
+
+def test_render_has_nonce():
+    f = RecaptchaNonceForm()
+    render = f.recaptcha()
+    assert 'nonce="foobar"' in render
 
 
 def test_render_custom_html(app):
