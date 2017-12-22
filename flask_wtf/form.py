@@ -68,6 +68,11 @@ class FlaskForm(Form):
             return formdata
 
         def get_translations(self, form):
+            locales = current_app.config.get('WTF_MESSAGE_LANGUAGE', None)
+            if locales is not None:
+                self.locales = locales
+                return super(FlaskForm.Meta, self).get_translations(form)
+
             if not current_app.config.get('WTF_I18N_ENABLED', True):
                 return None
 
