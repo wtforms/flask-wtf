@@ -22,14 +22,7 @@ Configuration
                            that the referrer matches the host. Only applies to
                            HTTPS requests. Default is ``True``.
 ``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support.
-``WTF_MESSAGE_LANGUAGE``   The default language for error messages. Default is 
-                           ``None`` (English). The values will be a list of 
-                           languages by priority to use, e.g: ``['es_ES', 'es']``.
-                           The full list of support locale can be found in here_.
-                           Set this will disabled i18n.
 ========================== =====================================================
-
-.. _here: https://github.com/wtforms/wtforms/tree/master/wtforms/locale
 
 Recaptcha
 ---------

@@ -147,9 +147,17 @@ def test_set_default_message_language(app, client):
 
     @app.route('/es', methods=['POST'])
     def es():
-        app.config['WTF_MESSAGE_LANGUAGE'] = ['es']
+        app.config['WTF_I18N_ENABLED'] = False
 
-        form = BasicForm()
+        class MyBaseForm(FlaskForm):
+            class Meta:
+                csrf = False
+                locales = ['es']
+
+        class NameForm(MyBaseForm):
+            name = StringField(validators=[DataRequired()])
+
+        form = NameForm()
         assert form.meta.locales == ['es']
         assert not form.validate_on_submit()
         assert 'Este campo es obligatorio.' in form.name.errors
