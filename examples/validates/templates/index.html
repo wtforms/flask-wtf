@@ -1,0 +1,24 @@
+<html>
+  <body>
+    <form method="POST" action="{{ url_for('index') }}">
+      {{ form.csrf_token }}
+      <p>
+        {{ form.title.label }}<br>
+        {{ form.title() }}
+        {% for error in form.title.errors %}
+          {{ error }}
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.text.label }}<br>
+        {{ form.text(rows=5, cols=40) }}
+        {% for error in form.text.errors %}
+          {{ error }}
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.submit() }}
+      </p>
+    </form>
+  </body>
+</html>
