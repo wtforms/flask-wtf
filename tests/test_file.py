@@ -4,7 +4,7 @@ from wtforms import FileField as BaseFileField
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.file import FileAllowed, FileField, FileRequired
+from flask_wtf.file import FileAllowed, FileField, FileRequired, FileMaxSize
 
 
 @pytest.fixture
@@ -41,6 +41,18 @@ def test_file_required(form):
 
     f = form(file=FileStorage(filename='real'))
     assert f.validate()
+
+
+def test_file_max_size(app, form):
+    form.file.kwargs['validators'] = [FileMaxSize(10)]
+    f = form()
+    assert f.validate()
+
+    f = form(file=FileStorage(open('samples/small.txt')))
+    assert f.validate()
+
+    f = form(file=FileStorage(open('samples/large.txt')))
+    assert not f.validate()
 
 
 def test_file_allowed(form):
