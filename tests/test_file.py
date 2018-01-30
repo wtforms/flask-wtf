@@ -1,3 +1,4 @@
+import os
 import pytest
 from werkzeug.datastructures import FileStorage, MultiDict
 from wtforms import FileField as BaseFileField
@@ -5,6 +6,8 @@ from wtforms import FileField as BaseFileField
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
 from flask_wtf.file import FileAllowed, FileField, FileRequired, FileMaxSize
+
+DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 @pytest.fixture
@@ -48,10 +51,10 @@ def test_file_max_size(app, form):
     f = form()
     assert f.validate()
 
-    f = form(file=FileStorage(open('samples/small.txt')))
+    f = form(file=FileStorage(open(os.path.join(DIR, 'samples/small.txt'))))
     assert f.validate()
 
-    f = form(file=FileStorage(open('samples/large.txt')))
+    f = form(file=FileStorage(open(os.path.join(DIR, 'samples/large.txt'))))
     assert not f.validate()
 
 
