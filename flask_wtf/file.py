@@ -1,5 +1,7 @@
+import os
 import warnings
 from collections import Iterable
+from io import UnsupportedOperation
 
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
@@ -91,3 +93,36 @@ class FileAllowed(object):
 
 
 file_allowed = FileAllowed
+
+
+class FileMaxSize:
+    """Validates that the uploaded file size is equal or below
+    a defined limit.
+
+    :param max_size: max allowed file size
+    :param message: error message
+
+    You can also use the synonym ``file_max_size``.
+    """
+
+    def __init__(self, max_size, message=None):
+        self.max_size = max_size
+        self.message = message
+
+    def __call__(self, form, field):
+        if field.data is None:
+            return
+
+        try:
+            size = os.fstat(field.data.stream.fileno()).st_size
+        except (UnsupportedOperation, AttributeError):
+            size = len(field.data.read())
+            field.data.seek(0)
+
+        if size > self.max_size:
+            raise StopValidation(self.message or field.gettext(
+                'File size is above limit of %d bytes.' % self.max_size
+            ))
+
+
+file_max_size = FileMaxSize
