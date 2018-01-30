@@ -110,12 +110,12 @@ class FileMaxSize:
         self.message = message
 
     def __call__(self, form, field):
-        if not field.data:
+        if field.data is None:
             return
 
         try:
             size = os.fstat(field.data.stream.fileno()).st_size
-        except UnsupportedOperation:
+        except (UnsupportedOperation, AttributeError):
             size = len(field.data.read())
             field.data.seek(0)
 

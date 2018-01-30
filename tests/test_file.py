@@ -1,5 +1,6 @@
 import os
 import pytest
+from werkzeug._compat import BytesIO
 from werkzeug.datastructures import FileStorage, MultiDict
 from wtforms import FileField as BaseFileField
 
@@ -55,6 +56,15 @@ def test_file_max_size(app, form):
     assert f.validate()
 
     f = form(file=FileStorage(open(os.path.join(DIR, 'samples/large.txt'))))
+    assert not f.validate()
+
+
+def test_file_max_size_unsupported_operand(app, form):
+    form.file.kwargs['validators'] = [FileMaxSize(10)]
+    f = form(file=FileStorage(BytesIO(b'AAA')))
+    assert f.validate()
+
+    f = form(file=FileStorage(BytesIO(b'AAAAAAAAAAAA')))
     assert not f.validate()
 
 
