@@ -114,7 +114,7 @@ class FileMaxSize:
             return
 
         try:
-            size = os.stat(field.data.stream.fileno()).st_size
+            size = os.fstat(field.data.stream.fileno()).st_size
         except UnsupportedOperation:
             size = len(field.data.read())
             field.data.seek(0)
