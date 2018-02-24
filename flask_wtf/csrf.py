@@ -164,7 +164,7 @@ class CSRFProtect(object):
     ::
 
         app = Flask(__name__)
-        csrf = CsrfProtect(app)
+        csrf = CSRFProtect(app)
 
     Checks the ``csrf_token`` field sent with forms, or the ``X-CSRFToken``
     header sent with JavaScript requests. Render the token in templates using
