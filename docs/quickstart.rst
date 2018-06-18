@@ -52,7 +52,7 @@ Validating Forms
 
 Validating the request in your view handlers::
 
-    @app.route('/submit', methods=('GET', 'POST'))
+    @app.route('/submit', methods=['GET', 'POST'])
     def submit():
         form = MyForm()
         if form.validate_on_submit():
