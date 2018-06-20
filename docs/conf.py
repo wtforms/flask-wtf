@@ -166,10 +166,10 @@ html_static_path = ['_static']
 #
 # html_last_updated_fmt = None
 
-# If true, SmartyPants will be used to convert quotes and dashes to
+# If true, Smart Quotes will be used to convert quotes and dashes to
 # typographically correct entities.
 #
-html_use_smartypants = False
+smartquotes = False
 
 # Custom sidebar templates, maps document names to template names.
 #
