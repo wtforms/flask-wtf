@@ -12,6 +12,9 @@ SECRET_KEY = 'secret'
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+# If the default server is blocked, you can switch to the mirror server
+# RECAPTCHA_VERIFY_SERVER = 'https://recaptcha.net/recaptcha/api/siteverify'
+# RECAPTCHA_SCRIPT = 'https://recaptcha.net/recaptcha/api.js'
 
 app = Flask(__name__)
 app.config.from_object(__name__)

@@ -5,7 +5,7 @@ from werkzeug import url_encode
 
 JSONEncoder = json.JSONEncoder
 
-RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
+DEFAULT_RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
 RECAPTCHA_TEMPLATE = u'''
 <script src='%s' async defer></script>
 <div class="g-recaptcha" %s></div>
@@ -21,7 +21,8 @@ class RecaptchaWidget(object):
         if html:
             return Markup(html)
         params = current_app.config.get('RECAPTCHA_PARAMETERS')
-        script = RECAPTCHA_SCRIPT
+        script = current_app.config.get('RECAPTCHA_SCRIPT',
+                                        DEFAULT_RECAPTCHA_SCRIPT)
         if params:
             script += u'?' + url_encode(params)
 

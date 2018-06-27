@@ -27,16 +27,20 @@ Configuration
 Recaptcha
 ---------
 
-========================= ==============================================
-``RECAPTCHA_PUBLIC_KEY``  **required** A public key.
-``RECAPTCHA_PRIVATE_KEY`` **required** A private key.
-                          https://www.google.com/recaptcha/admin
-``RECAPTCHA_PARAMETERS``  **optional** A dict of configuration options.
-``RECAPTCHA_HTML``        **optional** Override default HTML template
-                          for Recaptcha.
-``RECAPTCHA_DATA_ATTRS``  **optional** A dict of ``data-`` attrs to use
-                          for Recaptcha div
-========================= ==============================================
+============================ ==============================================
+``RECAPTCHA_PUBLIC_KEY``     **required** A public key.
+``RECAPTCHA_PRIVATE_KEY``    **required** A private key.
+                             https://www.google.com/recaptcha/admin
+``RECAPTCHA_PARAMETERS``     **optional** A dict of configuration options.
+``RECAPTCHA_HTML``           **optional** Override default HTML template
+                             for Recaptcha.
+``RECAPTCHA_VERIFY_SERVER``  **optional** Override default verify server
+                             address for Recaptcha.
+``RECAPTCHA_SCRIPT``         **optional** Override default recaptcha script
+                             address for Recaptcha.
+``RECAPTCHA_DATA_ATTRS``     **optional** A dict of ``data-`` attrs to use
+                             for Recaptcha div
+============================ ==============================================
 
 Logging
 -------

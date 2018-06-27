@@ -12,7 +12,7 @@ from wtforms import ValidationError
 
 from .._compat import to_bytes, to_unicode
 
-RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
+DEFAULT_RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
 RECAPTCHA_ERROR_CODES = {
     'missing-input-secret': 'The secret parameter is missing.',
     'invalid-input-secret': 'The secret parameter is invalid or malformed.',
@@ -62,7 +62,9 @@ class Recaptcha(object):
             'response':   response
         })
 
-        http_response = http.urlopen(RECAPTCHA_VERIFY_SERVER, to_bytes(data))
+        recaptcha_verify_server = current_app.config.get(
+            'RECAPTCHA_VERIFY_SERVER', DEFAULT_RECAPTCHA_VERIFY_SERVER)
+        http_response = http.urlopen(recaptcha_verify_server, to_bytes(data))
 
         if http_response.code != 200:
             return False
