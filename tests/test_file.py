@@ -85,12 +85,10 @@ def test_file_max_size(form):
     test_file_small.write(b"\0")
     test_file_small.seek(0)
 
-
     test_file_big = open('big-file.test', "wb+")
     test_file_big.seek(180 * 1024 + 1)
     test_file_big.write(b"\0")
     test_file_big.seek(0)
-
 
     f = form()
     assert f.validate()
