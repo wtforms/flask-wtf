@@ -100,7 +100,7 @@ def test_file_max_size(form):
 
     f = form(file=FileStorage(stream=test_file_big))
     assert not f.validate()
-    assert f.file.errors[0] == 'File should be smaller than 180 Kb.'
+    assert f.file.errors[0] == 'File must be smaller than 180 bytes.'
     test_file_big.close()
     os.remove('big-file.test')
 
