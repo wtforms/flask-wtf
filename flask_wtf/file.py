@@ -114,7 +114,9 @@ class FileMaxSize(object):
 
         if file_size > self.max_size:  # the file is too big => validation failure
             raise ValidationError(self.message or field.gettext(
-                'File should be smaller than ' + str(self.max_size) + '.'
+                'File must be smaller than {max_size}.'.format(
+                    max_size=self.max_size
+                )
             ))
 
 
