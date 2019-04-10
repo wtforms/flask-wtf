@@ -112,9 +112,7 @@ class FileMaxSize(object):
         file_size = len(field.data.read())
         field.data.seek(0)  # reset cursor position to beginning of file
 
-        if file_size <= self.max_size:
-            return
-        else:  # the file is too big => validation failure
+        if file_size > self.max_size:  # the file is too big => validation failure
             raise StopValidation(self.message or field.gettext(
                 'File should be smaller than ' + str(self.max_size) + '.'
             ))
