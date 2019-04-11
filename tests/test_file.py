@@ -78,30 +78,36 @@ def test_file_allowed_uploadset(app, form):
     assert f.file.errors[0] == 'File does not have an approved extension.'
 
 
-def test_file_max_size(form):
+def test_file_max_size_no_file_passes_validation(form):
     form.file.kwargs['validators'] = [FileMaxSize(180)]
-
-    test_file_small = open('small-file.test', "wb+")
-    test_file_small.write(b"\0")
-    test_file_small.seek(0)
-
-    test_file_big = open('big-file.test', "wb+")
-    test_file_big.seek(180 * 1024 + 1)
-    test_file_big.write(b"\0")
-    test_file_big.seek(0)
-
     f = form()
     assert f.validate()
 
-    f = form(file=FileStorage(stream=test_file_small))
+
+def test_file_max_size_small_file_passes_validation(form):
+    form.file.kwargs['validators'] = [FileMaxSize(180)]
+
+    test_file_smaller_than_max = open('small-file.test', "wb+")
+    test_file_smaller_than_max.write(b"\0")
+    test_file_smaller_than_max.seek(0)  # Reset file position
+
+    f = form(file=FileStorage(stream=test_file_smaller_than_max))
     assert f.validate()
-    test_file_small.close()
+    test_file_smaller_than_max.close()
     os.remove('small-file.test')
 
-    f = form(file=FileStorage(stream=test_file_big))
+
+def test_file_max_size_large_file_fails_validation(form):
+    form.file.kwargs['validators'] = [FileMaxSize(180)]
+    test_file_too_large = open('big-file.test', "wb+")
+    test_file_too_large.seek(180 + 1)  # Create a file larger than the maximum size
+    test_file_too_large.write(b"\0")
+    test_file_too_large.seek(0)  # Reset file position
+
+    f = form(file=FileStorage(stream=test_file_too_large))
     assert not f.validate()
     assert f.file.errors[0] == 'File must be smaller than 180 bytes.'
-    test_file_big.close()
+    test_file_too_large.close()
     os.remove('big-file.test')
 
 
