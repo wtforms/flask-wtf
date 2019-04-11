@@ -84,31 +84,25 @@ def test_file_max_size_no_file_passes_validation(form):
     assert f.validate()
 
 
-def test_file_max_size_small_file_passes_validation(form):
+def test_file_max_size_small_file_passes_validation(form, tmpdir):
     form.file.kwargs['validators'] = [FileMaxSize(180)]
 
-    test_file_smaller_than_max = open('small-file.test', "wb+")
+    test_file_smaller_than_max = tmpdir.join("test_file.txt")
     test_file_smaller_than_max.write(b"\0")
-    test_file_smaller_than_max.seek(0)  # Reset file position
 
-    f = form(file=FileStorage(stream=test_file_smaller_than_max))
+    f = form(file=FileStorage(open(test_file_smaller_than_max.strpath, 'rb')))
     assert f.validate()
-    test_file_smaller_than_max.close()
-    os.remove('small-file.test')
 
 
-def test_file_max_size_large_file_fails_validation(form):
+def test_file_max_size_large_file_fails_validation(form, tmpdir):
     form.file.kwargs['validators'] = [FileMaxSize(180)]
-    test_file_too_large = open('big-file.test', "wb+")
-    test_file_too_large.seek(180 + 1)  # Create a file larger than the maximum size
-    test_file_too_large.write(b"\0")
-    test_file_too_large.seek(0)  # Reset file position
+    test_file_too_large = tmpdir.join("test_file.txt")
+    test_file_too_large.write(b"\0" * (180 + 1))
 
-    f = form(file=FileStorage(stream=test_file_too_large))
+    f = form(file=FileStorage(open(test_file_too_large.strpath, 'rb')))
+
     assert not f.validate()
     assert f.file.errors[0] == 'File must be smaller than 180 bytes.'
-    test_file_too_large.close()
-    os.remove('big-file.test')
 
 
 def test_validate_base_field(req_ctx):
