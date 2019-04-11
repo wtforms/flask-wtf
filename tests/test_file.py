@@ -87,7 +87,7 @@ def test_file_max_size_no_file_passes_validation(form):
 def test_file_max_size_small_file_passes_validation(form, tmpdir):
     form.file.kwargs['validators'] = [FileMaxSize(180)]
 
-    test_file_smaller_than_max = tmpdir.join("test_file.txt")
+    test_file_smaller_than_max = tmpdir.join("test_file_smaller_than_max.txt")
     test_file_smaller_than_max.write(b"\0")
 
     f = form(file=FileStorage(open(test_file_smaller_than_max.strpath, 'rb')))
@@ -96,7 +96,7 @@ def test_file_max_size_small_file_passes_validation(form, tmpdir):
 
 def test_file_max_size_large_file_fails_validation(form, tmpdir):
     form.file.kwargs['validators'] = [FileMaxSize(180)]
-    test_file_too_large = tmpdir.join("test_file.txt")
+    test_file_too_large = tmpdir.join("test_file_too_large.txt")
     test_file_too_large.write(b"\0" * (180 + 1))
 
     f = form(file=FileStorage(open(test_file_too_large.strpath, 'rb')))
