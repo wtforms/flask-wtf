@@ -1,5 +1,4 @@
 import pytest
-import os
 from werkzeug.datastructures import FileStorage, MultiDict
 from wtforms import FileField as BaseFileField
 
