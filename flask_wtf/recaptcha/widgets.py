@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Markup, current_app, json
-from werkzeug import url_encode
+from werkzeug.urls import url_encode
 
 JSONEncoder = json.JSONEncoder
 

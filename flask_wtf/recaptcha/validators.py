@@ -7,7 +7,7 @@ except ImportError:
 import json
 
 from flask import current_app, request
-from werkzeug import url_encode
+from werkzeug.urls import url_encode
 from wtforms import ValidationError
 
 from .._compat import to_bytes, to_unicode
