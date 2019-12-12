@@ -53,6 +53,13 @@ def test_render_has_js():
     assert 'https://www.google.com/recaptcha/api.js' in render
 
 
+def test_render_has_js_recaptcha_net():
+    app.config['RECAPTCHA_USE_RECAPTCHA_NET'] = True
+    f = RecaptchaForm()
+    render = f.recaptcha()
+    assert 'https://www.recaptcha.net/recaptcha/api.js' in render
+
+
 def test_render_custom_html(app):
     app.config['RECAPTCHA_HTML'] = 'custom'
     f = RecaptchaForm()

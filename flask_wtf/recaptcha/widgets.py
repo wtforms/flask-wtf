@@ -5,7 +5,10 @@ from werkzeug.urls import url_encode
 
 JSONEncoder = json.JSONEncoder
 
-RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
+if app.config.get("RECAPTCHA_USE_RECAPTCHA_NET", False):
+    RECAPTCHA_SCRIPT = u'https://www.recaptcha.net/recaptcha/api.js'
+else:
+    RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js
 RECAPTCHA_TEMPLATE = u'''
 <script src='%s' async defer></script>
 <div class="g-recaptcha" %s></div>
