@@ -4,8 +4,8 @@ from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
 from wtforms.validators import DataRequired, StopValidation
 
+from ._compat import abc
 from ._compat import FlaskWTFDeprecationWarning
-from ._compat import Iterable
 
 
 class FileField(_FileField):
@@ -76,7 +76,7 @@ class FileAllowed(object):
 
         filename = field.data.filename.lower()
 
-        if isinstance(self.upload_set, Iterable):
+        if isinstance(self.upload_set, abc.Iterable):
             if any(filename.endswith('.' + x) for x in self.upload_set):
                 return
 
