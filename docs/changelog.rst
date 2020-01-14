@@ -1,6 +1,12 @@
 Flask-WTF Changelog
 ===================
 
+Unreleased
+----------
+
+- Drop support for Python 3.4.
+- Add support for Python 3.7 and 3.8.
+
 Version 0.14.2
 --------------
 

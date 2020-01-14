@@ -1,12 +1,12 @@
-sudo: false
 language: python
 
 python:
     - 2.7
     - pypy
-    - 3.4
     - 3.5
     - 3.6
+    - 3.7
+    - 3.8
 env:
     - TOXENV=py,codecov
 
