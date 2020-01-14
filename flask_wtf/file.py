@@ -1,5 +1,5 @@
 import warnings
-from collections import Iterable
+from collections.abc import Iterable
 
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
