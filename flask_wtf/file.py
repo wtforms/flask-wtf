@@ -5,11 +5,7 @@ from wtforms import FileField as _FileField
 from wtforms.validators import DataRequired, StopValidation
 
 from ._compat import FlaskWTFDeprecationWarning
-from ._compat import PY2
-if PY2:
-    from collections import Iterable
-else:
-    from collections.abc import Iterable
+from ._compat import Iterable
 
 
 class FileField(_FileField):
