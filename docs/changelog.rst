@@ -1,6 +1,14 @@
 Flask-WTF Changelog
 ===================
 
+Version 0.14.3
+--------------
+
+Released 2020-02-06
+
+-   Fix deprecated imports from ``werkzeug`` and ``collections``.
+
+
 Version 0.14.2
 --------------
 

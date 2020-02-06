@@ -4,7 +4,7 @@ Creating Forms
 Secure Form
 -----------
 
-.. module:: flask_wtf
+.. currentmodule:: flask_wtf
 
 Without any configuration, the :class:`FlaskForm` will be a session secure
 form with csrf protection. We encourage you do nothing.
@@ -28,7 +28,7 @@ another secret key, config it::
 File Uploads
 ------------
 
-.. module:: flask_wtf.file
+.. currentmodule:: flask_wtf.file
 
 The :class:`FileField` provided by Flask-WTF differs from the WTForms-provided
 field. It will check that the file is a non-empty instance of
@@ -112,7 +112,7 @@ It can be used without Flask-Uploads by passing the extensions directly. ::
 Recaptcha
 ---------
 
-.. module:: flask_wtf.recaptcha
+.. currentmodule:: flask_wtf.recaptcha
 
 Flask-WTF also provides Recaptcha support through a :class:`RecaptchaField`::
 
