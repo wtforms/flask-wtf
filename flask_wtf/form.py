@@ -12,7 +12,7 @@ from ._compat import FlaskWTFDeprecationWarning, string_types, text_type
 from .csrf import _FlaskFormCSRF
 
 try:
-    from .i18n import translations
+    from .i18n import translations, get_locale
 except ImportError:
     translations = None  # babel not installed
 
@@ -32,6 +32,13 @@ class FlaskForm(Form):
     class Meta(DefaultMeta):
         csrf_class = _FlaskFormCSRF
         csrf_context = session  # not used, provided for custom csrf_class
+
+        @property
+        def locales(self):
+            if not current_app.config.get('WTF_I18N_ENABLED', True):
+                return False
+            locale = get_locale()
+            return [locale.language]
 
         @cached_property
         def csrf(self):
