@@ -22,6 +22,7 @@ setup(
         'Flask',
         'WTForms',
         'itsdangerous',
+        'flask_babel',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
