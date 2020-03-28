@@ -26,7 +26,7 @@ def generate_csrf(secret_key=None, token_key=None):
 
     :param secret_key: Used to securely sign the token. Default is
         ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
-    :param token_key: Key where token is stored in session for comparision.
+    :param token_key: Key where token is stored in session for comparison.
         Default is ``WTF_CSRF_FIELD_NAME`` or ``'csrf_token'``.
     """
 
@@ -65,7 +65,7 @@ def validate_csrf(data, secret_key=None, time_limit=None, token_key=None):
         ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
     :param time_limit: Number of seconds that the token is valid. Default is
         ``WTF_CSRF_TIME_LIMIT`` or 3600 seconds (60 minutes).
-    :param token_key: Key where token is stored in session for comparision.
+    :param token_key: Key where token is stored in session for comparison.
         Default is ``WTF_CSRF_FIELD_NAME`` or ``'csrf_token'``.
 
     :raises ValidationError: Contains the reason that validation failed.
