@@ -132,7 +132,7 @@ RECAPTCHA_PRIVATE_KEY   **required** A private key.
 RECAPTCHA_API_SERVER    **optional** Specify your Recaptcha API server.
 RECAPTCHA_PARAMETERS    **optional** A dict of JavaScript (api.js) parameters.
 RECAPTCHA_DATA_ATTRS    **optional** A dict of data attributes options.
-                        https://developers.google.com/recaptcha/docs/display
+                        https://developers.google.com/recaptcha/docs/display#javascript_resource_apijs_parameters
 ======================= ==============================================
 
 Example of RECAPTCHA_PARAMETERS, and RECAPTCHA_DATA_ATTRS::
