@@ -1,7 +1,7 @@
 # coding=utf8
 import pytest
 from flask import request
-from wtforms import StringField
+from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired, Length
 
 from flask_wtf import FlaskForm
@@ -72,3 +72,30 @@ def test_outside_request():
     sp = 'Field must be at least %(min)d character long.'
     assert translations.ngettext(ss, sp, 1) == ss
     assert translations.ngettext(ss, sp, 2) == sp
+
+
+class NumberForm(FlaskForm):
+
+    number = DecimalField(use_locale=True)
+
+
+def test_decimal_field_localization(app):
+    try:
+        from flask_babel import Babel
+    except ImportError:
+        try:
+            from flask_babelex import Babel
+        except ImportError:
+            pytest.skip('Flask-Babel or Flask-BabelEx must be installed.')
+
+    Babel(app)
+
+    with app.test_request_context():
+        app.config['BABEL_DEFAULT_LOCALE'] = 'de'
+        form = NumberForm(number=1100.1)
+        assert form['number']._value() == '1.100,1'
+
+    with app.test_request_context():
+        app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+        form = NumberForm(number=1100.1)
+        assert form['number']._value() == '1,100.1'
