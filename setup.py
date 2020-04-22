@@ -20,7 +20,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'WTForms',
+        'WTForms==2.2.1',
         'itsdangerous',
     ],
     classifiers=[
