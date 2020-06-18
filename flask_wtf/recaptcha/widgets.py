@@ -8,7 +8,7 @@ JSONEncoder = json.JSONEncoder
 RECAPTCHA_SCRIPT = u'https://www.google.com/recaptcha/api.js'
 RECAPTCHA_TEMPLATE = u'''
 <script src='%s' async defer></script>
-<div class="g-recaptcha" %s></div>
+<div %s></div>
 '''
 
 __all__ = ['RecaptchaWidget']
@@ -16,7 +16,7 @@ __all__ = ['RecaptchaWidget']
 
 class RecaptchaWidget(object):
 
-    def recaptcha_html(self, public_key):
+    def recaptcha_html(self, public_key, **kwargs):
         html = current_app.config.get('RECAPTCHA_HTML')
         if html:
             return Markup(html)
@@ -27,7 +27,9 @@ class RecaptchaWidget(object):
 
         attrs = current_app.config.get('RECAPTCHA_DATA_ATTRS', {})
         attrs['sitekey'] = public_key
-        snippet = u' '.join([u'data-%s="%s"' % (k, attrs[k]) for k in attrs])
+        snippet_attrs = [u'%s="%s"' % (k, v) for k, v in kwargs.items()]
+        snippet_attrs += [u'data-%s="%s"' % (k, attrs[k]) for k in attrs]
+        snippet = u' '.join(snippet_attrs)
         return Markup(RECAPTCHA_TEMPLATE % (script, snippet))
 
     def __call__(self, field, error=None, **kwargs):
@@ -37,5 +39,8 @@ class RecaptchaWidget(object):
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:
             raise RuntimeError('RECAPTCHA_PUBLIC_KEY config not set')
-
-        return self.recaptcha_html(public_key)
+        defaults = (('id', field.id), ('class', 'g-recaptcha'))
+        for key, default_value in defaults:
+            if key not in kwargs:
+                kwargs[key] = default_value
+        return self.recaptcha_html(public_key, **kwargs)
