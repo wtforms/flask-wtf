@@ -6,10 +6,12 @@ PY2 = sys.version_info[0] == 2
 if not PY2:
     text_type = str
     string_types = (str,)
+    from collections import abc
     from urllib.parse import urlparse
 else:
     text_type = unicode
     string_types = (str, unicode)
+    import collections as abc
     from urlparse import urlparse
 
 

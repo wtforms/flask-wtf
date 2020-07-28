@@ -1,4 +1,4 @@
-.. module:: flask_wtf.csrf
+.. currentmodule:: flask_wtf.csrf
 
 .. _csrf:
 

@@ -133,3 +133,33 @@ def test_deprecated_csrf_enabled(req_ctx, recwarn):
     F(csrf_enabled=False)
     w = recwarn.pop(FlaskWTFDeprecationWarning)
     assert "meta={'csrf': False}" in str(w.message)
+
+
+def test_set_default_message_language(app, client):
+
+    @app.route('/default', methods=['POST'])
+    def default():
+        form = BasicForm()
+        assert not form.validate_on_submit()
+        assert 'This field is required.' in form.name.errors
+
+    client.post('/default', data={'name': '  '})
+
+    @app.route('/es', methods=['POST'])
+    def es():
+        app.config['WTF_I18N_ENABLED'] = False
+
+        class MyBaseForm(FlaskForm):
+            class Meta:
+                csrf = False
+                locales = ['es']
+
+        class NameForm(MyBaseForm):
+            name = StringField(validators=[DataRequired()])
+
+        form = NameForm()
+        assert form.meta.locales == ['es']
+        assert not form.validate_on_submit()
+        assert 'Este campo es obligatorio.' in form.name.errors
+
+    client.post('/es', data={'name': '  '})

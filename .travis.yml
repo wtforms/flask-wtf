@@ -1,14 +1,13 @@
-sudo: false
 language: python
 
 python:
-    - 2.6
     - 2.7
     - pypy
-    - 3.3
     - 3.4
     - 3.5
     - 3.6
+    - 3.7
+    - 3.8
 env:
     - TOXENV=py,codecov
 
@@ -18,7 +17,7 @@ matrix:
           env: TOXENV=py-babelex,codecov
         - python: 3.6
           env: TOXENV=py-no-babel,codecov
-        - python: 3.6
+        - python: 3.8
           env: TOXENV=docs-html
 
 install:
