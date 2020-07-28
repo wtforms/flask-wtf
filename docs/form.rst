@@ -7,7 +7,7 @@ Secure Form
 .. currentmodule:: flask_wtf
 
 Without any configuration, the :class:`FlaskForm` will be a session secure
-form with csrf protection. We encourage you do nothing.
+form with csrf protection. We encourage you not to change this.
 
 But if you want to disable the csrf protection, you can pass::
 
@@ -123,8 +123,7 @@ Flask-WTF also provides Recaptcha support through a :class:`RecaptchaField`::
         username = TextField('Username')
         recaptcha = RecaptchaField()
 
-This comes together with a number of configuration, which you have to
-implement them.
+This comes with a number of configuration variables, some of which you have to configure.
 
 ======================= ==============================================
 RECAPTCHA_PUBLIC_KEY    **required** A public key.
@@ -140,8 +139,8 @@ Example of RECAPTCHA_PARAMETERS, and RECAPTCHA_DATA_ATTRS::
     RECAPTCHA_PARAMETERS = {'hl': 'zh', 'render': 'explicit'}
     RECAPTCHA_DATA_ATTRS = {'theme': 'dark'}
 
-For testing your application, if ``app.testing`` is ``True``, recaptcha
-field will always be valid for you convenience.
+For your convenience, when testing your application, if ``app.testing`` is ``True``, the recaptcha
+field will always be valid.
 
 And it can be easily setup in the templates:
 

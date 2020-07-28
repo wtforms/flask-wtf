@@ -60,7 +60,7 @@ Validating the request in your view handlers::
         return render_template('submit.html', form=form)
 
 Note that you don't have to pass ``request.form`` to Flask-WTF; it will
-load automatically. And the convenience ``validate_on_submit`` will check
+load automatically. And the convenient ``validate_on_submit`` will check
 if it is a POST request and if it is valid.
 
 Heading over to :doc:`form` to learn more skills.
