@@ -63,4 +63,18 @@ Note that you don't have to pass ``request.form`` to Flask-WTF; it will
 load automatically. And the convenient ``validate_on_submit`` will check
 if it is a POST request and if it is valid.
 
+If your forms include validation, you'll need to add to your template to display
+any error messages.  Using the ``form.name`` field from the example above, that
+would look like this:
+
+.. sourcecode:: html+jinja
+
+    {% if form.name.errors %}
+        <ul class="errors">
+        {% for error in form.name %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
 Heading over to :doc:`form` to learn more skills.
