@@ -1,8 +1,4 @@
-try:
-    import urllib2 as http
-except ImportError:
-    # Python 3
-    from urllib import request as http
+from urllib import request as http
 
 import json
 

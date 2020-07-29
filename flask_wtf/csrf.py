@@ -2,6 +2,7 @@ import hashlib
 import logging
 import os
 import warnings
+from urllib.parse import urlparse
 from functools import wraps
 
 from flask import Blueprint, current_app, g, request, session
@@ -11,7 +12,7 @@ from werkzeug.security import safe_str_cmp
 from wtforms import ValidationError
 from wtforms.csrf.core import CSRF
 
-from ._compat import FlaskWTFDeprecationWarning, string_types, urlparse
+from ._compat import FlaskWTFDeprecationWarning
 
 __all__ = ('generate_csrf', 'validate_csrf', 'CSRFProtect')
 logger = logging.getLogger(__name__)
@@ -290,7 +291,7 @@ class CSRFProtect:
             self._exempt_blueprints.add(view.name)
             return view
 
-        if isinstance(view, string_types):
+        if isinstance(view, str):
             view_location = view
         else:
             view_location = '.'.join((view.__module__, view.__name__))

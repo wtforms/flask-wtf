@@ -8,7 +8,7 @@ from wtforms import Form
 from wtforms.meta import DefaultMeta
 from wtforms.widgets import HiddenInput
 
-from ._compat import FlaskWTFDeprecationWarning, string_types, text_type
+from ._compat import FlaskWTFDeprecationWarning
 from .csrf import _FlaskFormCSRF
 
 try:
@@ -122,7 +122,7 @@ class FlaskForm(Form):
 
         def hidden_fields(fields):
             for f in fields:
-                if isinstance(f, string_types):
+                if isinstance(f, str):
                     f = getattr(self, f, None)
 
                 if f is None or not isinstance(f.widget, HiddenInput):
@@ -131,7 +131,7 @@ class FlaskForm(Form):
                 yield f
 
         return Markup(
-            '\n'.join(text_type(f) for f in hidden_fields(fields or self))
+            '\n'.join(str(f) for f in hidden_fields(fields or self))
         )
 
 

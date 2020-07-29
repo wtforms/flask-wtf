@@ -4,7 +4,7 @@ from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
 from wtforms.validators import DataRequired, StopValidation
 
-from ._compat import abc
+from collections import abc
 from ._compat import FlaskWTFDeprecationWarning
 
 
