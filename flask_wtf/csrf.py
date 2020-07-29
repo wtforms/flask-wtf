@@ -133,7 +133,7 @@ def _get_config(
 class _FlaskFormCSRF(CSRF):
     def setup_form(self, form):
         self.meta = form.meta
-        return super(_FlaskFormCSRF, self).setup_form(form)
+        return super().setup_form(form)
 
     def generate_csrf_token(self, csrf_token_field):
         return generate_csrf(
@@ -158,7 +158,7 @@ class _FlaskFormCSRF(CSRF):
             raise
 
 
-class CSRFProtect(object):
+class CSRFProtect:
     """Enable CSRF protection globally for a Flask app.
 
     ::
@@ -216,7 +216,7 @@ class CSRFProtect(object):
                 return
 
             view = app.view_functions.get(request.endpoint)
-            dest = '{0}.{1}'.format(view.__module__, view.__name__)
+            dest = f'{view.__module__}.{view.__name__}'
 
             if dest in self._exempt_views:
                 return
@@ -262,7 +262,7 @@ class CSRFProtect(object):
             if not request.referrer:
                 self._error_response('The referrer header is missing.')
 
-            good_referrer = 'https://{0}/'.format(request.host)
+            good_referrer = f'https://{request.host}/'
 
             if not same_origin(request.referrer, good_referrer):
                 self._error_response('The referrer does not match the host.')
@@ -346,7 +346,7 @@ class CsrfProtect(CSRFProtect):
             '"flask_wtf.CsrfProtect" has been renamed to "CSRFProtect" '
             'and will be removed in 1.0.'
         ), stacklevel=2)
-        super(CsrfProtect, self).__init__(app=app)
+        super().__init__(app=app)
 
 
 class CSRFError(BadRequest):

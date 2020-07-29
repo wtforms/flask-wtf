@@ -33,7 +33,7 @@ def _get_translations():
     return translations
 
 
-class Translations(object):
+class Translations:
     def gettext(self, string):
         t = _get_translations()
         return string if t is None else t.ugettext(string)

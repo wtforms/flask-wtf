@@ -55,7 +55,7 @@ class FileRequired(DataRequired):
 file_required = FileRequired
 
 
-class FileAllowed(object):
+class FileAllowed:
     """Validates that the uploaded file is allowed by a given list of
     extensions or a Flask-Uploads :class:`~flaskext.uploads.UploadSet`.
 

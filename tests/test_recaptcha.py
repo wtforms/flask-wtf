@@ -77,7 +77,7 @@ def test_missing_response(app):
         assert f.recaptcha.errors[0] == 'The response parameter is missing.'
 
 
-class MockResponse(object):
+class MockResponse:
     def __init__(self, code, error='invalid-input-response', read_bytes=False):
         self.code = code
         self.data = json.dumps({
