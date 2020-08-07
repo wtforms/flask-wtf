@@ -7,11 +7,11 @@ from flask_babel import lazy_gettext as _
 
 
 class BabelForm(FlaskForm):
-    name = TextField(_('Name'), validators=[DataRequired()])
+    name = TextField(_("Name"), validators=[DataRequired()])
 
 
 DEBUG = True
-SECRET_KEY = 'secret'
+SECRET_KEY = "secret"
 WTF_I18N_ENABLED = True
 
 app = Flask(__name__)
@@ -32,7 +32,7 @@ def get_locale():
         return request.accept_languages.best_match(match, default)
     """
     # this is a demo case, we use url to get locale
-    code = request.args.get('lang', 'en')
+    code = request.args.get("lang", "en")
     return code
 
 

@@ -8,7 +8,7 @@ class Flask(_Flask):
 
     def make_response(self, rv):
         if rv is None:
-            rv = ''
+            rv = ""
 
         return super().make_response(rv)
 

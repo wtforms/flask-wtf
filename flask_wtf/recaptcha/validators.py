@@ -8,12 +8,12 @@ from wtforms import ValidationError
 
 from .._compat import to_bytes, to_unicode
 
-RECAPTCHA_VERIFY_SERVER = 'https://www.google.com/recaptcha/api/siteverify'
+RECAPTCHA_VERIFY_SERVER = "https://www.google.com/recaptcha/api/siteverify"
 RECAPTCHA_ERROR_CODES = {
-    'missing-input-secret': 'The secret parameter is missing.',
-    'invalid-input-secret': 'The secret parameter is invalid or malformed.',
-    'missing-input-response': 'The response parameter is missing.',
-    'invalid-input-response': 'The response parameter is invalid or malformed.'
+    "missing-input-secret": "The secret parameter is missing.",
+    "invalid-input-secret": "The secret parameter is invalid or malformed.",
+    "missing-input-response": "The response parameter is missing.",
+    "invalid-input-response": "The response parameter is invalid or malformed.",
 }
 
 
@@ -25,7 +25,7 @@ class Recaptcha:
 
     def __init__(self, message=None):
         if message is None:
-            message = RECAPTCHA_ERROR_CODES['missing-input-response']
+            message = RECAPTCHA_ERROR_CODES["missing-input-response"]
         self.message = message
 
     def __call__(self, form, field):
@@ -33,30 +33,28 @@ class Recaptcha:
             return True
 
         if request.json:
-            response = request.json.get('g-recaptcha-response', '')
+            response = request.json.get("g-recaptcha-response", "")
         else:
-            response = request.form.get('g-recaptcha-response', '')
+            response = request.form.get("g-recaptcha-response", "")
         remote_ip = request.remote_addr
 
         if not response:
             raise ValidationError(field.gettext(self.message))
 
         if not self._validate_recaptcha(response, remote_ip):
-            field.recaptcha_error = 'incorrect-captcha-sol'
+            field.recaptcha_error = "incorrect-captcha-sol"
             raise ValidationError(field.gettext(self.message))
 
     def _validate_recaptcha(self, response, remote_addr):
         """Performs the actual validation."""
         try:
-            private_key = current_app.config['RECAPTCHA_PRIVATE_KEY']
+            private_key = current_app.config["RECAPTCHA_PRIVATE_KEY"]
         except KeyError:
             raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set")
 
-        data = url_encode({
-            'secret':     private_key,
-            'remoteip':   remote_addr,
-            'response':   response
-        })
+        data = url_encode(
+            {"secret": private_key, "remoteip": remote_addr, "response": response}
+        )
 
         http_response = http.urlopen(RECAPTCHA_VERIFY_SERVER, to_bytes(data))
 

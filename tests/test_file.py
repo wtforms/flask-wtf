@@ -19,62 +19,62 @@ def form(req_ctx):
 
 
 def test_process_formdata(form):
-    assert form(MultiDict((('file', FileStorage()),))).file.data is None
-    assert form(
-        MultiDict((('file', FileStorage(filename='real')),))
-    ).file.data is not None
+    assert form(MultiDict((("file", FileStorage()),))).file.data is None
+    assert (
+        form(MultiDict((("file", FileStorage(filename="real")),))).file.data is not None
+    )
 
 
 def test_file_required(form):
-    form.file.kwargs['validators'] = [FileRequired()]
+    form.file.kwargs["validators"] = [FileRequired()]
 
     f = form()
     assert not f.validate()
-    assert f.file.errors[0] == 'This field is required.'
+    assert f.file.errors[0] == "This field is required."
 
-    f = form(file='not a file')
+    f = form(file="not a file")
     assert not f.validate()
-    assert f.file.errors[0] == 'This field is required.'
+    assert f.file.errors[0] == "This field is required."
 
     f = form(file=FileStorage())
     assert not f.validate()
 
-    f = form(file=FileStorage(filename='real'))
+    f = form(file=FileStorage(filename="real"))
     assert f.validate()
 
 
 def test_file_allowed(form):
-    form.file.kwargs['validators'] = [FileAllowed(('txt',))]
+    form.file.kwargs["validators"] = [FileAllowed(("txt",))]
 
     f = form()
     assert f.validate()
 
-    f = form(file=FileStorage(filename='test.txt'))
+    f = form(file=FileStorage(filename="test.txt"))
     assert f.validate()
 
-    f = form(file=FileStorage(filename='test.png'))
+    f = form(file=FileStorage(filename="test.png"))
     assert not f.validate()
-    assert f.file.errors[0] == 'File does not have an approved extension: txt'
+    assert f.file.errors[0] == "File does not have an approved extension: txt"
 
 
 def test_file_allowed_uploadset(app, form):
-    pytest.importorskip('flask_uploads')
+    pytest.importorskip("flask_uploads")
     from flask_uploads import UploadSet, configure_uploads
 
-    app.config['UPLOADS_DEFAULT_DEST'] = 'uploads'
-    txt = UploadSet('txt', extensions=('txt',))
+    app.config["UPLOADS_DEFAULT_DEST"] = "uploads"
+    txt = UploadSet("txt", extensions=("txt",))
     configure_uploads(app, (txt,))
-    form.file.kwargs['validators'] = [FileAllowed(txt)]
+    form.file.kwargs["validators"] = [FileAllowed(txt)]
 
     f = form()
     assert f.validate()
 
-    f = form(file=FileStorage(filename='test.txt'))
+    f = form(file=FileStorage(filename="test.txt"))
     assert f.validate()
 
-    f = form(file=FileStorage(filename='test.png'))
+    f = form(file=FileStorage(filename="test.png"))
     assert not f.validate()
-    assert f.file.errors[0] == 'File does not have an approved extension.'
+    assert f.file.errors[0] == "File does not have an approved extension."
 
 
 def test_validate_base_field(req_ctx):
@@ -86,10 +86,10 @@ def test_validate_base_field(req_ctx):
 
     assert not F().validate()
     assert not F(f=FileStorage()).validate()
-    assert F(f=FileStorage(filename='real')).validate()
+    assert F(f=FileStorage(filename="real")).validate()
 
 
 def test_deprecated_filefield(recwarn, form):
     assert not form().file.has_file()
     w = recwarn.pop(FlaskWTFDeprecationWarning)
-    assert 'has_file' in str(w.message)
+    assert "has_file" in str(w.message)
