@@ -1,4 +1,3 @@
-# coding=utf8
 import pytest
 from flask import request
 from wtforms import StringField
@@ -49,9 +48,9 @@ def test_i18n(app, client):
         if not app.config.get('WTF_I18N_ENABLED', True):
             assert form.name.errors[0] == 'This field is required.'
         elif not form.name.data:
-            assert form.name.errors[0] == u'该字段是必填字段。'
+            assert form.name.errors[0] == '该字段是必填字段。'
         else:
-            assert form.name.errors[0] == u'字段长度必须至少 8 个字符。'
+            assert form.name.errors[0] == '字段长度必须至少 8 个字符。'
 
     client.post('/', headers={'Accept-Language': 'zh-CN,zh;q=0.8'})
     client.post(

@@ -1,8 +1,4 @@
-try:
-    import urllib2 as http
-except ImportError:
-    # Python 3
-    from urllib import request as http
+from urllib import request as http
 
 import json
 
@@ -24,7 +20,7 @@ RECAPTCHA_ERROR_CODES = {
 __all__ = ["Recaptcha"]
 
 
-class Recaptcha(object):
+class Recaptcha:
     """Validates a ReCaptcha."""
 
     def __init__(self, message=None):

@@ -8,7 +8,7 @@ from wtforms import Form
 from wtforms.meta import DefaultMeta
 from wtforms.widgets import HiddenInput
 
-from ._compat import FlaskWTFDeprecationWarning, string_types, text_type
+from ._compat import FlaskWTFDeprecationWarning
 from .csrf import _FlaskFormCSRF
 
 try:
@@ -17,7 +17,7 @@ except ImportError:
     translations = None  # babel not installed
 
 
-SUBMIT_METHODS = set(('POST', 'PUT', 'PATCH', 'DELETE'))
+SUBMIT_METHODS = {'POST', 'PUT', 'PATCH', 'DELETE'}
 _Auto = object()
 
 
@@ -84,7 +84,7 @@ class FlaskForm(Form):
             kwargs['meta'] = kwargs.get('meta') or {}
             kwargs['meta'].setdefault('csrf', csrf_enabled)
 
-        super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+        super().__init__(formdata=formdata, **kwargs)
 
     def is_submitted(self):
         """Consider the form submitted if there is an active request and
@@ -122,7 +122,7 @@ class FlaskForm(Form):
 
         def hidden_fields(fields):
             for f in fields:
-                if isinstance(f, string_types):
+                if isinstance(f, str):
                     f = getattr(self, f, None)
 
                 if f is None or not isinstance(f.widget, HiddenInput):
@@ -131,7 +131,7 @@ class FlaskForm(Form):
                 yield f
 
         return Markup(
-            u'\n'.join(text_type(f) for f in hidden_fields(fields or self))
+            '\n'.join(str(f) for f in hidden_fields(fields or self))
         )
 
 
@@ -154,4 +154,4 @@ class Form(FlaskForm):
             '"flask_wtf.Form" has been renamed to "FlaskForm" '
             'and will be removed in 1.0.'
         ), stacklevel=3)
-        super(Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

@@ -14,4 +14,4 @@ class RecaptchaField(Field):
 
     def __init__(self, label='', validators=None, **kwargs):
         validators = validators or [Recaptcha()]
-        super(RecaptchaField, self).__init__(label, validators, **kwargs)
+        super().__init__(label, validators, **kwargs)

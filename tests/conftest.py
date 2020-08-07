@@ -10,7 +10,7 @@ class Flask(_Flask):
         if rv is None:
             rv = ''
 
-        return super(Flask, self).make_response(rv)
+        return super().make_response(rv)
 
 
 @pytest.fixture
