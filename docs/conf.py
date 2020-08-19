@@ -335,8 +335,8 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
-    'flask': ('http://flask.pocoo.org/docs/latest/', None),
-    'werkzeug': ('http://werkzeug.pocoo.org/docs/latest/', None),
-    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None),
+    'flask': ('https://flask.palletsprojects.com/en/1.1.x/', None),
+    'werkzeug': ('https://werkzeug.palletsprojects.com/en/1.0.x/', None),
+    'wtforms': ('https://wtforms.readthedocs.io/en/2.3.x/', None),
     'flask_uploads': ('https://pythonhosted.org/Flask-Uploads', None),
 }
