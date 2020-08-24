@@ -246,9 +246,7 @@ class CSRFProtect:
                 return
     
             view = current_app.view_functions.get(request.endpoint)
-            dest = f'{view.__module__}.{view.__name__}'
-    
-            if dest in self._exempt_views:
+            if view is not None and f'{view.__module__}.{view.__name__}' in self._exempt_views:
                 return
     
         if request.method not in current_app.config['WTF_CSRF_METHODS']:
