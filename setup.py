@@ -23,6 +23,7 @@ setup(
         'WTForms',
         'itsdangerous',
     ],
+    extras_require={'email': ['email-validator']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
