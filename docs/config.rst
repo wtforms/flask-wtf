@@ -33,16 +33,29 @@ Configuration
 Recaptcha
 ---------
 
-========================= ==============================================
-``RECAPTCHA_PUBLIC_KEY``  **required** A public key.
-``RECAPTCHA_PRIVATE_KEY`` **required** A private key.
-                          https://www.google.com/recaptcha/admin
-``RECAPTCHA_PARAMETERS``  **optional** A dict of configuration options.
-``RECAPTCHA_HTML``        **optional** Override default HTML template
-                          for Recaptcha.
-``RECAPTCHA_DATA_ATTRS``  **optional** A dict of ``data-`` attrs to use
-                          for Recaptcha div
-========================= ==============================================
+=========================== ==============================================
+``RECAPTCHA_PUBLIC_KEY``    **required** A public key.
+``RECAPTCHA_PRIVATE_KEY``   **required** A private key.
+                            https://www.google.com/recaptcha/admin
+``RECAPTCHA_PARAMETERS``    **optional** A dict of configuration options.
+``RECAPTCHA_HTML``          **optional** Override default HTML template
+                            for Recaptcha.
+``RECAPTCHA_DATA_ATTRS``    **optional** A dict of ``data-`` attrs to use
+                            for Recaptcha div
+``RECAPTCHA_SCRIPT``        **optional** Override the default captcha
+                            script URI in case an alternative service to
+                            reCAPtCHA, e.g. hCaptcha is used. Default is
+                            ``'https://www.google.com/recaptcha/api.js'``
+``RECAPTCHA_DIV_CLASS``     **optional** Override the default class of the
+                            captcha div in case an alternative captcha
+                            service is used. Default is
+                            ``'g-recaptcha'``
+``RECAPTCHA_VERIFY_SERVER`` **optional** Override the default verification
+                            server in case an alternative service is used.
+                            Default is
+                            ``'https://www.google.com/recaptcha/api/siteverify'``
+
+=========================== ==============================================
 
 Logging
 -------
