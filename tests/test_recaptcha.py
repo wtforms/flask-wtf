@@ -51,12 +51,28 @@ def test_render_has_js():
     assert "https://www.google.com/recaptcha/api.js" in render
 
 
+def test_render_has_custom_js(app):
+    captcha_script = "https://hcaptcha.com/1/api.js"
+    app.config["RECAPTCHA_SCRIPT"] = captcha_script
+    f = RecaptchaForm()
+    render = f.recaptcha()
+    assert captcha_script in render
+
+
 def test_render_custom_html(app):
     app.config["RECAPTCHA_HTML"] = "custom"
     f = RecaptchaForm()
     render = f.recaptcha()
     assert render == "custom"
     assert isinstance(render, Markup)
+
+
+def test_render_custom_div_class(app):
+    div_class = "h-captcha"
+    app.config["RECAPTCHA_DIV_CLASS"] = div_class
+    f = RecaptchaForm()
+    render = f.recaptcha()
+    assert div_class in render
 
 
 def test_render_custom_args(app):
@@ -130,6 +146,20 @@ def test_request_success(monkeypatch):
         return MockResponse(200, "")
 
     monkeypatch.setattr(http, "urlopen", mock_urlopen)
+    f = RecaptchaForm()
+    f.validate()
+    assert not f.recaptcha.errors
+
+
+def test_request_custom_verify_server(app, monkeypatch):
+    verify_server = "https://hcaptcha.com/siteverify"
+
+    def mock_urlopen(url, data):
+        assert url == verify_server
+        return MockResponse(200, "")
+
+    monkeypatch.setattr(http, "urlopen", mock_urlopen)
+    app.config["RECAPTCHA_VERIFY_SERVER"] = verify_server
     f = RecaptchaForm()
     f.validate()
     assert not f.recaptcha.errors
