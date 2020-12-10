@@ -5,7 +5,10 @@ Unreleased
 ----------
 
 - Stopped support for python<3.6 (`#416`_)
+- ``FileSize`` validator (`#307`_, `#365`_)
 
+.. _#307: https://github.com/lepture/flask-wtf/pull/307
+.. _#365: https://github.com/lepture/flask-wtf/pull/365
 .. _#416: https://github.com/lepture/flask-wtf/pull/416
 
 Version 0.14.3
