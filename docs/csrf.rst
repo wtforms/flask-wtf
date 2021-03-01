@@ -54,8 +54,8 @@ token in the form.
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
 
-JavaScript AJAX Requests
-------------------------
+JavaScript Requests
+-------------------
 
 When sending an AJAX request, add the ``X-CSRFToken`` header to it.
 For example, in jQuery you can configure all requests to send the token.
@@ -74,24 +74,13 @@ For example, in jQuery you can configure all requests to send the token.
         });
     </script>
 
-
-JavaScript Axios Requests
-------------------------
-
-When sending an Axios request, add the ``X-CSRFToken`` header to it.
-For example, in Axios you can configure all requests to send the token.
+In Axios you can set the header for all requests with ``axios.defaults.headers.common``.
 
 .. sourcecode:: html+jinja
 
     <script type="text/javascript">
-        
-        axios.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token() }}';
-        
+        axios.defaults.headers.common['X-CSRFToken'] = "{{ csrf_token() }}";
     </script>
-
-For more details look to `this stack overflow answer 
-<https://stackoverflow.com/a/45581882/7838574>`_.
-    
 
 Customize the error response
 ----------------------------
