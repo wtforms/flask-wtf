@@ -79,7 +79,7 @@ In Axios you can set the header for all requests with ``axios.defaults.headers.c
 .. sourcecode:: html+jinja
 
     <script type="text/javascript">
-        axios.defaults.headers.common['X-CSRFToken'] = "{{ csrf_token() }}";
+        axios.defaults.headers.common["X-CSRFToken"] = "{{ csrf_token() }}";
     </script>
 
 Customize the error response
