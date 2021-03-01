@@ -74,6 +74,14 @@ For example, in jQuery you can configure all requests to send the token.
         });
     </script>
 
+In Axios you can set the header for all requests with ``axios.defaults.headers.common``.
+
+.. sourcecode:: html+jinja
+
+    <script type="text/javascript">
+        axios.defaults.headers.common["X-CSRFToken"] = "{{ csrf_token() }}";
+    </script>
+
 Customize the error response
 ----------------------------
 
