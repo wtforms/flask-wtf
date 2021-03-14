@@ -22,8 +22,8 @@ setup(
         'Flask',
         'WTForms',
         'itsdangerous',
+	'email_validator',
     ],
-    extras_require={'email': ['email-validator']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
