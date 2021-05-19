@@ -24,7 +24,7 @@ def app(app):
     return app
 
 
-@pytest.yield_fixture(autouse=True)
+@pytest.fixture(autouse=True)
 def req_ctx(app):
     with app.test_request_context(
         data={'g-recaptcha-response': 'pass'}

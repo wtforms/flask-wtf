@@ -1,4 +1,5 @@
 import hashlib
+import hmac
 import logging
 import os
 import warnings
@@ -8,7 +9,6 @@ from functools import wraps
 from flask import Blueprint, current_app, g, request, session
 from itsdangerous import BadData, SignatureExpired, URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
-from werkzeug.security import safe_str_cmp
 from wtforms import ValidationError
 from wtforms.csrf.core import CSRF
 
@@ -103,7 +103,7 @@ def validate_csrf(data, secret_key=None, time_limit=None, token_key=None):
     except BadData:
         raise ValidationError('The CSRF token is invalid.')
 
-    if not safe_str_cmp(session[field_name], token):
+    if not hmac.compare_digest(session[field_name], token):
         raise ValidationError('The CSRF tokens do not match.')
 
 
