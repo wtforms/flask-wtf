@@ -1,7 +1,7 @@
 import warnings
 
 from flask import current_app, request, session
-from jinja2 import Markup
+from markupsafe import Markup
 from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
 from werkzeug.utils import cached_property
 from wtforms import Form
