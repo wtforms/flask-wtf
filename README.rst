@@ -1,8 +1,8 @@
 Flask-WTF
 =========
 
-.. image:: https://travis-ci.org/lepture/flask-wtf.svg?branch=master
-    :target: https://travis-ci.org/lepture/flask-wtf
+.. image:: https://github.com/lepture/flask-wtf/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/lepture/flask-wtf/actions/
     :alt: Test Status
 .. image:: https://codecov.io/gh/lepture/flask-wtf/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/lepture/flask-wtf
