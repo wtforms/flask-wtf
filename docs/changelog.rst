@@ -1,8 +1,10 @@
 Flask-WTF Changelog
 ===================
 
-Unreleased
-----------
+Version 0.15.0
+--------------
+
+Released 2021-05-24
 
 - Stopped support for python<3.6 (`#416`_)
 - ``FileSize`` validator (`#307`_, `#365`_)
