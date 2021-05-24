@@ -1,15 +1,36 @@
 Flask-WTF Changelog
 ===================
 
-Unreleased
-----------
+Version 0.15.0
+--------------
+
+Released 2021-05-24
 
 - Stopped support for python<3.6 (`#416`_)
 - ``FileSize`` validator (`#307`_, `#365`_)
+- Extra-requirement `email-validator` installs the
+  `email_validator` package (`#423`_)
+- Fixed Flask 2.0 warnings (`#434`_)
+- Various documentation fixes (`#315`_, `#321`_, `#335`_,
+  `#344`_, `#386`_, `#400`_, `#404`_, `#420`_, `#437`_)
+- Various CI fixes (`#405`_, `#438`_)
 
 .. _#307: https://github.com/lepture/flask-wtf/pull/307
+.. _#315: https://github.com/lepture/flask-wtf/pull/315
+.. _#321: https://github.com/lepture/flask-wtf/pull/321
+.. _#335: https://github.com/lepture/flask-wtf/pull/335
+.. _#344: https://github.com/lepture/flask-wtf/pull/344
 .. _#365: https://github.com/lepture/flask-wtf/pull/365
+.. _#386: https://github.com/lepture/flask-wtf/pull/386
+.. _#400: https://github.com/lepture/flask-wtf/pull/400
+.. _#404: https://github.com/lepture/flask-wtf/pull/404
+.. _#405: https://github.com/lepture/flask-wtf/pull/405
 .. _#416: https://github.com/lepture/flask-wtf/pull/416
+.. _#420: https://github.com/lepture/flask-wtf/pull/420
+.. _#423: https://github.com/lepture/flask-wtf/pull/423
+.. _#434: https://github.com/lepture/flask-wtf/pull/434
+.. _#437: https://github.com/lepture/flask-wtf/pull/437
+.. _#438: https://github.com/lepture/flask-wtf/pull/438
 
 Version 0.14.3
 --------------
