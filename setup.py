@@ -6,8 +6,8 @@ with open('README.rst') as f:
 
 setup(
     name='Flask-WTF',
-    version='0.15.0',
-    url='https://github.com/lepture/flask-wtf',
+    version='0.15.1',
+    url='https://github.com/wtforms/flask-wtf',
     license='BSD',
     author='Dan Jacob',
     author_email='danjac354@gmail.com',
@@ -18,6 +18,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     zip_safe=False,
     platforms='any',
+    python_requires=">= 3.6",
     install_requires=[
         'Flask',
         'WTForms',

@@ -1,36 +1,49 @@
 Flask-WTF Changelog
 ===================
 
+
+Version 0.15.1
+--------------
+
+Released 2021-05-25
+
+-   Add ``python_requires`` metadata to avoid installing on unsupported
+    Python versions. `442`_
+
+.. _442: https://github.com/wtforms/flask-wtf/pull/442
+
+
 Version 0.15.0
 --------------
 
 Released 2021-05-24
 
-- Stopped support for python<3.6 (`#416`_)
-- ``FileSize`` validator (`#307`_, `#365`_)
-- Extra-requirement `email-validator` installs the
-  `email_validator` package (`#423`_)
-- Fixed Flask 2.0 warnings (`#434`_)
-- Various documentation fixes (`#315`_, `#321`_, `#335`_,
-  `#344`_, `#386`_, `#400`_, `#404`_, `#420`_, `#437`_)
-- Various CI fixes (`#405`_, `#438`_)
+-   Drop support for Python < 3.6. `#416`_
+-   ``FileSize`` validator. `#307`_, `#365`_
+-   Extra requirement ``email`` installs the ``email_validator``
+    package. `#423`_
+-   Fixed Flask 2.0 warnings. `#434`_
+-   Various documentation fixes. `#315`_, `#321`_, `#335`_, `#344`_,
+    `#386`_, `#400`_, `#404`_, `#420`_, `#437`_
+-   Various CI fixes. `#405`_, `#438`_
 
-.. _#307: https://github.com/lepture/flask-wtf/pull/307
-.. _#315: https://github.com/lepture/flask-wtf/pull/315
-.. _#321: https://github.com/lepture/flask-wtf/pull/321
-.. _#335: https://github.com/lepture/flask-wtf/pull/335
-.. _#344: https://github.com/lepture/flask-wtf/pull/344
-.. _#365: https://github.com/lepture/flask-wtf/pull/365
-.. _#386: https://github.com/lepture/flask-wtf/pull/386
-.. _#400: https://github.com/lepture/flask-wtf/pull/400
-.. _#404: https://github.com/lepture/flask-wtf/pull/404
-.. _#405: https://github.com/lepture/flask-wtf/pull/405
-.. _#416: https://github.com/lepture/flask-wtf/pull/416
-.. _#420: https://github.com/lepture/flask-wtf/pull/420
-.. _#423: https://github.com/lepture/flask-wtf/pull/423
-.. _#434: https://github.com/lepture/flask-wtf/pull/434
-.. _#437: https://github.com/lepture/flask-wtf/pull/437
-.. _#438: https://github.com/lepture/flask-wtf/pull/438
+.. _#307: https://github.com/wtforms/flask-wtf/pull/307
+.. _#315: https://github.com/wtforms/flask-wtf/pull/315
+.. _#321: https://github.com/wtforms/flask-wtf/pull/321
+.. _#335: https://github.com/wtforms/flask-wtf/pull/335
+.. _#344: https://github.com/wtforms/flask-wtf/pull/344
+.. _#365: https://github.com/wtforms/flask-wtf/pull/365
+.. _#386: https://github.com/wtforms/flask-wtf/pull/386
+.. _#400: https://github.com/wtforms/flask-wtf/pull/400
+.. _#404: https://github.com/wtforms/flask-wtf/pull/404
+.. _#405: https://github.com/wtforms/flask-wtf/pull/405
+.. _#416: https://github.com/wtforms/flask-wtf/pull/416
+.. _#420: https://github.com/wtforms/flask-wtf/pull/420
+.. _#423: https://github.com/wtforms/flask-wtf/pull/423
+.. _#434: https://github.com/wtforms/flask-wtf/pull/434
+.. _#437: https://github.com/wtforms/flask-wtf/pull/437
+.. _#438: https://github.com/wtforms/flask-wtf/pull/438
+
 
 Version 0.14.3
 --------------
@@ -48,7 +61,7 @@ Released 2017-01-10
 - Fix bug where ``FlaskForm`` assumed ``meta`` argument was not ``None`` if it
   was passed. (`#278`_)
 
-.. _#278: https://github.com/lepture/flask-wtf/issues/278
+.. _#278: https://github.com/wtforms/flask-wtf/issues/278
 
 Version 0.14.1
 --------------
@@ -65,8 +78,8 @@ Released 2017-01-10
       WTForms ``FileField`` classes.
     - The ``Optional`` validator now works with ``FileField``.
 
-.. _#276: https://github.com/lepture/flask-wtf/issues/276
-.. _#277: https://github.com/lepture/flask-wtf/pull/277
+.. _#276: https://github.com/wtforms/flask-wtf/issues/276
+.. _#277: https://github.com/wtforms/flask-wtf/pull/277
 
 Version 0.14
 ------------
@@ -112,16 +125,16 @@ Released 2017-01-06
 - ``FileField`` is deprecated because it no longer provides functionality over
   the provided validators. Use ``wtforms.FileField`` directly. (`#272`_)
 
-.. _`#200`: https://github.com/lepture/flask-wtf/issues/200
-.. _`#209`: https://github.com/lepture/flask-wtf/pull/209
-.. _`#216`: https://github.com/lepture/flask-wtf/issues/216
-.. _`#227`: https://github.com/lepture/flask-wtf/issues/227
-.. _`#239`: https://github.com/lepture/flask-wtf/issues/239
-.. _`#243`: https://github.com/lepture/flask-wtf/pull/243
-.. _`#252`: https://github.com/lepture/flask-wtf/pull/252
-.. _`#264`: https://github.com/lepture/flask-wtf/pull/264
-.. _`#271`: https://github.com/lepture/flask-wtf/pull/271
-.. _`#272`: https://github.com/lepture/flask-wtf/pull/272
+.. _`#200`: https://github.com/wtforms/flask-wtf/issues/200
+.. _`#209`: https://github.com/wtforms/flask-wtf/pull/209
+.. _`#216`: https://github.com/wtforms/flask-wtf/issues/216
+.. _`#227`: https://github.com/wtforms/flask-wtf/issues/227
+.. _`#239`: https://github.com/wtforms/flask-wtf/issues/239
+.. _`#243`: https://github.com/wtforms/flask-wtf/pull/243
+.. _`#252`: https://github.com/wtforms/flask-wtf/pull/252
+.. _`#264`: https://github.com/wtforms/flask-wtf/pull/264
+.. _`#271`: https://github.com/wtforms/flask-wtf/pull/271
+.. _`#272`: https://github.com/wtforms/flask-wtf/pull/272
 
 Version 0.13.1
 --------------
@@ -131,8 +144,8 @@ Released 2016/10/6
 - Deprecation warning for ``Form`` is shown during ``__init__`` instead of immediately when subclassing. (`#262`_)
 - Don't use ``pkg_resources`` to get version, for compatibility with GAE. (`#261`_)
 
-.. _`#261`: https://github.com/lepture/flask-wtf/issues/261
-.. _`#262`: https://github.com/lepture/flask-wtf/issues/262
+.. _`#261`: https://github.com/wtforms/flask-wtf/issues/261
+.. _`#262`: https://github.com/wtforms/flask-wtf/issues/262
 
 Version 0.13
 ------------
@@ -148,14 +161,14 @@ Released 2016/09/29
 - ``form.data`` can be accessed multiple times without raising an exception. (`#248`_)
 - File extension with multiple parts (``.tar.gz``) can be used in the ``FileAllowed`` validator. (`#201`_)
 
-.. _`#187`: https://github.com/lepture/flask-wtf/pull/187
-.. _`#193`: https://github.com/lepture/flask-wtf/issues/193
-.. _`#201`: https://github.com/lepture/flask-wtf/issues/201
-.. _`#206`: https://github.com/lepture/flask-wtf/pull/206
-.. _`#217`: https://github.com/lepture/flask-wtf/issues/217
-.. _`#248`: https://github.com/lepture/flask-wtf/pull/248
-.. _`#250`: https://github.com/lepture/flask-wtf/pull/250
-.. _`#251`: https://github.com/lepture/flask-wtf/pull/251
+.. _`#187`: https://github.com/wtforms/flask-wtf/pull/187
+.. _`#193`: https://github.com/wtforms/flask-wtf/issues/193
+.. _`#201`: https://github.com/wtforms/flask-wtf/issues/201
+.. _`#206`: https://github.com/wtforms/flask-wtf/pull/206
+.. _`#217`: https://github.com/wtforms/flask-wtf/issues/217
+.. _`#248`: https://github.com/wtforms/flask-wtf/pull/248
+.. _`#250`: https://github.com/wtforms/flask-wtf/pull/250
+.. _`#251`: https://github.com/wtforms/flask-wtf/pull/251
 
 Version 0.12
 ------------
@@ -173,7 +186,7 @@ Released 2015/01/21
 
 - Use the new reCAPTCHA API via `#164`_.
 
-.. _`#164`: https://github.com/lepture/flask-wtf/pull/164
+.. _`#164`: https://github.com/wtforms/flask-wtf/pull/164
 
 
 Version 0.10.3
@@ -185,8 +198,8 @@ Released 2014/11/16
 - Support customize hidden tags via `#150`_.
 - And many more bug fixes
 
-.. _`#150`: https://github.com/lepture/flask-wtf/pull/150
-.. _`#159`: https://github.com/lepture/flask-wtf/pull/159
+.. _`#150`: https://github.com/wtforms/flask-wtf/pull/150
+.. _`#159`: https://github.com/wtforms/flask-wtf/pull/159
 
 Version 0.10.2
 --------------
@@ -195,7 +208,7 @@ Released 2014/09/03
 
 - Update translation for reCaptcha via `#146`_.
 
-.. _`#146`: https://github.com/lepture/flask-wtf/pull/146
+.. _`#146`: https://github.com/wtforms/flask-wtf/pull/146
 
 
 Version 0.10.1
@@ -207,8 +220,8 @@ Released 2014/08/26
 - Update requirement Werkzeug>=0.9.5
 - Fix CsrfProtect exempt for blueprints via `#143`_.
 
-.. _`#145`: https://github.com/lepture/flask-wtf/pull/145
-.. _`#143`: https://github.com/lepture/flask-wtf/pull/143
+.. _`#145`: https://github.com/wtforms/flask-wtf/pull/145
+.. _`#143`: https://github.com/wtforms/flask-wtf/pull/143
 
 Version 0.10.0
 --------------
@@ -220,7 +233,7 @@ Released 2014/07/16
 - Fix csrf validation without time limit (time_limit=False)
 - CSRF exempt supports blueprint `#111`_.
 
-.. _`#111`: https://github.com/lepture/flask-wtf/issues/111
+.. _`#111`: https://github.com/wtforms/flask-wtf/issues/111
 
 Version 0.9.5
 -------------
@@ -230,8 +243,8 @@ Released 2014/03/21
 - ``csrf_token`` for all template types `#112`_.
 - Make FileRequired a subclass of InputRequired `#108`_.
 
-.. _`#108`: https://github.com/lepture/flask-wtf/pull/108
-.. _`#112`: https://github.com/lepture/flask-wtf/pull/112
+.. _`#108`: https://github.com/wtforms/flask-wtf/pull/108
+.. _`#112`: https://github.com/wtforms/flask-wtf/pull/112
 
 Version 0.9.4
 -------------
@@ -251,8 +264,8 @@ Released 2013/10/02
 - Fix validation of recaptcha when app in testing mode `#89`_.
 - Bugfix for csrf module `#91`_
 
-.. _`#89`: https://github.com/lepture/flask-wtf/pull/89
-.. _`#91`: https://github.com/lepture/flask-wtf/pull/91
+.. _`#89`: https://github.com/wtforms/flask-wtf/pull/89
+.. _`#91`: https://github.com/wtforms/flask-wtf/pull/91
 
 
 Version 0.9.2
@@ -265,9 +278,9 @@ Released 2013/9/11
 - No DateInput widget in html5 `#81`_.
 - PUT and PATCH for CSRF `#86`_.
 
-.. _`#77`: https://github.com/lepture/flask-wtf/issues/77
-.. _`#81`: https://github.com/lepture/flask-wtf/issues/81
-.. _`#86`: https://github.com/lepture/flask-wtf/issues/86
+.. _`#77`: https://github.com/wtforms/flask-wtf/issues/77
+.. _`#81`: https://github.com/wtforms/flask-wtf/issues/81
+.. _`#86`: https://github.com/wtforms/flask-wtf/issues/86
 
 
 Version 0.9.1
@@ -277,7 +290,7 @@ Released 2013/8/21
 
 This is a patch version for backward compitable for Flask<0.10 `#82`_.
 
-.. _`#82`: https://github.com/lepture/flask-wtf/issues/82
+.. _`#82`: https://github.com/wtforms/flask-wtf/issues/82
 
 Version 0.9.0
 -------------

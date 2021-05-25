@@ -1,11 +1,11 @@
 Flask-WTF
 =========
 
-.. image:: https://github.com/lepture/flask-wtf/actions/workflows/tests.yaml/badge.svg
-    :target: https://github.com/lepture/flask-wtf/actions/
+.. image:: https://github.com/wtforms/flask-wtf/actions/workflows/tests.yaml/badge.svg
+    :target: https://github.com/wtforms/flask-wtf/actions/
     :alt: Test Status
-.. image:: https://codecov.io/gh/lepture/flask-wtf/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/lepture/flask-wtf
+.. image:: https://codecov.io/gh/wtforms/flask-wtf/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/wtforms/flask-wtf
     :alt: Coverage Status
 .. image:: https://readthedocs.org/projects/flask-wtf/badge/?version=latest
     :target: https://flask-wtf.readthedocs.io/
@@ -18,4 +18,4 @@ Links
 
 * `Documentation <https://flask-wtf.readthedocs.io>`_
 * `PyPI <https://pypi.python.org/pypi/Flask-WTF>`_
-* `GitHub <https://github.com/lepture/flask-wtf>`_
+* `GitHub <https://github.com/wtforms/flask-wtf>`_
