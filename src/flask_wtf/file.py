@@ -29,10 +29,12 @@ class FileField(_FileField):
             ``FileStorage``. Check ``form.data is not None`` instead.
         """
 
-        warnings.warn(FlaskWTFDeprecationWarning(
-            '"has_file" is deprecated and will be removed in 1.0. The data is '
-            'checked during processing instead.'
-        ))
+        warnings.warn(
+            FlaskWTFDeprecationWarning(
+                '"has_file" is deprecated and will be removed in 1.0. The data is '
+                "checked during processing instead."
+            )
+        )
         return bool(self.data)
 
 
@@ -47,9 +49,9 @@ class FileRequired(DataRequired):
 
     def __call__(self, form, field):
         if not (isinstance(field.data, FileStorage) and field.data):
-            raise StopValidation(self.message or field.gettext(
-                'This field is required.'
-            ))
+            raise StopValidation(
+                self.message or field.gettext("This field is required.")
+            )
 
 
 file_required = FileRequired
@@ -77,17 +79,21 @@ class FileAllowed:
         filename = field.data.filename.lower()
 
         if isinstance(self.upload_set, abc.Iterable):
-            if any(filename.endswith('.' + x) for x in self.upload_set):
+            if any(filename.endswith("." + x) for x in self.upload_set):
                 return
 
-            raise StopValidation(self.message or field.gettext(
-                'File does not have an approved extension: {extensions}'
-            ).format(extensions=', '.join(self.upload_set)))
+            raise StopValidation(
+                self.message
+                or field.gettext(
+                    "File does not have an approved extension: {extensions}"
+                ).format(extensions=", ".join(self.upload_set))
+            )
 
         if not self.upload_set.file_allowed(field.data, filename):
-            raise StopValidation(self.message or field.gettext(
-                'File does not have an approved extension.'
-            ))
+            raise StopValidation(
+                self.message
+                or field.gettext("File does not have an approved extension.")
+            )
 
 
 file_allowed = FileAllowed
@@ -117,12 +123,14 @@ class FileSize:
 
         if (file_size < self.min_size) or (file_size > self.max_size):
             # the file is too small or too big => validation failure
-            raise ValidationError(self.message or field.gettext(
-                'File must be between {min_size} and {max_size} bytes.'.format(
-                    min_size=self.min_size,
-                    max_size=self.max_size
+            raise ValidationError(
+                self.message
+                or field.gettext(
+                    "File must be between {min_size} and {max_size} bytes.".format(
+                        min_size=self.min_size, max_size=self.max_size
+                    )
                 )
-            ))
+            )
 
 
 file_size = FileSize
