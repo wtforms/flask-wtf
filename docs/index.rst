@@ -59,4 +59,4 @@ Legal information and changelog are here.
    :maxdepth: 2
 
    license
-   changelog
+   changes
