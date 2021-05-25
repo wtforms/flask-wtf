@@ -7,6 +7,9 @@ and reCAPTCHA.
 Links
 -----
 
-* `Documentation <https://flask-wtf.readthedocs.io>`_
-* `PyPI <https://pypi.python.org/pypi/Flask-WTF>`_
-* `GitHub <https://github.com/wtforms/flask-wtf>`_
+-   Documentation: https://flask-wtf.readthedocs.io/
+-   Changes: https://flask-wtf.readthedocs.io/changes/
+-   PyPI Releases: https://pypi.org/project/Flask-WTF/
+-   Source Code: https://github.com/wtforms/flask-wtf/
+-   Issue Tracker: https://github.com/wtforms/flask-wtf/issues/
+-   Chat: https://discord.gg/pallets
