@@ -1,5 +1,4 @@
----
-name: tests
+name: Tests
 on:
   push:
     branches:
@@ -9,40 +8,39 @@ on:
     branches:
       - main
       - '*.x'
+    paths-ignore:
+      - 'docs/**'
+      - '*.rst'
 jobs:
   tests:
-    name: ${{ matrix.python }}
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python:
-          - '3.9'
-          - '3.8'
-          - '3.7'
-          - '3.6'
-          - pypy3
+        include:
+          - {name: '3.9', python: '3.9', tox: py39}
+          - {name: '3.8', python: '3.8', tox: py38}
+          - {name: '3.7', python: '3.7', tox: py37}
+          - {name: '3.6', python: '3.6', tox: py36}
+          - {name: 'PyPy', python: pypy3, tox: pypy3}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - uses: actions/cache@v1
+      - name: update pip
+        run: |
+          pip install -U wheel
+          pip install -U setuptools
+          python -m pip install -U pip
+      - name: get pip cache dir
+        id: pip-cache
+        run: echo "::set-output name=dir::$(pip cache dir)"
+      - name: cache pip
+        uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
-          key: pip|${{ hashFiles('setup.py') }}|${{ hashFiles('tox.ini') }}
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: pip|${{ runner.os }}|${{ matrix.python }}|${{ hashFiles('setup.py') }}|${{ hashFiles('requirements/*.txt') }}
       - run: pip install tox
-      - run: tox -e py
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cache/pip
-          key: pip|${{ hashFiles('setup.py') }}|${{ hashFiles('tox.ini') }}
-      - run: pip install tox
-      - run: tox -e docs
+      - run: tox -e ${{ matrix.tox }}
