@@ -19,9 +19,9 @@ app.config.from_object(__name__)
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-
     form = FileUploadForm()
-    for i in range(5):
+
+    for _ in range(5):
         form.uploads.append_entry()
 
     filedata = []

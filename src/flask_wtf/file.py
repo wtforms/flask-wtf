@@ -102,7 +102,8 @@ file_allowed = FileAllowed
 
 
 class FileSize:
-    """Validates that the uploaded file is within a minimum and maximum file size (set in bytes).
+    """Validates that the uploaded file is within a minimum and maximum
+    file size (set in bytes).
 
     :param min_size: minimum allowed file size (in bytes). Defaults to 0 bytes.
     :param max_size: maximum allowed file size (in bytes).

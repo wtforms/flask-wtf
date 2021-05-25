@@ -11,5 +11,5 @@ warnings.warn(
     stacklevel=2,
 )
 
-from wtforms.widgets.html5 import *
-from wtforms.fields.html5 import *
+from wtforms.widgets.html5 import *  # noqa: E402, F401, F403
+from wtforms.fields.html5 import *  # noqa: E402, F401, F403
