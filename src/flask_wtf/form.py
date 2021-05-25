@@ -1,8 +1,11 @@
 import warnings
 
-from flask import current_app, request, session
+from flask import current_app
+from flask import request
+from flask import session
 from markupsafe import Markup
-from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
+from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.datastructures import ImmutableMultiDict
 from werkzeug.utils import cached_property
 from wtforms import Form
 from wtforms.meta import DefaultMeta

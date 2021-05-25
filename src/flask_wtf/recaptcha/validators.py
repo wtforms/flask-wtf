@@ -1,12 +1,13 @@
+import json
 from urllib import request as http
 
-import json
-
-from flask import current_app, request
+from flask import current_app
+from flask import request
 from werkzeug.urls import url_encode
 from wtforms import ValidationError
 
-from .._compat import to_bytes, to_unicode
+from .._compat import to_bytes
+from .._compat import to_unicode
 
 RECAPTCHA_VERIFY_SERVER = "https://www.google.com/recaptcha/api/siteverify"
 RECAPTCHA_ERROR_CODES = {

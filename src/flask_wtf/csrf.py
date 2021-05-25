@@ -3,11 +3,17 @@ import hmac
 import logging
 import os
 import warnings
-from urllib.parse import urlparse
 from functools import wraps
+from urllib.parse import urlparse
 
-from flask import Blueprint, current_app, g, request, session
-from itsdangerous import BadData, SignatureExpired, URLSafeTimedSerializer
+from flask import Blueprint
+from flask import current_app
+from flask import g
+from flask import request
+from flask import session
+from itsdangerous import BadData
+from itsdangerous import SignatureExpired
+from itsdangerous import URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
 from wtforms import ValidationError
 from wtforms.csrf.core import CSRF

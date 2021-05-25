@@ -1,9 +1,11 @@
 import pytest
-from flask import g, session
+from flask import g
+from flask import session
 from wtforms import ValidationError
 
 from flask_wtf import FlaskForm
-from flask_wtf.csrf import generate_csrf, validate_csrf
+from flask_wtf.csrf import generate_csrf
+from flask_wtf.csrf import validate_csrf
 
 
 def test_csrf_requires_secret_key(app, req_ctx):

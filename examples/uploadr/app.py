@@ -1,7 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask
+from flask import render_template
+from wtforms import FieldList
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import FieldList
 
 
 class FileUploadForm(FlaskForm):

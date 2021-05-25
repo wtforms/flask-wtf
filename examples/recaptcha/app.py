@@ -1,6 +1,12 @@
-from flask import Flask, render_template, flash, session, redirect, url_for
+from flask import flash
+from flask import Flask
+from flask import redirect
+from flask import render_template
+from flask import session
+from flask import url_for
 from wtforms import TextAreaField
 from wtforms.validators import DataRequired
+
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
 

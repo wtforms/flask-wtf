@@ -1,9 +1,16 @@
 import pytest
-from flask import Blueprint, abort, g, render_template_string, request
+from flask import abort
+from flask import Blueprint
+from flask import g
+from flask import render_template_string
+from flask import request
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.csrf import CSRFError, CSRFProtect, CsrfProtect, generate_csrf
+from flask_wtf.csrf import CSRFError
+from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import generate_csrf
 
 
 @pytest.fixture

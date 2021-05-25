@@ -1,10 +1,14 @@
 import pytest
-from werkzeug.datastructures import FileStorage, MultiDict
+from werkzeug.datastructures import FileStorage
+from werkzeug.datastructures import MultiDict
 from wtforms import FileField as BaseFileField
 
 from flask_wtf import FlaskForm
 from flask_wtf._compat import FlaskWTFDeprecationWarning
-from flask_wtf.file import FileAllowed, FileField, FileRequired, FileSize
+from flask_wtf.file import FileAllowed
+from flask_wtf.file import FileField
+from flask_wtf.file import FileRequired
+from flask_wtf.file import FileSize
 
 
 @pytest.fixture

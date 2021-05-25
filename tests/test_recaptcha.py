@@ -5,7 +5,8 @@ from markupsafe import Markup
 from flask_wtf import FlaskForm
 from flask_wtf._compat import to_bytes
 from flask_wtf.recaptcha import RecaptchaField
-from flask_wtf.recaptcha.validators import Recaptcha, http
+from flask_wtf.recaptcha.validators import http
+from flask_wtf.recaptcha.validators import Recaptcha
 
 
 class RecaptchaForm(FlaskForm):

@@ -1,7 +1,8 @@
 import pytest
 from flask import request
 from wtforms import StringField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired
+from wtforms.validators import Length
 
 from flask_wtf import FlaskForm
 

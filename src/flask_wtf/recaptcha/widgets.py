@@ -1,4 +1,6 @@
-from flask import Markup, current_app, json
+from flask import current_app
+from flask import json
+from flask import Markup
 from werkzeug.urls import url_encode
 
 JSONEncoder = json.JSONEncoder

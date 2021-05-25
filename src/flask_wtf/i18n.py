@@ -1,5 +1,6 @@
 from babel import support
-from flask import current_app, request
+from flask import current_app
+from flask import request
 from wtforms.i18n import messages_path
 
 try:
