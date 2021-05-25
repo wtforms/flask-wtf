@@ -83,32 +83,32 @@ def test_file_size_no_file_passes_validation(form):
     assert f.validate()
 
 
-def test_file_size_small_file_passes_validation(form, tmpdir):
+def test_file_size_small_file_passes_validation(form, tmp_path):
     form.file.kwargs['validators'] = [FileSize(max_size=100)]
-    test_file_smaller_than_max = tmpdir.join("test_file_smaller_than_max.txt")
-    test_file_smaller_than_max.write(b"\0")
+    path = tmp_path / "test_file_smaller_than_max.txt"
+    path.write_bytes(b"\0")
 
-    f = form(file=FileStorage(open(test_file_smaller_than_max.strpath, 'rb')))
-
-    assert f.validate()
+    with path.open("rb") as file:
+        f = form(file=FileStorage(file))
+        assert f.validate()
 
 
 @pytest.mark.parametrize("min_size, max_size, invalid_file_size", [
     (1, 100, 0),
     (0, 100, 101)
 ])
-def test_file_size_invalid_file_size_fails_validation(form, min_size, max_size, invalid_file_size, tmpdir):
+def test_file_size_invalid_file_size_fails_validation(form, min_size, max_size, invalid_file_size, tmp_path):
     form.file.kwargs['validators'] = [FileSize(min_size=min_size, max_size=max_size)]
-    test_file_invalid_size = tmpdir.join("test_file_invalid_size.txt")
-    test_file_invalid_size.write(b"\0" * invalid_file_size)
+    path = tmp_path / "test_file_invalid_size.txt"
+    path.write_bytes(b"\0" * invalid_file_size)
 
-    f = form(file=FileStorage(open(test_file_invalid_size.strpath, 'rb')))
-
-    assert not f.validate()
-    assert f.file.errors[0] == 'File must be between {min_size} and {max_size} bytes.'.format(
-        min_size=min_size,
-        max_size=max_size
-    )
+    with path.open("rb") as file:
+        f = form(file=FileStorage(file))
+        assert not f.validate()
+        assert f.file.errors[0] == 'File must be between {min_size} and {max_size} bytes.'.format(
+            min_size=min_size,
+            max_size=max_size
+        )
 
 
 def test_validate_base_field(req_ctx):
