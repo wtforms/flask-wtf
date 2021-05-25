@@ -6,4 +6,4 @@ from .recaptcha import Recaptcha
 from .recaptcha import RecaptchaField
 from .recaptcha import RecaptchaWidget
 
-__version__ = "0.15.1"
+__version__ = "0.16.0.dev0"
