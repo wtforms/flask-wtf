@@ -1,10 +1,12 @@
 import warnings
+from collections import abc
 
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
-from wtforms.validators import DataRequired, StopValidation, ValidationError
+from wtforms.validators import DataRequired
+from wtforms.validators import StopValidation
+from wtforms.validators import ValidationError
 
-from collections import abc
 from ._compat import FlaskWTFDeprecationWarning
 
 
@@ -29,10 +31,12 @@ class FileField(_FileField):
             ``FileStorage``. Check ``form.data is not None`` instead.
         """
 
-        warnings.warn(FlaskWTFDeprecationWarning(
-            '"has_file" is deprecated and will be removed in 1.0. The data is '
-            'checked during processing instead.'
-        ))
+        warnings.warn(
+            FlaskWTFDeprecationWarning(
+                '"has_file" is deprecated and will be removed in 1.0. The data is '
+                "checked during processing instead."
+            )
+        )
         return bool(self.data)
 
 
@@ -47,9 +51,9 @@ class FileRequired(DataRequired):
 
     def __call__(self, form, field):
         if not (isinstance(field.data, FileStorage) and field.data):
-            raise StopValidation(self.message or field.gettext(
-                'This field is required.'
-            ))
+            raise StopValidation(
+                self.message or field.gettext("This field is required.")
+            )
 
 
 file_required = FileRequired
@@ -77,24 +81,29 @@ class FileAllowed:
         filename = field.data.filename.lower()
 
         if isinstance(self.upload_set, abc.Iterable):
-            if any(filename.endswith('.' + x) for x in self.upload_set):
+            if any(filename.endswith("." + x) for x in self.upload_set):
                 return
 
-            raise StopValidation(self.message or field.gettext(
-                'File does not have an approved extension: {extensions}'
-            ).format(extensions=', '.join(self.upload_set)))
+            raise StopValidation(
+                self.message
+                or field.gettext(
+                    "File does not have an approved extension: {extensions}"
+                ).format(extensions=", ".join(self.upload_set))
+            )
 
         if not self.upload_set.file_allowed(field.data, filename):
-            raise StopValidation(self.message or field.gettext(
-                'File does not have an approved extension.'
-            ))
+            raise StopValidation(
+                self.message
+                or field.gettext("File does not have an approved extension.")
+            )
 
 
 file_allowed = FileAllowed
 
 
-class FileSize(object):
-    """Validates that the uploaded file is within a minimum and maximum file size (set in bytes).
+class FileSize:
+    """Validates that the uploaded file is within a minimum and maximum
+    file size (set in bytes).
 
     :param min_size: minimum allowed file size (in bytes). Defaults to 0 bytes.
     :param max_size: maximum allowed file size (in bytes).
@@ -117,12 +126,14 @@ class FileSize(object):
 
         if (file_size < self.min_size) or (file_size > self.max_size):
             # the file is too small or too big => validation failure
-            raise ValidationError(self.message or field.gettext(
-                'File must be between {min_size} and {max_size} bytes.'.format(
-                    min_size=self.min_size,
-                    max_size=self.max_size
+            raise ValidationError(
+                self.message
+                or field.gettext(
+                    "File must be between {min_size} and {max_size} bytes.".format(
+                        min_size=self.min_size, max_size=self.max_size
+                    )
                 )
-            ))
+            )
 
 
 file_size = FileSize

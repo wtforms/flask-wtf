@@ -14,6 +14,8 @@ babel==2.9.1
     # via sphinx
 certifi==2020.12.5
     # via requests
+cfgv==3.3.0
+    # via pre-commit
 chardet==4.0.0
     # via requests
 click==8.0.1
@@ -32,6 +34,8 @@ flask-uploads==0.2.1
     # via -r requirements/tests.in
 flask==2.0.1
     # via flask-uploads
+identify==2.2.6
+    # via pre-commit
 idna==2.10
     # via requests
 imagesize==1.2.0
@@ -46,6 +50,8 @@ jinja2==3.0.1
     #   sphinx
 markupsafe==2.0.1
     # via jinja2
+nodeenv==1.6.0
+    # via pre-commit
 packaging==20.9
     # via
     #   pallets-sphinx-themes
@@ -62,6 +68,8 @@ pluggy==0.13.1
     # via
     #   pytest
     #   tox
+pre-commit==2.13.0
+    # via -r requirements/dev.in
 py==1.10.0
     # via
     #   pytest
@@ -74,6 +82,8 @@ pytest==6.2.4
     # via -r requirements/tests.in
 pytz==2021.1
     # via babel
+pyyaml==5.4.1
+    # via pre-commit
 requests==2.25.1
     # via sphinx
 six==1.16.0
@@ -107,6 +117,7 @@ sphinxcontrib-serializinghtml==1.1.5
 toml==0.10.2
     # via
     #   pep517
+    #   pre-commit
     #   pytest
     #   tox
 tox==3.23.1
@@ -114,7 +125,9 @@ tox==3.23.1
 urllib3==1.26.4
     # via requests
 virtualenv==20.4.7
-    # via tox
+    # via
+    #   pre-commit
+    #   tox
 werkzeug==2.0.1
     # via flask
 

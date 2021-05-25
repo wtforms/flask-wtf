@@ -1,8 +1,11 @@
 import warnings
 
-from flask import current_app, request, session
+from flask import current_app
+from flask import request
+from flask import session
 from markupsafe import Markup
-from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
+from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.datastructures import ImmutableMultiDict
 from werkzeug.utils import cached_property
 from wtforms import Form
 from wtforms.meta import DefaultMeta
@@ -17,7 +20,7 @@ except ImportError:
     translations = None  # babel not installed
 
 
-SUBMIT_METHODS = {'POST', 'PUT', 'PATCH', 'DELETE'}
+SUBMIT_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 _Auto = object()
 
 
@@ -35,29 +38,25 @@ class FlaskForm(Form):
 
         @cached_property
         def csrf(self):
-            return current_app.config.get('WTF_CSRF_ENABLED', True)
+            return current_app.config.get("WTF_CSRF_ENABLED", True)
 
         @cached_property
         def csrf_secret(self):
-            return current_app.config.get(
-                'WTF_CSRF_SECRET_KEY', current_app.secret_key
-            )
+            return current_app.config.get("WTF_CSRF_SECRET_KEY", current_app.secret_key)
 
         @cached_property
         def csrf_field_name(self):
-            return current_app.config.get('WTF_CSRF_FIELD_NAME', 'csrf_token')
+            return current_app.config.get("WTF_CSRF_FIELD_NAME", "csrf_token")
 
         @cached_property
         def csrf_time_limit(self):
-            return current_app.config.get('WTF_CSRF_TIME_LIMIT', 3600)
+            return current_app.config.get("WTF_CSRF_TIME_LIMIT", 3600)
 
         def wrap_formdata(self, form, formdata):
             if formdata is _Auto:
                 if _is_submitted():
                     if request.files:
-                        return CombinedMultiDict((
-                            request.files, request.form
-                        ))
+                        return CombinedMultiDict((request.files, request.form))
                     elif request.form:
                         return request.form
                     elif request.get_json():
@@ -68,21 +67,24 @@ class FlaskForm(Form):
             return formdata
 
         def get_translations(self, form):
-            if not current_app.config.get('WTF_I18N_ENABLED', True):
+            if not current_app.config.get("WTF_I18N_ENABLED", True):
                 return super(FlaskForm.Meta, self).get_translations(form)
 
             return translations
 
     def __init__(self, formdata=_Auto, **kwargs):
-        csrf_enabled = kwargs.pop('csrf_enabled', None)
+        csrf_enabled = kwargs.pop("csrf_enabled", None)
 
         if csrf_enabled is not None:
-            warnings.warn(FlaskWTFDeprecationWarning(
-                '"csrf_enabled" is deprecated and will be removed in 1.0. '
-                "Pass meta={'csrf': False} instead."
-            ), stacklevel=3)
-            kwargs['meta'] = kwargs.get('meta') or {}
-            kwargs['meta'].setdefault('csrf', csrf_enabled)
+            warnings.warn(
+                FlaskWTFDeprecationWarning(
+                    '"csrf_enabled" is deprecated and will be removed in 1.0. '
+                    "Pass meta={'csrf': False} instead."
+                ),
+                stacklevel=3,
+            )
+            kwargs["meta"] = kwargs.get("meta") or {}
+            kwargs["meta"].setdefault("csrf", csrf_enabled)
 
         super().__init__(formdata=formdata, **kwargs)
 
@@ -130,9 +132,7 @@ class FlaskForm(Form):
 
                 yield f
 
-        return Markup(
-            '\n'.join(str(f) for f in hidden_fields(fields or self))
-        )
+        return Markup("\n".join(str(f) for f in hidden_fields(fields or self)))
 
 
 def _is_submitted():
@@ -150,8 +150,11 @@ class Form(FlaskForm):
     """
 
     def __init__(self, *args, **kwargs):
-        warnings.warn(FlaskWTFDeprecationWarning(
-            '"flask_wtf.Form" has been renamed to "FlaskForm" '
-            'and will be removed in 1.0.'
-        ), stacklevel=3)
+        warnings.warn(
+            FlaskWTFDeprecationWarning(
+                '"flask_wtf.Form" has been renamed to "FlaskForm" '
+                "and will be removed in 1.0."
+            ),
+            stacklevel=3,
+        )
         super().__init__(*args, **kwargs)
