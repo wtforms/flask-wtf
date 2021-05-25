@@ -2,7 +2,7 @@ Configuration
 =============
 
 ========================== =====================================================
-``WTF_CSRF_ENABLED``       Set to ``False`` to disable all CSRF protection. 
+``WTF_CSRF_ENABLED``       Set to ``False`` to disable all CSRF protection.
                            Default is ``True``.
 ``WTF_CSRF_CHECK_DEFAULT`` When using the CSRF protection extension, this
                            controls whether every view is protected by default.
@@ -23,7 +23,7 @@ Configuration
                            that the referrer matches the host. Only applies to
                            HTTPS requests. Default is ``True``.
 ``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support.
-                           Also set to ``False`` if you want to use WTForms's 
+                           Also set to ``False`` if you want to use WTForms's
                            built-in messages directly, see more info `here`_.
                            Default is ``True``.
 ========================== =====================================================
