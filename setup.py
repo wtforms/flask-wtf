@@ -18,6 +18,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     zip_safe=False,
     platforms='any',
+    python_requires=">= 3.6",
     install_requires=[
         'Flask',
         'WTForms',
