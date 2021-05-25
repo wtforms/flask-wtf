@@ -1,17 +1,8 @@
 Flask-WTF
 =========
 
-.. image:: https://github.com/wtforms/flask-wtf/actions/workflows/tests.yaml/badge.svg
-    :target: https://github.com/wtforms/flask-wtf/actions/
-    :alt: Test Status
-.. image:: https://codecov.io/gh/wtforms/flask-wtf/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/wtforms/flask-wtf
-    :alt: Coverage Status
-.. image:: https://readthedocs.org/projects/flask-wtf/badge/?version=latest
-    :target: https://flask-wtf.readthedocs.io/
-    :alt: Documentation
-
-Simple integration of Flask and WTForms, including CSRF, file upload, and reCAPTCHA.
+Simple integration of Flask and WTForms, including CSRF, file upload,
+and reCAPTCHA.
 
 Links
 -----
