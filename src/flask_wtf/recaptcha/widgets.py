@@ -25,7 +25,7 @@ class RecaptchaWidget:
 
         attrs = current_app.config.get('RECAPTCHA_DATA_ATTRS', {})
         attrs['sitekey'] = public_key
-        snippet = ' '.join(['data-{}="{}"'.format(k, attrs[k]) for k in attrs])
+        snippet = ' '.join(f'data-{k}="{attrs[k]}"' for k in attrs)
         return Markup(RECAPTCHA_TEMPLATE % (script, snippet))
 
     def __call__(self, field, error=None, **kwargs):
