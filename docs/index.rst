@@ -1,5 +1,11 @@
+.. rst-class:: hide-header
+
 Flask-WTF
 =========
+
+.. image:: _static/flask-wtf.png
+    :alt: Flask-WTF
+    :align: center
 
 Simple integration of `Flask`_ and `WTForms`_, including CSRF, file upload,
 and reCAPTCHA.
