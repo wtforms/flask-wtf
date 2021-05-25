@@ -18,9 +18,13 @@ __all__ = ('generate_csrf', 'validate_csrf', 'CSRFProtect')
 logger = logging.getLogger(__name__)
 
 
-def generate_csrf(secret_key=None, token_key=None):
+def generate_csrf(secret_key=None, token_key=None, force_new=False):
     """Generate a CSRF token. The token is cached for a request, so multiple
     calls to this function will generate the same token.
+
+    To force generation of a new CSRF token (recommended during login and logout
+    of users), pass ``force_new=True``. This will reset the cached token, if one
+    exists, in both ``g.csrf_token`` and the session.
 
     During testing, it might be useful to access the signed token in
     ``g.csrf_token`` and the raw token in ``session['csrf_token']``.
@@ -29,6 +33,8 @@ def generate_csrf(secret_key=None, token_key=None):
         ``WTF_CSRF_SECRET_KEY`` or ``SECRET_KEY``.
     :param token_key: Key where token is stored in session for comparison.
         Default is ``WTF_CSRF_FIELD_NAME`` or ``'csrf_token'``.
+    :param force_new: When true, forces generation of a new CSRF token. Default
+        is ``False``.
     """
 
     secret_key = _get_config(
@@ -40,10 +46,10 @@ def generate_csrf(secret_key=None, token_key=None):
         message='A field name is required to use CSRF.'
     )
 
-    if field_name not in g:
+    if force_new or field_name not in g:
         s = URLSafeTimedSerializer(secret_key, salt='wtf-csrf-token')
 
-        if field_name not in session:
+        if force_new or field_name not in session:
             session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
 
         try:

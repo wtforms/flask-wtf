@@ -40,6 +40,19 @@ def test_validate(req_ctx):
     validate_csrf(generate_csrf())
 
 
+def test_force_new_csrf(req_ctx):
+    old_signed_token = generate_csrf()
+    old_raw_token = session['csrf_token']
+
+    new_signed_token = generate_csrf(force_new=True)
+    new_raw_token = session['csrf_token']
+
+    assert old_signed_token != new_signed_token
+    assert old_raw_token != new_raw_token
+
+    validate_csrf(new_signed_token)
+
+
 def test_validation_errors(req_ctx):
     e = pytest.raises(ValidationError, validate_csrf, None)
     assert str(e.value) == 'The CSRF token is missing.'
