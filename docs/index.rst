@@ -60,3 +60,4 @@ Legal information and changelog are here.
 
    license
    changes
+   contributing
