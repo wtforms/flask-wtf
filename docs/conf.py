@@ -23,7 +23,7 @@ intersphinx_mapping = {
     "flask": ("https://flask.palletsprojects.com/", None),
     "wtforms": ("https://wtforms.readthedocs.io/", None),
 }
-issues_github_path = "pallets/flask-wtf"
+issues_github_path = "wtforms/flask-wtf"
 
 # HTML -----------------------------------------------------------------
 
