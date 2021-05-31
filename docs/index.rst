@@ -11,7 +11,7 @@ Simple integration of `Flask`_ and `WTForms`_, including CSRF, file upload,
 and reCAPTCHA.
 
 .. _Flask: https://www.palletsprojects.com/p/flask
-.. _WTForms: https://wtforms.readthedocs.io/en/latest/
+.. _WTForms: https://wtforms.readthedocs.io/
 
 Features
 --------
