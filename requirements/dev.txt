@@ -31,7 +31,7 @@ filelock==3.0.12
     #   tox
     #   virtualenv
 flask-uploads==0.2.1
-    # via -r requirements/tests.in
+    # via -r tests.in
 flask==2.0.1
     # via flask-uploads
 identify==2.2.6
@@ -59,17 +59,17 @@ packaging==20.9
     #   sphinx
     #   tox
 pallets-sphinx-themes==2.0.1
-    # via -r requirements/docs.in
+    # via -r docs.in
 pep517==0.10.0
     # via pip-tools
 pip-tools==6.1.0
-    # via -r requirements/dev.in
+    # via -r dev.in
 pluggy==0.13.1
     # via
     #   pytest
     #   tox
 pre-commit==2.13.0
-    # via -r requirements/dev.in
+    # via -r dev.in
 py==1.10.0
     # via
     #   pytest
@@ -79,7 +79,7 @@ pygments==2.9.0
 pyparsing==2.4.7
     # via packaging
 pytest==6.2.4
-    # via -r requirements/tests.in
+    # via -r tests.in
 pytz==2021.1
     # via babel
 pyyaml==5.4.1
@@ -93,10 +93,10 @@ six==1.16.0
 snowballstemmer==2.1.0
     # via sphinx
 sphinx-issues==1.2.0
-    # via -r requirements/docs.in
+    # via -r docs.in
 sphinx==4.0.2
     # via
-    #   -r requirements/docs.in
+    #   -r docs.in
     #   pallets-sphinx-themes
     #   sphinx-issues
     #   sphinxcontrib-log-cabinet
@@ -109,7 +109,7 @@ sphinxcontrib-htmlhelp==2.0.0
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
 sphinxcontrib-log-cabinet==1.0.1
-    # via -r requirements/docs.in
+    # via -r docs.in
 sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
@@ -121,8 +121,8 @@ toml==0.10.2
     #   pytest
     #   tox
 tox==3.23.1
-    # via -r requirements/dev.in
-urllib3==1.26.4
+    # via -r dev.in
+urllib3==1.26.5
     # via requests
 virtualenv==20.4.7
     # via
