@@ -203,6 +203,7 @@ class CSRFProtect:
         app.config.setdefault("WTF_CSRF_HEADERS", ["X-CSRFToken", "X-CSRF-Token"])
         app.config.setdefault("WTF_CSRF_TIME_LIMIT", 3600)
         app.config.setdefault("WTF_CSRF_SSL_STRICT", True)
+        app.config.setdefault("WTF_CSRF_CHECK_WITHOUT_COOKIE", True)
 
         app.jinja_env.globals["csrf_token"] = generate_csrf
         app.context_processor(lambda: {"csrf_token": generate_csrf})
@@ -222,6 +223,9 @@ class CSRFProtect:
                 return
 
             if request.blueprint in self._exempt_blueprints:
+                return
+            
+            if not app.config["WTF_CSRF_CHECK_WITHOUT_COOKIE"] and not request.cookies:
                 return
 
             view = app.view_functions.get(request.endpoint)
