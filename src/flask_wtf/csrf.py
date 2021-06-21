@@ -224,7 +224,7 @@ class CSRFProtect:
 
             if request.blueprint in self._exempt_blueprints:
                 return
-            
+
             if not app.config["WTF_CSRF_CHECK_WITHOUT_COOKIE"] and not request.cookies:
                 return
 
