@@ -5,7 +5,7 @@ Version 0.16.0
 --------------
 
 Unreleased
-
+-   Add ``WTF_CSRF_CHECK_WITHOUT_COOKIE`` setting to avoid calling CSRF check on requests without cookies
 
 Version 0.15.1
 --------------
