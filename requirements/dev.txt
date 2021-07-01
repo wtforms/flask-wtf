@@ -30,10 +30,10 @@ filelock==3.0.12
     # via
     #   tox
     #   virtualenv
-flask-uploads==0.2.1
-    # via -r tests.in
 flask==2.0.1
     # via flask-uploads
+flask-uploads==0.2.1
+    # via -r tests.in
 identify==2.2.6
     # via pre-commit
 idna==2.10
@@ -62,7 +62,7 @@ pallets-sphinx-themes==2.0.1
     # via -r docs.in
 pep517==0.10.0
     # via pip-tools
-pip-tools==6.1.0
+pip-tools==6.2.0
     # via -r dev.in
 pluggy==0.13.1
     # via
@@ -92,14 +92,14 @@ six==1.16.0
     #   virtualenv
 snowballstemmer==2.1.0
     # via sphinx
-sphinx-issues==1.2.0
-    # via -r docs.in
 sphinx==4.0.2
     # via
     #   -r docs.in
     #   pallets-sphinx-themes
     #   sphinx-issues
     #   sphinxcontrib-log-cabinet
+sphinx-issues==1.2.0
+    # via -r docs.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
@@ -130,6 +130,8 @@ virtualenv==20.4.7
     #   tox
 werkzeug==2.0.1
     # via flask
+wheel==0.36.2
+    # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
