@@ -38,14 +38,14 @@ requests==2.25.1
     # via sphinx
 snowballstemmer==2.1.0
     # via sphinx
-sphinx-issues==1.2.0
-    # via -r docs.in
-sphinx==4.0.2
+sphinx==4.1.2
     # via
     #   -r docs.in
     #   pallets-sphinx-themes
     #   sphinx-issues
     #   sphinxcontrib-log-cabinet
+sphinx-issues==1.2.0
+    # via -r docs.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
