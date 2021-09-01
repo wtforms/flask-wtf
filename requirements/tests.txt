@@ -8,10 +8,10 @@ attrs==21.2.0
     # via pytest
 click==8.0.1
     # via flask
-flask-uploads==0.2.1
-    # via -r requirements/tests.in
 flask==2.0.1
     # via flask-uploads
+flask-uploads==0.2.1
+    # via -r tests.in
 iniconfig==1.1.1
     # via pytest
 itsdangerous==2.0.1
@@ -28,8 +28,8 @@ py==1.10.0
     # via pytest
 pyparsing==2.4.7
     # via packaging
-pytest==6.2.4
-    # via -r requirements/tests.in
+pytest==6.2.5
+    # via -r tests.in
 toml==0.10.2
     # via pytest
 werkzeug==2.0.1
