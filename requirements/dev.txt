@@ -62,7 +62,7 @@ pallets-sphinx-themes==2.0.1
     # via -r docs.in
 pep517==0.10.0
     # via pip-tools
-pip-tools==6.2.0
+pip-tools==6.3.0
     # via -r dev.in
 pluggy==0.13.1
     # via
