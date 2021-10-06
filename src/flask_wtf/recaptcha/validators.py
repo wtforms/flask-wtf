@@ -51,7 +51,7 @@ class Recaptcha:
         try:
             private_key = current_app.config["RECAPTCHA_PRIVATE_KEY"]
         except KeyError:
-            raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set")
+            raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set") from None
 
         data = url_encode(
             {"secret": private_key, "remoteip": remote_addr, "response": response}
