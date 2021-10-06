@@ -110,10 +110,10 @@ def validate_csrf(data, secret_key=None, time_limit=None, token_key=None):
 
     try:
         token = s.loads(data, max_age=time_limit)
-    except SignatureExpired:
-        raise ValidationError("The CSRF token has expired.")
-    except BadData:
-        raise ValidationError("The CSRF token is invalid.")
+    except SignatureExpired as e:
+        raise ValidationError("The CSRF token has expired.") from e
+    except BadData as e:
+        raise ValidationError("The CSRF token is invalid.") from e
 
     if not hmac.compare_digest(session[field_name], token):
         raise ValidationError("The CSRF tokens do not match.")
