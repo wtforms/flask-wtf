@@ -35,6 +35,6 @@ class RecaptchaWidget:
         try:
             public_key = current_app.config["RECAPTCHA_PUBLIC_KEY"]
         except KeyError:
-            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set")
+            raise RuntimeError("RECAPTCHA_PUBLIC_KEY config not set") from None
 
         return self.recaptcha_html(public_key)
