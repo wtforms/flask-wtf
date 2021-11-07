@@ -4,6 +4,8 @@ Changes
 Version 1.0.0
 --------------
 
+Released 2021-11-07
+
 -   Deprecated items removal :pr:`484`
 -   Support for alternatives captcha services :pr:`425` :pr:`342`
     :pr:`387` :issue:`384`
