@@ -6,7 +6,6 @@ from wtforms import FileField
 from wtforms import HiddenField
 from wtforms import IntegerField
 from wtforms import StringField
-from wtforms.compat import with_metaclass
 from wtforms.form import FormMeta
 from wtforms.validators import DataRequired
 from wtforms.widgets import HiddenInput
@@ -119,7 +118,7 @@ def test_custom_meta_with_deprecated_form(req_ctx, recwarn):
     class FMeta(FormMeta):
         pass
 
-    class F(with_metaclass(FMeta, Form)):
+    class F(Form, metaclass=FMeta):
         pass
 
     F()
