@@ -1,4 +1,3 @@
-import warnings
 from collections import abc
 
 from werkzeug.datastructures import FileStorage
@@ -6,8 +5,6 @@ from wtforms import FileField as _FileField
 from wtforms.validators import DataRequired
 from wtforms.validators import StopValidation
 from wtforms.validators import ValidationError
-
-from ._compat import FlaskWTFDeprecationWarning
 
 
 class FileField(_FileField):
@@ -21,23 +18,6 @@ class FileField(_FileField):
             self.data = data
         else:
             self.raw_data = ()
-
-    def has_file(self):
-        """Return ``True`` if ``self.data`` is a
-        :class:`~werkzeug.datastructures.FileStorage` object.
-
-        .. deprecated:: 0.14.1
-            ``data`` is no longer set if the input is not a non-empty
-            ``FileStorage``. Check ``form.data is not None`` instead.
-        """
-
-        warnings.warn(
-            FlaskWTFDeprecationWarning(
-                '"has_file" is deprecated and will be removed in 1.0. The data is '
-                "checked during processing instead."
-            )
-        )
-        return bool(self.data)
 
 
 class FileRequired(DataRequired):

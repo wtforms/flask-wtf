@@ -1,11 +1,10 @@
 Changes
 =======
 
-Version 0.16.0
+Version 1.0.0
 --------------
 
-Unreleased
-
+-   Deprecated items removal :pr:`484`
 
 Version 0.15.1
 --------------
