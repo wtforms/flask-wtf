@@ -4,7 +4,6 @@ from werkzeug.datastructures import MultiDict
 from wtforms import FileField as BaseFileField
 
 from flask_wtf import FlaskForm
-from flask_wtf._compat import FlaskWTFDeprecationWarning
 from flask_wtf.file import FileAllowed
 from flask_wtf.file import FileField
 from flask_wtf.file import FileRequired
@@ -127,9 +126,3 @@ def test_validate_base_field(req_ctx):
     assert not F().validate()
     assert not F(f=FileStorage()).validate()
     assert F(f=FileStorage(filename="real")).validate()
-
-
-def test_deprecated_filefield(recwarn, form):
-    assert not form().file.has_file()
-    w = recwarn.pop(FlaskWTFDeprecationWarning)
-    assert "has_file" in str(w.message)

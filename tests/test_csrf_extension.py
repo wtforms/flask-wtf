@@ -1,15 +1,11 @@
 import pytest
-from flask import abort
 from flask import Blueprint
 from flask import g
 from flask import render_template_string
-from flask import request
 
 from flask_wtf import FlaskForm
-from flask_wtf._compat import FlaskWTFDeprecationWarning
 from flask_wtf.csrf import CSRFError
 from flask_wtf.csrf import CSRFProtect
-from flask_wtf.csrf import CsrfProtect
 from flask_wtf.csrf import generate_csrf
 
 
@@ -180,28 +176,3 @@ def test_validate_error_logged(client, monkeypatch):
     client.post("/")
     assert len(messages) == 1
     assert messages[0] == "The CSRF token is missing."
-
-
-def test_deprecated_csrfprotect(recwarn):
-    CsrfProtect()
-    w = recwarn.pop(FlaskWTFDeprecationWarning)
-    assert "CSRFProtect" in str(w.message)
-
-
-def test_deprecated_error_handler(csrf, client, recwarn):
-    @csrf.error_handler
-    def handle_csrf_error(reason):
-        if "abort" in request.form:
-            abort(418)
-
-        return "return"
-
-    w = recwarn.pop(FlaskWTFDeprecationWarning)
-    assert "@app.errorhandler" in str(w.message)
-
-    response = client.post("/", data={"abort": "1"})
-    assert response.status_code == 418
-
-    response = client.post("/")
-    assert response.status_code == 200
-    assert "return" in response.get_data(as_text=True)

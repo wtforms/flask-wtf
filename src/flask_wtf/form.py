@@ -1,5 +1,3 @@
-import warnings
-
 from flask import current_app
 from flask import request
 from flask import session
@@ -11,7 +9,6 @@ from wtforms import Form
 from wtforms.meta import DefaultMeta
 from wtforms.widgets import HiddenInput
 
-from ._compat import FlaskWTFDeprecationWarning
 from .csrf import _FlaskFormCSRF
 
 try:
@@ -73,19 +70,6 @@ class FlaskForm(Form):
             return translations
 
     def __init__(self, formdata=_Auto, **kwargs):
-        csrf_enabled = kwargs.pop("csrf_enabled", None)
-
-        if csrf_enabled is not None:
-            warnings.warn(
-                FlaskWTFDeprecationWarning(
-                    '"csrf_enabled" is deprecated and will be removed in 1.0. '
-                    "Pass meta={'csrf': False} instead."
-                ),
-                stacklevel=3,
-            )
-            kwargs["meta"] = kwargs.get("meta") or {}
-            kwargs["meta"].setdefault("csrf", csrf_enabled)
-
         super().__init__(formdata=formdata, **kwargs)
 
     def is_submitted(self):
@@ -141,20 +125,3 @@ def _is_submitted():
     """
 
     return bool(request) and request.method in SUBMIT_METHODS
-
-
-class Form(FlaskForm):
-    """
-    .. deprecated:: 0.13
-        Renamed to :class:`~flask_wtf.FlaskForm`.
-    """
-
-    def __init__(self, *args, **kwargs):
-        warnings.warn(
-            FlaskWTFDeprecationWarning(
-                '"flask_wtf.Form" has been renamed to "FlaskForm" '
-                "and will be removed in 1.0."
-            ),
-            stacklevel=3,
-        )
-        super().__init__(*args, **kwargs)

@@ -2,8 +2,6 @@ import hashlib
 import hmac
 import logging
 import os
-import warnings
-from functools import wraps
 from urllib.parse import urlparse
 
 from flask import Blueprint
@@ -17,8 +15,6 @@ from itsdangerous import URLSafeTimedSerializer
 from werkzeug.exceptions import BadRequest
 from wtforms import ValidationError
 from wtforms.csrf.core import CSRF
-
-from ._compat import FlaskWTFDeprecationWarning
 
 __all__ = ("generate_csrf", "validate_csrf", "CSRFProtect")
 logger = logging.getLogger(__name__)
@@ -309,59 +305,6 @@ class CSRFProtect:
 
     def _error_response(self, reason):
         raise CSRFError(reason)
-
-    def error_handler(self, view):
-        """Register a function that will generate the response for CSRF errors.
-
-        .. deprecated:: 0.14
-            Use the standard Flask error system with
-            ``@app.errorhandler(CSRFError)`` instead. This will be removed in
-            version 1.0.
-
-        The function will be passed one argument, ``reason``. By default it
-        will raise a :class:`~flask_wtf.csrf.CSRFError`. ::
-
-            @csrf.error_handler
-            def csrf_error(reason):
-                return render_template('error.html', reason=reason)
-
-        Due to historical reasons, the function may either return a response
-        or raise an exception with :func:`flask.abort`.
-        """
-
-        warnings.warn(
-            FlaskWTFDeprecationWarning(
-                '"@csrf.error_handler" is deprecated. Use the standard Flask '
-                'error system with "@app.errorhandler(CSRFError)" instead. This '
-                "will be removed in 1.0."
-            ),
-            stacklevel=2,
-        )
-
-        @wraps(view)
-        def handler(reason):
-            response = current_app.make_response(view(reason))
-            raise CSRFError(response=response)
-
-        self._error_response = handler
-        return view
-
-
-class CsrfProtect(CSRFProtect):
-    """
-    .. deprecated:: 0.14
-        Renamed to :class:`~flask_wtf.csrf.CSRFProtect`.
-    """
-
-    def __init__(self, app=None):
-        warnings.warn(
-            FlaskWTFDeprecationWarning(
-                '"flask_wtf.CsrfProtect" has been renamed to "CSRFProtect" '
-                "and will be removed in 1.0."
-            ),
-            stacklevel=2,
-        )
-        super().__init__(app=app)
 
 
 class CSRFError(BadRequest):
