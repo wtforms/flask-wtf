@@ -5,6 +5,8 @@ Version 1.0.0
 --------------
 
 -   Deprecated items removal :pr:`484`
+-   Support for alternatives captcha services :pr:`425` :pr:`342`
+    :pr:`387` :issue:`384`
 
 Version 0.15.1
 --------------

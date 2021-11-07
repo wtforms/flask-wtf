@@ -5,10 +5,11 @@ from werkzeug.urls import url_encode
 
 JSONEncoder = json.JSONEncoder
 
-RECAPTCHA_SCRIPT = "https://www.google.com/recaptcha/api.js"
+RECAPTCHA_SCRIPT_DEFAULT = "https://www.google.com/recaptcha/api.js"
+RECAPTCHA_DIV_CLASS_DEFAULT = "g-recaptcha"
 RECAPTCHA_TEMPLATE = """
 <script src='%s' async defer></script>
-<div class="g-recaptcha" %s></div>
+<div class="%s" %s></div>
 """
 
 __all__ = ["RecaptchaWidget"]
@@ -20,14 +21,18 @@ class RecaptchaWidget:
         if html:
             return Markup(html)
         params = current_app.config.get("RECAPTCHA_PARAMETERS")
-        script = RECAPTCHA_SCRIPT
+        script = current_app.config.get("RECAPTCHA_SCRIPT")
+        if not script:
+            script = RECAPTCHA_SCRIPT_DEFAULT
         if params:
             script += "?" + url_encode(params)
-
         attrs = current_app.config.get("RECAPTCHA_DATA_ATTRS", {})
         attrs["sitekey"] = public_key
         snippet = " ".join(f'data-{k}="{attrs[k]}"' for k in attrs)
-        return Markup(RECAPTCHA_TEMPLATE % (script, snippet))
+        div_class = current_app.config.get("RECAPTCHA_DIV_CLASS")
+        if not div_class:
+            div_class = RECAPTCHA_DIV_CLASS_DEFAULT
+        return Markup(RECAPTCHA_TEMPLATE % (script, div_class, snippet))
 
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
