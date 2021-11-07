@@ -6,9 +6,6 @@ from flask import request
 from werkzeug.urls import url_encode
 from wtforms import ValidationError
 
-from .._compat import to_bytes
-from .._compat import to_unicode
-
 RECAPTCHA_VERIFY_SERVER = "https://www.google.com/recaptcha/api/siteverify"
 RECAPTCHA_ERROR_CODES = {
     "missing-input-secret": "The secret parameter is missing.",
@@ -57,12 +54,12 @@ class Recaptcha:
             {"secret": private_key, "remoteip": remote_addr, "response": response}
         )
 
-        http_response = http.urlopen(RECAPTCHA_VERIFY_SERVER, to_bytes(data))
+        http_response = http.urlopen(RECAPTCHA_VERIFY_SERVER, data.encode("utf-8"))
 
         if http_response.code != 200:
             return False
 
-        json_resp = json.loads(to_unicode(http_response.read()))
+        json_resp = json.loads(http_response.read())
 
         if json_resp["success"]:
             return True
