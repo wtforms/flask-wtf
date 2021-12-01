@@ -58,7 +58,7 @@ packaging==21.0
     #   pytest
     #   sphinx
     #   tox
-pallets-sphinx-themes==2.0.1
+pallets-sphinx-themes==2.0.2
     # via -r docs.in
 pep517==0.11.0
     # via pip-tools
@@ -70,7 +70,7 @@ pluggy==1.0.0
     # via
     #   pytest
     #   tox
-pre-commit==2.15.0
+pre-commit==2.16.0
     # via -r dev.in
 py==1.10.0
     # via
