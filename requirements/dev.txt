@@ -58,7 +58,7 @@ packaging==21.0
     #   pytest
     #   sphinx
     #   tox
-pallets-sphinx-themes==2.0.1
+pallets-sphinx-themes==2.0.2
     # via -r docs.in
 pep517==0.11.0
     # via pip-tools
