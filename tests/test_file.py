@@ -1,5 +1,6 @@
 import pytest
 from werkzeug.datastructures import FileStorage
+from werkzeug.datastructures import ImmutableMultiDict
 from werkzeug.datastructures import MultiDict
 from wtforms import FileField as BaseFileField
 
@@ -27,6 +28,27 @@ def test_process_formdata(form):
     assert form(MultiDict((("file", FileStorage()),))).file.data is None
     assert (
         form(MultiDict((("file", FileStorage(filename="real")),))).file.data is not None
+    )
+
+
+def test_multiple_process_formdata(form):
+    assert (
+        form(
+            ImmutableMultiDict([("files", FileStorage()), ("files", FileStorage())])
+        ).files.data
+        is None
+    )
+
+    assert (
+        form(
+            ImmutableMultiDict(
+                [
+                    ("files", FileStorage(filename="a.jpg")),
+                    ("files", FileStorage(filename="b.jpg")),
+                ]
+            )
+        ).files.data
+        is not None
     )
 
 
