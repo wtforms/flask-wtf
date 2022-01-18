@@ -82,7 +82,8 @@ Validation
 
 Flask-WTF supports validating file uploads with
 :class:`FileRequired` and :class:`FileAllowed`. They can be used with both
-Flask-WTF's and WTForms's ``FileField``, ``MultipleFileField`` classes.
+Flask-WTF's and WTForms's ``FileField`` classes. For the ``MultipleFileField``
+only Fask-WTF's implementation is supported.
 
 :class:`FileAllowed` works well with Flask-Uploads. ::
 
