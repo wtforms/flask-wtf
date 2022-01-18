@@ -8,7 +8,7 @@ Released ...
 
 - Add `flask-wtf.file.MultipleFileField` and ``FileRequired``,
     ``FileAllowed``, ``FileSize`` validators support for this field
-    :pr: `499` :issue:`337` :issue:`393`
+    :pr:`499` :issue:`337` :issue:`393`
 
 Version 1.0.0
 --------------
