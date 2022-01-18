@@ -2,6 +2,7 @@ from collections import abc
 
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
+from wtforms import MultipleFileField as _MultipleFileField
 from wtforms.validators import DataRequired
 from wtforms.validators import StopValidation
 from wtforms.validators import ValidationError
@@ -20,6 +21,19 @@ class FileField(_FileField):
             self.raw_data = ()
 
 
+class MultipleFileField(_MultipleFileField):
+    """Werkzeug-aware subclass of :class:`wtforms.fields.MultipleFileField`."""
+
+    def process_formdata(self, valuelist):
+        valuelist = (x for x in valuelist if isinstance(x, FileStorage) and x)
+        data = list(valuelist) or None
+
+        if data is not None:
+            self.data = data
+        else:
+            self.raw_data = ()
+
+
 class FileRequired(DataRequired):
     """Validates that the data is a Werkzeug
     :class:`~werkzeug.datastructures.FileStorage` object.
@@ -30,6 +44,16 @@ class FileRequired(DataRequired):
     """
 
     def __call__(self, form, field):
+        if isinstance(field, MultipleFileField):
+            if not (
+                field.data and all(isinstance(x, FileStorage) and x for x in field.data)
+            ):
+                raise StopValidation(
+                    self.message or field.gettext("This field is required.")
+                )
+
+            return
+
         if not (isinstance(field.data, FileStorage) and field.data):
             raise StopValidation(
                 self.message or field.gettext("This field is required.")
@@ -55,6 +79,10 @@ class FileAllowed:
         self.message = message
 
     def __call__(self, form, field):
+        if isinstance(field, MultipleFileField):
+            self.multiple_validation(field)
+            return
+
         if not (isinstance(field.data, FileStorage) and field.data):
             return
 
@@ -77,6 +105,32 @@ class FileAllowed:
                 or field.gettext("File does not have an approved extension.")
             )
 
+    def multiple_validation(self, field):
+        if not (
+            field.data and all(isinstance(x, FileStorage) and x for x in field.data)
+        ):
+            return
+
+        for data in field.data:
+            filename = data.filename.lower()
+
+            if isinstance(self.upload_set, abc.Iterable):
+                if any(filename.endswith("." + x) for x in self.upload_set):
+                    continue
+
+                raise StopValidation(
+                    self.message
+                    or field.gettext(
+                        "File does not have an approved extension: {extensions}"
+                    ).format(extensions=", ".join(self.upload_set))
+                )
+
+            if not self.upload_set.file_allowed(data, filename):
+                raise StopValidation(
+                    self.message
+                    or field.gettext("File does not have an approved extension.")
+                )
+
 
 file_allowed = FileAllowed
 
@@ -98,6 +152,10 @@ class FileSize:
         self.message = message
 
     def __call__(self, form, field):
+        if isinstance(field, MultipleFileField):
+            self.multiple_validation(field)
+            return
+
         if not (isinstance(field.data, FileStorage) and field.data):
             return
 
@@ -114,6 +172,29 @@ class FileSize:
                     )
                 )
             )
+
+    def multiple_validation(self, field):
+        if not (
+            field.data and all(isinstance(x, FileStorage) and x for x in field.data)
+        ):
+            return
+
+        for data in field.data:
+            file_size = len(data.read())  # reset cursor position to beginning of file
+            data.seek(0)
+
+            if (file_size < self.min_size) or (file_size > self.max_size):
+                # the file is too small or too big => validation failure
+                raise ValidationError(
+                    self.message
+                    or field.gettext(
+                        "File must be between {min_size} and {max_size} bytes.".format(
+                            min_size=self.min_size, max_size=self.max_size
+                        )
+                    )
+                )
+
+            continue
 
 
 file_size = FileSize
