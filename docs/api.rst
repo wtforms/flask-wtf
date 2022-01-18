@@ -21,6 +21,8 @@ Forms and Fields
 
 .. autoclass:: FileField
 
+.. autoclass:: MultipleFileField
+
 .. autoclass:: FileAllowed
 
 .. autoclass:: FileRequired
