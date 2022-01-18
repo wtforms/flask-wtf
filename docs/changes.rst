@@ -5,6 +5,7 @@ Version 1.0.1
 --------------
 
 Released 2022-01-18
+
 - Add `flask-wtf.file.MultipleFileField` and ``FileRequired``,
     ``FileAllowed``, ``FileSize`` validators support for this field
     :pr: `499` :issue:`337` :issue:`393`
