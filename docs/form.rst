@@ -30,7 +30,7 @@ File Uploads
 
 .. currentmodule:: flask_wtf.file
 
-The :class:`FileField` provided by Flask-WTF differs from the WTForms-provided
+The :class:`FileField` and :class:`MultipleFileField` provided by Flask-WTF differs from the WTForms-provided
 field. It will check that the file is a non-empty instance of
 :class:`~werkzeug.datastructures.FileStorage`, otherwise ``data`` will be
 ``None``. ::
@@ -82,7 +82,7 @@ Validation
 
 Flask-WTF supports validating file uploads with
 :class:`FileRequired` and :class:`FileAllowed`. They can be used with both
-Flask-WTF's and WTForms's ``FileField`` classes.
+Flask-WTF's and WTForms's ``FileField``, ``MultipleFileField`` classes.
 
 :class:`FileAllowed` works well with Flask-Uploads. ::
 
