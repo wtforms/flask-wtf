@@ -13,7 +13,7 @@ class FileField(_FileField):
 
     def process_formdata(self, valuelist):
         valuelist = (x for x in valuelist if isinstance(x, FileStorage) and x)
-        data = list(valuelist) or None
+        data = next(valuelist, None)
 
         if data is not None:
             self.data = data
