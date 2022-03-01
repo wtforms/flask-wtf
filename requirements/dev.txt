@@ -80,7 +80,7 @@ pygments==2.10.0
     # via sphinx
 pyparsing==2.4.7
     # via packaging
-pytest==6.2.5
+pytest==7.0.1
     # via -r tests.in
 pytz==2021.3
     # via babel
@@ -119,10 +119,11 @@ sphinxcontrib-serializinghtml==1.1.5
 toml==0.10.2
     # via
     #   pre-commit
-    #   pytest
     #   tox
 tomli==1.2.1
-    # via pep517
+    # via
+    #   pep517
+    #   pytest
 tox==3.24.5
     # via -r dev.in
 urllib3==1.26.7
