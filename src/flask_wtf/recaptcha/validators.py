@@ -27,7 +27,7 @@ class Recaptcha:
         self.message = message
 
     def __call__(self, form, field):
-        if current_app.testing or current_app.config.get('RECAPTCHA_DISABLE', False):
+        if current_app.testing or current_app.config.get("RECAPTCHA_DISABLE", False):
             return True
 
         if request.json:
