@@ -1,52 +1,67 @@
 Configuration
 =============
 
-Here is the full table of all configurations.
+========================== =====================================================
+``WTF_CSRF_ENABLED``       Set to ``False`` to disable all CSRF protection.
+                           Default is ``True``.
+``WTF_CSRF_CHECK_DEFAULT`` When using the CSRF protection extension, this
+                           controls whether every view is protected by default.
+                           Default is ``True``.
+``WTF_CSRF_SECRET_KEY``    Random data for generating secure tokens. If this is
+                           not set then ``SECRET_KEY`` is used.
+``WTF_CSRF_METHODS``       HTTP methods to protect from CSRF. Default is
+                           ``{'POST', 'PUT', 'PATCH', 'DELETE'}``.
+``WTF_CSRF_FIELD_NAME``    Name of the form field and session key that holds the
+                           CSRF token. Default is ``csrf_token``.
+``WTF_CSRF_HEADERS``       HTTP headers to search for CSRF token when it is not
+                           provided in the form. Default is
+                           ``['X-CSRFToken', 'X-CSRF-Token']``.
+``WTF_CSRF_TIME_LIMIT``    Max age in seconds for CSRF tokens. Default is
+                           ``3600``. If set to ``None``, the CSRF token is valid
+                           for the life of the session.
+``WTF_CSRF_SSL_STRICT``    Whether to enforce the same origin policy by checking
+                           that the referrer matches the host. Only applies to
+                           HTTPS requests. Default is ``True``.
+``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support.
+                           Also set to ``False`` if you want to use WTForms's
+                           built-in messages directly, see more info `here`_.
+                           Default is ``True``.
+========================== =====================================================
 
-Forms and CSRF
---------------
-
-The full list of configuration for Flask-WTF. Usually, you don't need
-to configure any of them. It just works.
-
-======================= ==============================================
-WTF_CSRF_ENABLED        Disable/enable CSRF protection for forms.
-                        Default is True.
-WTF_CSRF_CHECK_DEFAULT  Enable CSRF checks for all views by default.
-                        Default is True.
-WTF_I18N_ENABLED        Disable/enable I18N support. This should work
-                        together with Flask-Babel. Default is True.
-WTF_CSRF_HEADERS        CSRF token HTTP headers checked. Default is
-                        **['X-CSRFToken', 'X-CSRF-Token']**
-WTF_CSRF_SECRET_KEY     A random string for generating CSRF token.
-                        Default is the same as SECRET_KEY.
-WTF_CSRF_TIME_LIMIT     CSRF token expiring time. Default is **3600**
-                        seconds.
-WTF_CSRF_SSL_STRICT     Strictly protection on SSL. This will check
-                        the referrer, validate if it is from the same
-                        origin. Default is True.
-WTF_CSRF_METHODS        CSRF protection on these request methods.
-                        Default is **['POST', 'PUT', 'PATCH']**
-WTF_HIDDEN_TAG          HTML tag name of the hidden tag wrapper.
-                        Default is **div**
-WTF_HIDDEN_TAG_ATTRS    HTML tag attributes of the hidden tag wrapper.
-                        Default is **{'style': 'display:none;'}**
-======================= ==============================================
-
+.. _here: https://wtforms.readthedocs.io/en/stable/i18n.html#using-the-built-in-translations-provider
 
 Recaptcha
 ---------
 
-You have already learned these configuration at :ref:`recaptcha`.
-This table is only designed for a convience.
+=========================== ==============================================
+``RECAPTCHA_PUBLIC_KEY``    **required** A public key.
+``RECAPTCHA_PRIVATE_KEY``   **required** A private key.
+                            https://www.google.com/recaptcha/admin
+``RECAPTCHA_DISABLE``       Disable recaptcha widgets.
+                            Default is ``False``
+``RECAPTCHA_PARAMETERS``    **optional** A dict of configuration options.
+``RECAPTCHA_HTML``          **optional** Override default HTML template
+                            for Recaptcha.
+``RECAPTCHA_DATA_ATTRS``    **optional** A dict of ``data-`` attrs to use
+                            for Recaptcha div
+``RECAPTCHA_SCRIPT``        **optional** Override the default captcha
+                            script URI in case an alternative service to
+                            reCAPtCHA, e.g. hCaptcha is used. Default is
+                            ``'https://www.google.com/recaptcha/api.js'``
+``RECAPTCHA_DIV_CLASS``     **optional** Override the default class of the
+                            captcha div in case an alternative captcha
+                            service is used. Default is
+                            ``'g-recaptcha'``
+``RECAPTCHA_VERIFY_SERVER`` **optional** Override the default verification
+                            server in case an alternative service is used.
+                            Default is
+                            ``'https://www.google.com/recaptcha/api/siteverify'``
 
-======================= ==============================================
-RECAPTCHA_DISABLE       Disable recaptcha widgets.
-                        Default is False
-RECAPTCHA_USE_SSL       Enable/disable recaptcha through ssl.
-                        Default is False.
-RECAPTCHA_PUBLIC_KEY    **required** A public key.
-RECAPTCHA_PRIVATE_KEY   **required** A private key.
-RECAPTCHA_OPTIONS       **optional** A dict of configuration options.
-                        https://www.google.com/recaptcha/admin/create
-======================= ==============================================
+=========================== ==============================================
+
+Logging
+-------
+
+CSRF errors are logged at the ``INFO`` level to the ``flask_wtf.csrf`` logger.
+You still need to configure logging in your application in order to see these
+messages.

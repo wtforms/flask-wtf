@@ -11,11 +11,11 @@ Creating Forms
 
 Flask-WTF provides your Flask application integration with WTForms. For example::
 
-    from flask_wtf import Form
+    from flask_wtf import FlaskForm
     from wtforms import StringField
     from wtforms.validators import DataRequired
 
-    class MyForm(Form):
+    class MyForm(FlaskForm):
         name = StringField('name', validators=[DataRequired()])
 
 
@@ -35,9 +35,8 @@ render this in your template:
         <input type="submit" value="Go">
     </form>
 
-However, in order to create valid XHTML/HTML the Form class has a method
-hidden_tag which renders any hidden fields, including the CSRF field,
-inside a hidden DIV tag:
+If your form has multiple hidden fields, you can render them in one
+block using :meth:`~flask_wtf.FlaskForm.hidden_tag`.
 
 .. sourcecode:: html+jinja
 
@@ -53,7 +52,7 @@ Validating Forms
 
 Validating the request in your view handlers::
 
-    @app.route('/submit', methods=('GET', 'POST'))
+    @app.route('/submit', methods=['GET', 'POST'])
     def submit():
         form = MyForm()
         if form.validate_on_submit():
@@ -61,7 +60,21 @@ Validating the request in your view handlers::
         return render_template('submit.html', form=form)
 
 Note that you don't have to pass ``request.form`` to Flask-WTF; it will
-load automatically. And the convenience ``validate_on_submit`` will check
+load automatically. And the convenient ``validate_on_submit`` will check
 if it is a POST request and if it is valid.
+
+If your forms include validation, you'll need to add to your template to display
+any error messages.  Using the ``form.name`` field from the example above, that
+would look like this:
+
+.. sourcecode:: html+jinja
+
+    {% if form.name.errors %}
+        <ul class="errors">
+        {% for error in form.name.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 
 Heading over to :doc:`form` to learn more skills.

@@ -1,35 +1,70 @@
-from __future__ import with_statement
+import pytest
+from flask import request
+from wtforms import StringField
+from wtforms.validators import DataRequired
+from wtforms.validators import Length
 
-from .base import TestCase, to_unicode
+from flask_wtf import FlaskForm
 
 
-class TestI18NCase(TestCase):
-    def test_i18n_disabled(self):
-        self.app.config['CSRF_ENABLED'] = False
-        response = self.client.post(
-            "/",
-            headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
-            data={}
-        )
-        assert b'This field is required.' in response.data
+class NameForm(FlaskForm):
+    class Meta:
+        csrf = False
 
-    def test_i18n_enabled(self):
-        from flask import request
-        from flask.ext.babel import Babel
-        babel = Babel(self.app)
+    name = StringField(validators=[DataRequired(), Length(min=8)])
 
-        @babel.localeselector
-        def get_locale():
-            return request.accept_languages.best_match(['en', 'zh'], 'en')
 
-        self.app.config['CSRF_ENABLED'] = False
+def test_no_extension(app, client):
+    @app.route("/", methods=["POST"])
+    def index():
+        form = NameForm()
+        form.validate()
+        assert form.name.errors[0] == "This field is required."
 
-        response = self.client.post(
-            "/",
-            headers={'Accept-Language': 'zh-CN,zh;q=0.8'},
-            data={}
-        )
-        assert '\u8be5\u5b57\u6bb5\u662f' in to_unicode(response.data)
+    client.post("/", headers={"Accept-Language": "zh-CN,zh;q=0.8"})
 
-        response = self.client.post("/", data={})
-        assert b'This field is required.' in response.data
+
+def test_i18n(app, client):
+    try:
+        from flask_babel import Babel
+    except ImportError:
+        try:
+            from flask_babelex import Babel
+        except ImportError:
+            pytest.skip("Flask-Babel or Flask-BabelEx must be installed.")
+
+    babel = Babel(app)
+
+    @babel.localeselector
+    def get_locale():
+        return request.accept_languages.best_match(["en", "zh"], "en")
+
+    @app.route("/", methods=["POST"])
+    def index():
+        form = NameForm()
+        form.validate()
+
+        if not app.config.get("WTF_I18N_ENABLED", True):
+            assert form.name.errors[0] == "This field is required."
+        elif not form.name.data:
+            assert form.name.errors[0] == "该字段是必填字段。"
+        else:
+            assert form.name.errors[0] == "字段长度必须至少 8 个字符。"
+
+    client.post("/", headers={"Accept-Language": "zh-CN,zh;q=0.8"})
+    client.post("/", headers={"Accept-Language": "zh"}, data={"name": "short"})
+    app.config["WTF_I18N_ENABLED"] = False
+    client.post("/", headers={"Accept-Language": "zh"})
+
+
+def test_outside_request():
+    pytest.importorskip("babel")
+    from flask_wtf.i18n import translations
+
+    s = "This field is required."
+    assert translations.gettext(s) == s
+
+    ss = "Field must be at least %(min)d character long."
+    sp = "Field must be at least %(min)d character long."
+    assert translations.ngettext(ss, sp, 1) == ss
+    assert translations.ngettext(ss, sp, 2) == sp

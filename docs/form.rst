@@ -1,22 +1,20 @@
 Creating Forms
 ==============
 
-This part of the documentation covers the Form parts.
-
 Secure Form
 -----------
 
-.. module:: flask_wtf
+.. currentmodule:: flask_wtf
 
-Without any configuration, the :class:`Form` will be a session secure
-form with csrf protection. We encourage you do nothing.
+Without any configuration, the :class:`FlaskForm` will be a session secure
+form with csrf protection. We encourage you not to change this.
 
 But if you want to disable the csrf protection, you can pass::
 
-    form = Form(csrf_enabled=False)
+    form = FlaskForm(meta={'csrf': False})
 
-If you want to disable it globally, which you really shouldn't. But if
-you insist, it can be done with the configuration::
+You can disable it globally—though you really shouldn't—with the
+configuration::
 
     WTF_CSRF_ENABLED = False
 
@@ -30,85 +28,83 @@ another secret key, config it::
 File Uploads
 ------------
 
-.. module:: flask_wtf.file
+.. currentmodule:: flask_wtf.file
 
-Flask-WTF provides you a :class:`FileField` to handle file uploading,
-it will automatically draw data from ``flask.request.files`` if the form
-is posted. The ``data`` attribute of :class:`FileField` will be an
-instance of Werkzeug FileStorage. 
+The :class:`FileField` provided by Flask-WTF differs from the WTForms-provided
+field. It will check that the file is a non-empty instance of
+:class:`~werkzeug.datastructures.FileStorage`, otherwise ``data`` will be
+``None``. ::
 
-For example::
+    from flask_wtf import FlaskForm
+    from flask_wtf.file import FileField, FileRequired
+    from werkzeug.utils import secure_filename
 
-    from werkzeug import secure_filename
-    from flask_wtf.file import FileField
+    class PhotoForm(FlaskForm):
+        photo = FileField(validators=[FileRequired()])
 
-    class PhotoForm(Form):
-        photo = FileField('Your photo')
-
-    @app.route('/upload/', methods=('GET', 'POST'))
+    @app.route('/upload', methods=['GET', 'POST'])
     def upload():
         form = PhotoForm()
+
         if form.validate_on_submit():
-            filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save('uploads/' + filename)
-        else:
-            filename = None
-        return render_template('upload.html', form=form, filename=filename)
+            f = form.photo.data
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(
+                app.instance_path, 'photos', filename
+            ))
+            return redirect(url_for('index'))
 
-.. note::
+        return render_template('upload.html', form=form)
 
-    Remember to set the ``enctype`` of your HTML form to
-    ``multipart/form-data``, which means:
+Remember to set the ``enctype`` of the HTML form to
+``multipart/form-data``, otherwise ``request.files`` will be empty.
 
-    .. sourcecode:: html
+.. sourcecode:: html
 
-        <form action="/upload/" method="POST" enctype="multipart/form-data">
-            ....
-        </form>
+    <form method="POST" enctype="multipart/form-data">
+        ...
+    </form>
 
-More than that, Flask-WTF supports validation on file uploading. There
-are :class:`FileRequired` and :class:`FileAllowed`.
+Flask-WTF handles passing form data to the form for you.
+If you pass in the data explicitly, remember that ``request.form`` must
+be combined with ``request.files`` for the form to see the file data. ::
 
-The :class:`FileAllowed` works well with Flask-Uploads, for example::
+    form = PhotoForm()
+    # is equivalent to:
 
-    from flask.ext.uploads import UploadSet, IMAGES
-    from flask_wtf import Form
+    from flask import request
+    from werkzeug.datastructures import CombinedMultiDict
+    form = PhotoForm(CombinedMultiDict((request.files, request.form)))
+
+
+Validation
+~~~~~~~~~~
+
+Flask-WTF supports validating file uploads with
+:class:`FileRequired` and :class:`FileAllowed`. They can be used with both
+Flask-WTF's and WTForms's ``FileField`` classes.
+
+:class:`FileAllowed` works well with Flask-Uploads. ::
+
+    from flask_uploads import UploadSet, IMAGES
+    from flask_wtf import FlaskForm
     from flask_wtf.file import FileField, FileAllowed, FileRequired
 
     images = UploadSet('images', IMAGES)
 
-    class UploadForm(Form):
+    class UploadForm(FlaskForm):
         upload = FileField('image', validators=[
             FileRequired(),
             FileAllowed(images, 'Images only!')
         ])
 
-It can work without Flask-Uploads too. You need to pass the extensions
-to :class:`FileAllowed`::
+It can be used without Flask-Uploads by passing the extensions directly. ::
 
-    class UploadForm(Form):
+    class UploadForm(FlaskForm):
         upload = FileField('image', validators=[
             FileRequired(),
             FileAllowed(['jpg', 'png'], 'Images only!')
         ])
-
-HTML5 Widgets
--------------
-
-.. note::
-
-    HTML5 widgets and fields are builtin of wtforms since 1.0.5. You
-    should consider import them from wtforms if possible.
-
-    We will drop html5 module in next release 0.9.3.
-
-You can import a number of HTML5 widgets from ``wtforms``::
-
-    from wtforms.fields.html5 import URLField
-    from wtforms.validators import url
-
-    class LinkForm(Form):
-        url = URLField(validators=[url()])
 
 
 .. _recaptcha:
@@ -116,36 +112,35 @@ You can import a number of HTML5 widgets from ``wtforms``::
 Recaptcha
 ---------
 
-.. module:: flask_wtf.recaptcha
+.. currentmodule:: flask_wtf.recaptcha
 
 Flask-WTF also provides Recaptcha support through a :class:`RecaptchaField`::
 
-    from flask_wtf import Form, RecaptchaField
+    from flask_wtf import FlaskForm, RecaptchaField
     from wtforms import TextField
 
-    class SignupForm(Form):
+    class SignupForm(FlaskForm):
         username = TextField('Username')
         recaptcha = RecaptchaField()
 
-This comes together with a number of configuration, which you have to
-implement them.
+This comes with a number of configuration variables, some of which you have to configure.
 
-===================== =========================================================
-RECAPTCHA_PUBLIC_KEY  **required** A public key.
-RECAPTCHA_PRIVATE_KEY **required** A private key.
-RECAPTCHA_API_SERVER  **optional** Specify your Recaptcha API server.
-RECAPTCHA_PARAMETERS  **optional** A dict of JavaScript (api.js) parameters.
-RECAPTCHA_DATA_ATTRS  **optional** A dict of data attributes options.
-                      https://developers.google.com/recaptcha/docs/display
-===================== ==========================================================
+======================= ==============================================
+RECAPTCHA_PUBLIC_KEY    **required** A public key.
+RECAPTCHA_PRIVATE_KEY   **required** A private key.
+RECAPTCHA_API_SERVER    **optional** Specify your Recaptcha API server.
+RECAPTCHA_PARAMETERS    **optional** A dict of JavaScript (api.js) parameters.
+RECAPTCHA_DATA_ATTRS    **optional** A dict of data attributes options.
+                        https://developers.google.com/recaptcha/docs/display#javascript_resource_apijs_parameters
+======================= ==============================================
 
 Example of RECAPTCHA_PARAMETERS, and RECAPTCHA_DATA_ATTRS::
 
     RECAPTCHA_PARAMETERS = {'hl': 'zh', 'render': 'explicit'}
     RECAPTCHA_DATA_ATTRS = {'theme': 'dark'}
 
-For testing your application, if ``app.testing`` is ``True``, recaptcha
-field will always be valid for you convenience.
+For your convenience, when testing your application, if ``app.testing`` is ``True``, the recaptcha
+field will always be valid.
 
 In development environment or when you are offline you can disable all
 recaptcha fields::
@@ -163,4 +158,4 @@ And it can be easily setup in the templates:
 
 We have an example for you: `recaptcha@github`_.
 
-.. _`recaptcha@github`: https://github.com/lepture/flask-wtf/tree/master/examples/recaptcha
+.. _`recaptcha@github`: https://github.com/wtforms/flask-wtf/tree/main/examples/recaptcha

@@ -1,36 +1,28 @@
+.. currentmodule:: flask_wtf.csrf
+
+.. _csrf:
+
 CSRF Protection
 ===============
 
-This part of the documentation covers the CSRF protection.
+Any view using :class:`~flask_wtf.FlaskForm` to process the request is already
+getting CSRF protection. If you have views that don't use ``FlaskForm`` or make
+AJAX requests, use the provided CSRF extension to protect those requests as
+well.
 
-Why CSRF
---------
+Setup
+-----
 
-Flask-WTF form is already protecting you from CSRF, you don't have to
-worry about that. However, you have views that contain no forms, and they
-still need protection.
+To enable CSRF protection globally for a Flask app, register the
+:class:`CSRFProtect` extension. ::
 
-For example, the POST request is sent by AJAX, but it has no form behind
-it. You can't get the csrf token prior 0.9.0 of Flask-WTF. That's why we
-created this CSRF for you.
+    from flask_wtf.csrf import CSRFProtect
 
-Implementation
---------------
+    csrf = CSRFProtect(app)
 
-.. module:: flask_wtf.csrf
+Like other Flask extensions, you can apply it lazily::
 
-To enable CSRF protection for all your view handlers, you need to enable
-the :class:`CsrfProtect` module::
-
-    from flask_wtf.csrf import CsrfProtect
-
-    CsrfProtect(app)
-
-Like any other Flask extensions, you can load it lazily::
-
-    from flask_wtf.csrf import CsrfProtect
-
-    csrf = CsrfProtect()
+    csrf = CSRFProtect()
 
     def create_app():
         app = Flask(__name__)
@@ -38,108 +30,94 @@ Like any other Flask extensions, you can load it lazily::
 
 .. note::
 
-    You need to setup a secret key for CSRF protection. Usually, this
-    is the same as your Flask app SECRET_KEY.
+    CSRF protection requires a secret key to securely sign the token. By default
+    this will use the Flask app's ``SECRET_KEY``. If you'd like to use a
+    separate token you can set ``WTF_CSRF_SECRET_KEY``.
 
-If the template has a form, you don't need to do any thing. It is the
-same as before:
+HTML Forms
+----------
+
+When using a ``FlaskForm``, render the form's CSRF field like normal.
 
 .. sourcecode:: html+jinja
 
-    <form method="post" action="/">
+    <form method="post">
         {{ form.csrf_token }}
     </form>
 
-But if the template has no forms, you still need a csrf token:
+If the template doesn't use a ``FlaskForm``, render a hidden input with the
+token in the form.
 
 .. sourcecode:: html+jinja
 
-    <form method="post" action="/">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
 
-Whenever a CSRF validation fails, it will return a 400 response. You can
-customize the error response::
+JavaScript Requests
+-------------------
 
-    @csrf.error_handler
-    def csrf_error(reason):
-        return render_template('csrf_error.html', reason=reason), 400
+When sending an AJAX request, add the ``X-CSRFToken`` header to it.
+For example, in jQuery you can configure all requests to send the token.
+
+.. sourcecode:: html+jinja
+
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token() }}";
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+        });
+    </script>
+
+In Axios you can set the header for all requests with ``axios.defaults.headers.common``.
+
+.. sourcecode:: html+jinja
+
+    <script type="text/javascript">
+        axios.defaults.headers.common["X-CSRFToken"] = "{{ csrf_token() }}";
+    </script>
+
+Customize the error response
+----------------------------
+
+When CSRF validation fails, it will raise a :class:`CSRFError`.
+By default this returns a response with the failure reason and a 400 code.
+You can customize the error response using Flask's
+:meth:`~flask.Flask.errorhandler`. ::
+
+    from flask_wtf.csrf import CSRFError
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        return render_template('csrf_error.html', reason=e.description), 400
+
+Exclude views from protection
+-----------------------------
 
 We strongly suggest that you protect all your views with CSRF. But if
-needed, you can exclude some views using a decorator::
+needed, you can exclude some views using a decorator. ::
 
-    @csrf.exempt
     @app.route('/foo', methods=('GET', 'POST'))
+    @csrf.exempt
     def my_handler():
         # ...
         return 'ok'
 
-If needed, you can also exclude all the views from within a given Blueprint:
+You can exclude all the views of a blueprint. ::
 
     csrf.exempt(account_blueprint)
-    
-You can also disable CSRF protection in all views by default, by setting
+
+You can disable CSRF protection in all views by default, by setting
 ``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
-``csrf.protect()`` only when you need. This also enables you to do some
-pre-processing on the requests before checking for the CSRF token::
+:meth:`~flask_wtf.csrf.CSRFProtect.protect` only when you need. This also enables you to do some
+pre-processing on the requests before checking for the CSRF token. ::
 
     @app.before_request
     def check_csrf():
         if not is_oauth(request):
             csrf.protect()
-
-AJAX
-----
-
-Sending POST requests via AJAX is possible where there are no forms at all.
-This feature is available since 0.9.0.
-
-Assuming you have done ``CsrfProtect(app)``, you can get the csrf token via
-``{{ csrf_token() }}``. This method is available in every template, that
-way you don't have to worry if there are no forms for rendering the csrf token
-field.
-
-The suggested way is that you render the token in a ``<meta>`` tag:
-
-.. sourcecode:: html+jinja
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-And it is also possible to render it in the ``<script>`` tag:
-
-.. sourcecode:: html+jinja
-
-    <script type="text/javascript">
-        var csrftoken = "{{ csrf_token() }}"
-    </script>
-
-We will take the ``<meta>`` way for example, the ``<script>`` way is far
-more easier, you don't have to worry if there is no example for it.
-
-Whenever you send a AJAX POST request, add the ``X-CSRFToken`` for it:
-
-.. sourcecode:: javascript
-
-    var csrftoken = $('meta[name=csrf-token]').attr('content')
-
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken)
-            }
-        }
-    })
-
-Troubleshooting
----------------
-
-When you define your forms, if you make `the mistake`_ of importing
-``Form`` from ``wtforms`` instead of from ``flask.ext.wtf``, most
-features besides CSRF protection will work (aside from
-``form.validate_on_submit()``), but CSRF protection will fail. Upon
-submitting forms, you’ll get
-``Bad Request``/``CSRF token missing or incorrect`` (and the
-``form.csrf_token`` in your template will produce no output). The
-problem is in your broken import statements, not your configuration.
-
-.. _the mistake: http://stackoverflow.com/a/20577177/884640

@@ -1,44 +1,30 @@
 Installation
 ============
 
-This part of the documentation covers the installation of Flask-WTF.
-The first step to using any software package is getting it properly installed.
+The `Python Packaging Guide`_ contains general information about how to manage
+your project and dependencies.
 
+.. _Python Packaging Guide: https://packaging.python.org/current/
 
-Distribute & Pip
+Released version
 ----------------
 
-Installing Flask-WTF is simple with `pip <http://www.pip-installer.org/>`_::
+Install or upgrade using pip. ::
 
-    $ pip install Flask-WTF
+    pip install -U Flask-WTF
 
-or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
+Development
+-----------
 
-    $ easy_install Flask-WTF
+The latest code is available from `GitHub`_. Clone the repository then install
+using pip. ::
 
-But, you really `shouldn't do that <https://python-packaging-user-guide.readthedocs.org/en/latest/technical.html#pip-vs-easy-install>`_.
+    git clone https://github.com/wtforms/flask-wtf
+    pip install -e ./flask-wtf
 
+Or install the latest build from an `archive`_. ::
 
-Get the Code
-------------
+    pip install -U https://github.com/wtforms/flask-wtf/archive/main.tar.gz
 
-Flask-WTF is actively developed on GitHub, where the code is
-`always available <https://github.com/lepture/flask-wtf>`_.
-
-You can either clone the public repository::
-
-    git clone git://github.com/lepture/flask-wtf.git
-
-Download the `tarball <https://github.com/lepture/flask-wtf/tarball/master>`_::
-
-    $ curl -OL https://github.com/lepture/flask-wtf/tarball/master
-
-Or, download the `zipball <https://github.com/lepture/flask-wtf/zipball/master>`_::
-
-    $ curl -OL https://github.com/lepture/flask-wtf/zipball/master
-
-
-Once you have a copy of the source, you can embed it in your Python package,
-or install it into your site-packages easily::
-
-    $ python setup.py install
+.. _GitHub: https://github.com/wtforms/flask-wtf
+.. _archive: https://github.com/wtforms/flask-wtf/archive/main.tar.gz
