@@ -9,6 +9,10 @@
 -r tests.txt
 cfgv==3.3.1
     # via pre-commit
+click==8.1.1
+    # via
+    #   pip-compile-multi
+    #   pip-tools
 distlib==0.3.4
     # via virtualenv
 filelock==3.6.0
