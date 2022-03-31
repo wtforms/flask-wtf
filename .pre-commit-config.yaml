@@ -2,15 +2,16 @@ ci:
   autoupdate_schedule: monthly
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.29.0
+    rev: v2.31.1
     hooks:
       - id: pyupgrade
         args: ["--py36-plus"]
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: v2.6.0
+    rev: v3.0.1
     hooks:
       - id: reorder-python-imports
         args: ["--application-directories", "src"]
+        additional_dependencies: ["setuptools>60.9"]
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
@@ -22,8 +23,12 @@ repos:
         additional_dependencies:
           - flake8-bugbear
           - flake8-implicit-str-concat
+  - repo: https://github.com/peterdemin/pip-compile-multi
+    rev: v2.4.3
+    hooks:
+      - id: pip-compile-multi-verify
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: fix-byte-order-marker
       - id: trailing-whitespace
