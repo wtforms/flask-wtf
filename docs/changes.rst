@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 1.0.1
+-------------
+
+Unreleased
+
+-   Update compatibility with the latest Werkzeug release. :issue:`511`
+
+
 Version 1.0.0
 --------------
 
