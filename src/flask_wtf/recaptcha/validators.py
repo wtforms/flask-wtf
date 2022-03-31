@@ -30,7 +30,7 @@ class Recaptcha:
         if current_app.testing:
             return True
 
-        if request.json:
+        if request.is_json:
             response = request.json.get("g-recaptcha-response", "")
         else:
             response = request.form.get("g-recaptcha-response", "")

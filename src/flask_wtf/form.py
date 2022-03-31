@@ -56,7 +56,7 @@ class FlaskForm(Form):
                         return CombinedMultiDict((request.files, request.form))
                     elif request.form:
                         return request.form
-                    elif request.get_json():
+                    elif request.is_json:
                         return ImmutableMultiDict(request.get_json())
 
                 return None

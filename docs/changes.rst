@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 1.0.1
+-------------
+
+Released 2022-03-31
+
+-   Update compatibility with the latest Werkzeug release. :issue:`511`
+
+
 Version 1.0.0
 --------------
 

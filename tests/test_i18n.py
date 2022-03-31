@@ -6,6 +6,10 @@ from wtforms.validators import Length
 
 from flask_wtf import FlaskForm
 
+pytest.importorskip(
+    "flask_wtf.i18n", reason="Neither Flask-Babel nor Flask-BabelEx is installed."
+)
+
 
 class NameForm(FlaskForm):
     class Meta:
