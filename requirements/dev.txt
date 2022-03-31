@@ -39,8 +39,10 @@ six==1.16.0
     # via
     #   tox
     #   virtualenv
-tomli==2.0.1
-    # via pep517
+toml==0.10.2
+    # via
+    #   pre-commit
+    #   tox
 toposort==1.7
     # via pip-compile-multi
 tox==3.24.5
