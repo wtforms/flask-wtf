@@ -6,6 +6,8 @@ Version 1.1.0
 
 Unreleased
 
+-   Drop support for Python 3.6.
+
 
 Version 1.0.1
 -------------
