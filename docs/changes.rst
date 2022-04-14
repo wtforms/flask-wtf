@@ -1,6 +1,14 @@
 Changes
 =======
 
+Unreleased
+----------
+
+Unreleased
+
+-   ``validate_on_submit`` takes a ``extra_validators`` parameters :pr:`479`
+
+
 Version 1.1.0
 -------------
 
