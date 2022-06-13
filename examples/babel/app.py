@@ -3,14 +3,14 @@ from flask import render_template
 from flask import request
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _
-from wtforms import TextField
+from wtforms import StringField
 from wtforms.validators import DataRequired
 
 from flask_wtf import FlaskForm
 
 
 class BabelForm(FlaskForm):
-    name = TextField(_("Name"), validators=[DataRequired()])
+    name = StringField(_("Name"), validators=[DataRequired()])
 
 
 DEBUG = True
