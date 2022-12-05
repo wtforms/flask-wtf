@@ -65,7 +65,7 @@ class FlaskForm(Form):
 
         def get_translations(self, form):
             if not current_app.config.get("WTF_I18N_ENABLED", True):
-                return super(FlaskForm.Meta, self).get_translations(form)
+                return super().get_translations(form)
 
             return translations
 
