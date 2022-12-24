@@ -7,6 +7,7 @@ Unreleased
 Unreleased
 
 -   ``validate_on_submit`` takes a ``extra_validators`` parameters :pr:`479`
+-   Stop supporting Flask-Babelex :pr:`540`
 
 
 Version 1.1.0
