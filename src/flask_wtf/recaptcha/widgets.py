@@ -1,9 +1,6 @@
 from flask import current_app
-from flask import json
 from flask import Markup
 from werkzeug.urls import url_encode
-
-JSONEncoder = json.JSONEncoder
 
 RECAPTCHA_SCRIPT_DEFAULT = "https://www.google.com/recaptcha/api.js"
 RECAPTCHA_DIV_CLASS_DEFAULT = "g-recaptcha"
