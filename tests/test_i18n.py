@@ -6,9 +6,7 @@ from wtforms.validators import Length
 
 from flask_wtf import FlaskForm
 
-pytest.importorskip(
-    "flask_wtf.i18n", reason="Neither Flask-Babel nor Flask-BabelEx is installed."
-)
+pytest.importorskip("flask_wtf.i18n", reason="Flask-Babel is not installed.")
 
 
 class NameForm(FlaskForm):
@@ -32,10 +30,7 @@ def test_i18n(app, client):
     try:
         from flask_babel import Babel
     except ImportError:
-        try:
-            from flask_babelex import Babel
-        except ImportError:
-            pytest.skip("Flask-Babel or Flask-BabelEx must be installed.")
+        pytest.skip("Flask-Babel must be installed.")
 
     babel = Babel(app)
 
