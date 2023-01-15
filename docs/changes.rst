@@ -1,22 +1,16 @@
 Changes
 =======
 
-Unreleased
-----------
-
-Unreleased
-
--   ``validate_on_submit`` takes a ``extra_validators`` parameters :pr:`479`
--   Stop supporting Flask-Babelex :pr:`540`
-
-
 Version 1.1.0
 -------------
 
-Unreleased
+Released 2023-01-15
 
 -   Drop support for Python 3.6.
-
+-   ``validate_on_submit`` takes a ``extra_validators`` parameters :pr:`479`
+-   Stop supporting Flask-Babelex :pr:`540`
+-   Support for python 3.11 :pr:`542`
+-   Remove unused call to `JSONEncoder` :pr:`536`
 
 Version 1.0.1
 -------------
