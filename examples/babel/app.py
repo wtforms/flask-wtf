@@ -17,14 +17,7 @@ DEBUG = True
 SECRET_KEY = "secret"
 WTF_I18N_ENABLED = True
 
-app = Flask(__name__)
-app.config.from_object(__name__)
 
-# config babel
-babel = Babel(app)
-
-
-@babel.localeselector
 def get_locale():
     """how to get the locale is defined by you.
 
@@ -37,6 +30,13 @@ def get_locale():
     # this is a demo case, we use url to get locale
     code = request.args.get("lang", "en")
     return code
+
+
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+# config babel
+babel = Babel(app, locale_selector=get_locale)
 
 
 @app.route("/", methods=("GET", "POST"))
