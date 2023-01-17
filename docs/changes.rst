@@ -4,7 +4,7 @@ Changes
 Version 1.1.1
 -------------
 
-Unreleased
+Released 2023-01-17
 
 -   Fixed `validate` `extra_validators` parameter. :pr:`548`
 
