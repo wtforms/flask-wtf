@@ -83,7 +83,7 @@ class FlaskForm(Form):
         """Call :meth:`validate` only if the form is submitted.
         This is a shortcut for ``form.is_submitted() and form.validate()``.
         """
-        return self.is_submitted() and self.validate(extra_validators)
+        return self.is_submitted() and self.validate(extra_validators=extra_validators)
 
     def hidden_tag(self, *fields):
         """Render the form's hidden fields in one call.
