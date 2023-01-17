@@ -25,7 +25,7 @@ class RecaptchaWidget:
             script += "?" + url_encode(params)
         attrs = current_app.config.get("RECAPTCHA_DATA_ATTRS", {})
         attrs["sitekey"] = public_key
-        snippet = " ".join(f'data-{k}="{attrs[k]}"' for k in attrs)
+        snippet = " ".join(f'data-{k}="{attrs[k]}"' for k in attrs)  # noqa: B028
         div_class = current_app.config.get("RECAPTCHA_DIV_CLASS")
         if not div_class:
             div_class = RECAPTCHA_DIV_CLASS_DEFAULT
