@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 1.1.1
+-------------
+
+Unreleased
+
+-   Fixed `validate` `extra_validators` parameter. :pr:`548`
+
 Version 1.1.0
 -------------
 
