@@ -32,11 +32,10 @@ def test_i18n(app, client):
     except ImportError:
         pytest.skip("Flask-Babel must be installed.")
 
-    babel = Babel(app)
-
-    @babel.localeselector
     def get_locale():
         return request.accept_languages.best_match(["en", "zh"], "en")
+
+    Babel(app, locale_selector=get_locale)
 
     @app.route("/", methods=["POST"])
     def index():
