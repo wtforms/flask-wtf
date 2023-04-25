@@ -7,6 +7,7 @@ Version 1.1.1
 Released 2023-01-17
 
 -   Fixed `validate` `extra_validators` parameter. :pr:`548`
+-   Fix csrf - add flag session.modified = True after change session 
 
 Version 1.1.0
 -------------
