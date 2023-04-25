@@ -51,6 +51,7 @@ def generate_csrf(secret_key=None, token_key=None):
 
         if field_name not in session:
             session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
+            session.modified = True
 
         try:
             token = s.dumps(session[field_name])
