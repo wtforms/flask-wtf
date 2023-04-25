@@ -1,5 +1,5 @@
 from flask import current_app
-from flask import Markup
+from markupsafe import Markup
 from werkzeug.urls import url_encode
 
 RECAPTCHA_SCRIPT_DEFAULT = "https://www.google.com/recaptcha/api.js"
