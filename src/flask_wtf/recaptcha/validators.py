@@ -1,9 +1,9 @@
 import json
 from urllib import request as http
+from urllib.parse import urlencode
 
 from flask import current_app
 from flask import request
-from werkzeug.urls import url_encode
 from wtforms import ValidationError
 
 RECAPTCHA_VERIFY_SERVER_DEFAULT = "https://www.google.com/recaptcha/api/siteverify"
@@ -54,7 +54,7 @@ class Recaptcha:
         if not verify_server:
             verify_server = RECAPTCHA_VERIFY_SERVER_DEFAULT
 
-        data = url_encode(
+        data = urlencode(
             {"secret": private_key, "remoteip": remote_addr, "response": response}
         )
 

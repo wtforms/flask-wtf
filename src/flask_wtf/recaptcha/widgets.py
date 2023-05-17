@@ -1,6 +1,7 @@
+from urllib.parse import urlencode
+
 from flask import current_app
 from markupsafe import Markup
-from werkzeug.urls import url_encode
 
 RECAPTCHA_SCRIPT_DEFAULT = "https://www.google.com/recaptcha/api.js"
 RECAPTCHA_DIV_CLASS_DEFAULT = "g-recaptcha"
@@ -22,7 +23,7 @@ class RecaptchaWidget:
         if not script:
             script = RECAPTCHA_SCRIPT_DEFAULT
         if params:
-            script += "?" + url_encode(params)
+            script += "?" + urlencode(params)
         attrs = current_app.config.get("RECAPTCHA_DATA_ATTRS", {})
         attrs["sitekey"] = public_key
         snippet = " ".join(f'data-{k}="{attrs[k]}"' for k in attrs)  # noqa: B028, B907

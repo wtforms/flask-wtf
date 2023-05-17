@@ -80,7 +80,6 @@ def test_render_custom_args(app):
     app.config["RECAPTCHA_DATA_ATTRS"] = {"red": "blue"}
     f = RecaptchaForm()
     render = f.recaptcha()
-    # new versions of url_encode allow more characters
     assert "?key=(value)" in render or "?key=%28value%29" in render
     assert 'data-red="blue"' in render
 
