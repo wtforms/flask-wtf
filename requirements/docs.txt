@@ -29,7 +29,7 @@ packaging==21.3
     #   sphinx
 pallets-sphinx-themes==2.0.2
     # via -r docs.in
-pygments==2.11.2
+pygments==2.15.0
     # via sphinx
 pyparsing==3.0.7
     # via packaging
