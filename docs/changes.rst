@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 1.1.2
+-------------
+
+Unreleased
+
+-   Fixed Flask 2.3 deprecations of ``werkzeug.urls.url_encode`` and
+    ``flask.Markup`` `:pr:`565` :issue:`561`
+
 Version 1.1.1
 -------------
 
