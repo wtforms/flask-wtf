@@ -10,6 +10,7 @@ Unreleased
     ``flask.Markup`` :pr:`565` :issue:`561`
 -   Stop support for python 3.7 :pr:`574`
 -   Use `pyproject.toml` instead of `setup.cfg` :pr:`576`
+-   Fixed nested blueprint CSRF exemption :pr:`572`
 
 Version 1.1.1
 -------------
