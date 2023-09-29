@@ -9,6 +9,7 @@ Unreleased
 -   Fixed Flask 2.3 deprecations of ``werkzeug.urls.url_encode`` and
     ``flask.Markup`` :pr:`565` :issue:`561`
 -   Stop support for python 3.7 :pr:`574`
+-   Use `pyproject.toml` instead of `setup.cfg` :pr:`576`
 
 Version 1.1.1
 -------------
