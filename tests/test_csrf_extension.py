@@ -154,6 +154,22 @@ def test_exempt_blueprint(app, csrf, client):
     assert response.status_code == 200
 
 
+def test_exempt_nested_blueprint(app, csrf, client):
+    bp1 = Blueprint("exempt1", __name__, url_prefix="/")
+    bp2 = Blueprint("exempt2", __name__, url_prefix="/exempt")
+    csrf.exempt(bp2)
+
+    @bp2.route("/", methods=["POST"])
+    def index():
+        pass
+
+    bp1.register_blueprint(bp2)
+    app.register_blueprint(bp1)
+
+    response = client.post("/exempt/")
+    assert response.status_code == 200
+
+
 def test_error_handler(app, client):
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
