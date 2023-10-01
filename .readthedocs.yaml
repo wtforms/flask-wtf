@@ -7,3 +7,7 @@ python:
 sphinx:
   builder: dirhtml
   fail_on_warning: true
+build:
+  os: "ubuntu-22.04"
+  tools:
+    python: "3.11"
