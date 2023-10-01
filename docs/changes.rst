@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 1.1.3
+-------------
+
+Unreleased
+
+-   Add field ``MultipleFileField``. ``FileRequired``, ``FileAllowed``, ``FileSize``
+    now can be used to validate multiple files :pr:`556` :issue:`338`
+
 Version 1.1.2
 -------------
 

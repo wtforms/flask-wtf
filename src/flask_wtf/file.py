@@ -2,6 +2,7 @@ from collections import abc
 
 from werkzeug.datastructures import FileStorage
 from wtforms import FileField as _FileField
+from wtforms import MultipleFileField as _MultipleFileField
 from wtforms.validators import DataRequired
 from wtforms.validators import StopValidation
 from wtforms.validators import ValidationError
@@ -20,8 +21,24 @@ class FileField(_FileField):
             self.raw_data = ()
 
 
+class MultipleFileField(_MultipleFileField):
+    """Werkzeug-aware subclass of :class:`wtforms.fields.MultipleFileField`.
+
+    .. versionadded:: 1.2.0
+    """
+
+    def process_formdata(self, valuelist):
+        valuelist = (x for x in valuelist if isinstance(x, FileStorage) and x)
+        data = list(valuelist) or None
+
+        if data is not None:
+            self.data = data
+        else:
+            self.raw_data = ()
+
+
 class FileRequired(DataRequired):
-    """Validates that the data is a Werkzeug
+    """Validates that the uploaded files(s) is a Werkzeug
     :class:`~werkzeug.datastructures.FileStorage` object.
 
     :param message: error message
@@ -30,7 +47,11 @@ class FileRequired(DataRequired):
     """
 
     def __call__(self, form, field):
-        if not (isinstance(field.data, FileStorage) and field.data):
+        if not isinstance(field.data, list):
+            field.data = [field.data]
+        if not (
+            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+        ):
             raise StopValidation(
                 self.message or field.gettext("This field is required.")
             )
@@ -40,7 +61,7 @@ file_required = FileRequired
 
 
 class FileAllowed:
-    """Validates that the uploaded file is allowed by a given list of
+    """Validates that the uploaded file(s) is allowed by a given list of
     extensions or a Flask-Uploads :class:`~flaskext.uploads.UploadSet`.
 
     :param upload_set: A list of extensions or an
@@ -55,34 +76,39 @@ class FileAllowed:
         self.message = message
 
     def __call__(self, form, field):
-        if not (isinstance(field.data, FileStorage) and field.data):
+        if not isinstance(field.data, list):
+            field.data = [field.data]
+        if not (
+            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+        ):
             return
 
-        filename = field.data.filename.lower()
+        filenames = [f.filename.lower() for f in field.data]
 
-        if isinstance(self.upload_set, abc.Iterable):
-            if any(filename.endswith("." + x) for x in self.upload_set):
-                return
+        for filename in filenames:
+            if isinstance(self.upload_set, abc.Iterable):
+                if any(filename.endswith("." + x) for x in self.upload_set):
+                    continue
 
-            raise StopValidation(
-                self.message
-                or field.gettext(
-                    "File does not have an approved extension: {extensions}"
-                ).format(extensions=", ".join(self.upload_set))
-            )
+                raise StopValidation(
+                    self.message
+                    or field.gettext(
+                        "File does not have an approved extension: {extensions}"
+                    ).format(extensions=", ".join(self.upload_set))
+                )
 
-        if not self.upload_set.file_allowed(field.data, filename):
-            raise StopValidation(
-                self.message
-                or field.gettext("File does not have an approved extension.")
-            )
+            if not self.upload_set.file_allowed(field.data, filename):
+                raise StopValidation(
+                    self.message
+                    or field.gettext("File does not have an approved extension.")
+                )
 
 
 file_allowed = FileAllowed
 
 
 class FileSize:
-    """Validates that the uploaded file is within a minimum and maximum
+    """Validates that the uploaded file(s) is within a minimum and maximum
     file size (set in bytes).
 
     :param min_size: minimum allowed file size (in bytes). Defaults to 0 bytes.
@@ -98,22 +124,28 @@ class FileSize:
         self.message = message
 
     def __call__(self, form, field):
-        if not (isinstance(field.data, FileStorage) and field.data):
+        if not isinstance(field.data, list):
+            field.data = [field.data]
+        if not (
+            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+        ):
             return
 
-        file_size = len(field.data.read())
-        field.data.seek(0)  # reset cursor position to beginning of file
+        for f in field.data:
+            file_size = len(f.read())
+            print(f, file_size, self.max_size, self.min_size)
+            f.seek(0)  # reset cursor position to beginning of file
 
-        if (file_size < self.min_size) or (file_size > self.max_size):
-            # the file is too small or too big => validation failure
-            raise ValidationError(
-                self.message
-                or field.gettext(
-                    "File must be between {min_size} and {max_size} bytes.".format(
-                        min_size=self.min_size, max_size=self.max_size
+            if (file_size < self.min_size) or (file_size > self.max_size):
+                # the file is too small or too big => validation failure
+                raise ValidationError(
+                    self.message
+                    or field.gettext(
+                        "File must be between {min_size} and {max_size} bytes.".format(
+                            min_size=self.min_size, max_size=self.max_size
+                        )
                     )
                 )
-            )
 
 
 file_size = FileSize
