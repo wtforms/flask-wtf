@@ -4,7 +4,7 @@ Changes
 Version 1.2.1
 -------------
 
-Unreleased
+Released 2023-10-02
 
 - Fix a bug introduced with :pr:`556` where file validators were editing
   the file fields content. :pr:`578`
