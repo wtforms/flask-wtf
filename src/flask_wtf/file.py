@@ -47,10 +47,9 @@ class FileRequired(DataRequired):
     """
 
     def __call__(self, form, field):
-        if not isinstance(field.data, list):
-            field.data = [field.data]
+        field_data = [field.data] if not isinstance(field.data, list) else field.data
         if not (
-            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+            all(isinstance(x, FileStorage) and x for x in field_data) and field_data
         ):
             raise StopValidation(
                 self.message or field.gettext("This field is required.")
@@ -76,14 +75,13 @@ class FileAllowed:
         self.message = message
 
     def __call__(self, form, field):
-        if not isinstance(field.data, list):
-            field.data = [field.data]
+        field_data = [field.data] if not isinstance(field.data, list) else field.data
         if not (
-            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+            all(isinstance(x, FileStorage) and x for x in field_data) and field_data
         ):
             return
 
-        filenames = [f.filename.lower() for f in field.data]
+        filenames = [f.filename.lower() for f in field_data]
 
         for filename in filenames:
             if isinstance(self.upload_set, abc.Iterable):
@@ -97,7 +95,7 @@ class FileAllowed:
                     ).format(extensions=", ".join(self.upload_set))
                 )
 
-            if not self.upload_set.file_allowed(field.data, filename):
+            if not self.upload_set.file_allowed(field_data, filename):
                 raise StopValidation(
                     self.message
                     or field.gettext("File does not have an approved extension.")
@@ -124,16 +122,14 @@ class FileSize:
         self.message = message
 
     def __call__(self, form, field):
-        if not isinstance(field.data, list):
-            field.data = [field.data]
+        field_data = [field.data] if not isinstance(field.data, list) else field.data
         if not (
-            all(isinstance(x, FileStorage) and x for x in field.data) and field.data
+            all(isinstance(x, FileStorage) and x for x in field_data) and field_data
         ):
             return
 
-        for f in field.data:
+        for f in field_data:
             file_size = len(f.read())
-            print(f, file_size, self.max_size, self.min_size)
             f.seek(0)  # reset cursor position to beginning of file
 
             if (file_size < self.min_size) or (file_size > self.max_size):

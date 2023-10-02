@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 1.2.1
+-------------
+
+Unreleased
+
+- Fix a bug introduced with :pr:`556` where file validators were editing
+  the file fields content. :pr:`578`
+
 Version 1.2.0
 -------------
 
