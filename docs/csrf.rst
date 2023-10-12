@@ -85,10 +85,10 @@ In Axios you can set the header for all requests with ``axios.defaults.headers.c
         axios.defaults.headers.common["X-CSRFToken"] = "{{ csrf_token() }}";
     </script>
 
-To send the form data of other form inputs to your backend route using Vanilla Js for example. 
+To send the form data of other form inputs to your backend route using Vanilla Js for example.
 
 .. sourcecode:: html+jinja
-    
+
     <script type="text/javascript">
         const formElement = document.getElementById("form-id");
 
