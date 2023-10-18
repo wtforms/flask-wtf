@@ -53,6 +53,7 @@ token in the form.
     <form method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
+
 Be careful to write the ``name`` attribute of the input tag as it is, with an underscore.
 If CSRF protection is enabled and the name does not match with the value of ``WTF_CSRF_FIELD_NAME`` (whose default value is ``'csrf_token'``), you get the Bad Request: CSRF token missing error.
 If you want to use something else as the  name attribute (although not recommended), ensure to set the ``WTF_CSRF_FIELD_NAME`` to ``'anyStringYouWant'`` in your app config.
