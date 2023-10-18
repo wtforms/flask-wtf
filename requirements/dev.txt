@@ -121,7 +121,7 @@ toposort==1.7
     # via pip-compile-multi
 tox==3.24.5
     # via -r dev.in
-urllib3==1.26.17
+urllib3==1.26.18
     # via requests
 virtualenv==20.14.0
     # via
