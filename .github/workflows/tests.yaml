@@ -27,7 +27,7 @@ jobs:
           - {name: 'PyPy39', python: 'pypy-3.9', tox: pypy39}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
           cache: 'pip'
