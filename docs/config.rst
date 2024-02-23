@@ -19,6 +19,9 @@ Configuration
 ``WTF_CSRF_TIME_LIMIT``    Max age in seconds for CSRF tokens. Default is
                            ``3600``. If set to ``None``, the CSRF token is valid
                            for the life of the session.
+                           If your webserver has a cache policy, make sure it is
+                           configured with at maximum this value, so user browsers
+                           won't display pages with expired CSRF tokens.
 ``WTF_CSRF_SSL_STRICT``    Whether to enforce the same origin policy by checking
                            that the referrer matches the host. Only applies to
                            HTTPS requests. Default is ``True``.
