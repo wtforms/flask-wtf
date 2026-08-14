@@ -128,3 +128,44 @@ def test_set_default_message_language(app, client):
 
     client.post("/default", data={"name": "  "})
     client.post("/es", data={"name": "  "})
+
+
+def test_locales_without_flask_babel(app, client):
+    """WTForms locales work when Flask-Babel is not initialized.
+
+    FlaskForm used to skip WTForms translations whenever
+    WTF_I18N_ENABLED was true, so meta["locales"] was ignored unless
+    Flask-Babel was installed and initialized. See issue #582.
+    """
+
+    class SpanishForm(FlaskForm):
+        class Meta:
+            csrf = False
+            locales = ["es"]
+
+        name = StringField(validators=[DataRequired()])
+
+    class FrenchForm(FlaskForm):
+        class Meta:
+            csrf = False
+
+        name = StringField(validators=[DataRequired()])
+
+    @app.route("/es", methods=["POST"])
+    def es():
+        form = SpanishForm()
+        assert form.meta.locales == ["es"]
+        assert not form.validate_on_submit()
+        assert "Este campo es obligatorio." in form.name.errors
+        return ""
+
+    @app.route("/fr", methods=["POST"])
+    def fr():
+        form = FrenchForm(meta={"locales": ["fr"]})
+        assert form.meta.locales == ["fr"]
+        assert not form.validate_on_submit()
+        assert "Ce champ est requis." in form.name.errors
+        return ""
+
+    client.post("/es", data={"name": "  "})
+    client.post("/fr", data={"name": "  "})

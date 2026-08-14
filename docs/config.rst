@@ -28,10 +28,12 @@ Configuration
 ``WTF_CSRF_SSL_STRICT``    Whether to enforce the same origin policy by checking
                            that the referrer matches the host. Only applies to
                            HTTPS requests. Default is ``True``.
-``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support.
-                           Also set to ``False`` if you want to use WTForms's
-                           built-in messages directly, see more info `here`_.
-                           Default is ``True``.
+``WTF_I18N_ENABLED``       Set to ``False`` to disable Flask-Babel I18N support
+                           and use WTForms's built-in messages directly, see
+                           more info `here`_. Default is ``True``. When
+                           Flask-Babel is not installed or not initialized,
+                           Flask-WTF falls back to WTForms translations so
+                           ``meta["locales"]`` still works.
 ========================== =====================================================
 
 .. _here: https://wtforms.readthedocs.io/en/stable/i18n.html#using-the-built-in-translations-provider

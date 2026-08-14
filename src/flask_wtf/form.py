@@ -64,10 +64,16 @@ class FlaskForm(Form):
             return formdata
 
         def get_translations(self, form):
-            if not current_app.config.get("WTF_I18N_ENABLED", True):
-                return super().get_translations(form)
+            # Flask-Babel translations only apply when Babel is installed
+            # and initialized. Otherwise honor WTForms meta["locales"].
+            if (
+                current_app.config.get("WTF_I18N_ENABLED", True)
+                and translations is not None
+                and "babel" in current_app.extensions
+            ):
+                return translations
 
-            return translations
+            return super().get_translations(form)
 
     def __init__(self, formdata=_Auto, **kwargs):
         super().__init__(formdata=formdata, **kwargs)

@@ -1,6 +1,13 @@
 Changes
 =======
 
+Unreleased
+----------
+
+- Fall back to WTForms built-in translations when Flask-Babel is not
+  installed or not initialized, so ``meta["locales"]`` works without
+  setting ``WTF_I18N_ENABLED`` to ``False``. :issue:`582`
+
 Version 1.3.0
 -------------
 
