@@ -9,7 +9,7 @@ __all__ = ("Translations", "translations")
 
 def _get_translations():
     """Returns the correct gettext translations.
-    Copy from flask-babel with some modifications.
+    Copied from flask-babel with some modifications.
     """
 
     if not request:
