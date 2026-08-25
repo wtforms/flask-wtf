@@ -32,14 +32,12 @@ Configuration
                                   Also set to ``False`` if you want to use WTForms's
                                   built-in messages directly, see more info `here`_.
                                   Default is ``True``.
-``WTF_CSRF_SIGNER_DIGEST_METHOD`` Set to an algorithm from the `hashlib`_ library to
+``WTF_CSRF_SIGNER_DIGEST_METHOD`` Set to an algorithm from the :mod:`hashlib` library to
                                   configure which hash algorithm is used to sign CSRF
-                                  tokens.
-                                  Default is ``hashlib.sha1``.
+                                  tokens. Default is ``hashlib.sha1``.
 ================================= =====================================================
 
 .. _here: https://wtforms.readthedocs.io/en/stable/i18n.html#using-the-built-in-translations-provider
-.. _hashlib: https://docs.python.org/3/library/hashlib.html
 
 Recaptcha
 ---------
