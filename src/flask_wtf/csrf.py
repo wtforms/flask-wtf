@@ -21,6 +21,8 @@ from wtforms.csrf.core import CSRF
 __all__ = ("generate_csrf", "validate_csrf", "csrf_meta_tag", "CSRFProtect")
 logger = logging.getLogger(__name__)
 
+DEFAULT_CSRF_SIGNER_DIGEST_METHOD = hashlib.sha1
+
 
 def generate_csrf(secret_key=None, token_key=None):
     """Generate a CSRF token. The token is cached for a request, so multiple
@@ -49,7 +51,15 @@ def generate_csrf(secret_key=None, token_key=None):
     )
 
     if field_name not in g:
-        s = URLSafeTimedSerializer(secret_key, salt="wtf-csrf-token")
+        s = URLSafeTimedSerializer(
+            secret_key,
+            salt="wtf-csrf-token",
+            signer_kwargs={
+                "digest_method": current_app.config.get(
+                    "WTF_CSRF_SIGNER_DIGEST_METHOD", DEFAULT_CSRF_SIGNER_DIGEST_METHOD
+                )
+            },
+        )
 
         if field_name not in session:
             session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
@@ -104,7 +114,15 @@ def validate_csrf(data, secret_key=None, time_limit=None, token_key=None):
     if field_name not in session:
         raise ValidationError("The CSRF session token is missing.")
 
-    s = URLSafeTimedSerializer(secret_key, salt="wtf-csrf-token")
+    s = URLSafeTimedSerializer(
+        secret_key,
+        salt="wtf-csrf-token",
+        signer_kwargs={
+            "digest_method": current_app.config.get(
+                "WTF_CSRF_SIGNER_DIGEST_METHOD", DEFAULT_CSRF_SIGNER_DIGEST_METHOD
+            )
+        },
+    )
 
     try:
         token = s.loads(data, max_age=time_limit)
@@ -221,6 +239,9 @@ class CSRFProtect:
         app.config.setdefault("WTF_CSRF_META_NAME", "csrf-token")
         app.config.setdefault("WTF_CSRF_TIME_LIMIT", 3600)
         app.config.setdefault("WTF_CSRF_SSL_STRICT", True)
+        app.config.setdefault(
+            "WTF_CSRF_SIGNER_DIGEST_METHOD", DEFAULT_CSRF_SIGNER_DIGEST_METHOD
+        )
 
         app.jinja_env.globals["csrf_token"] = generate_csrf
         app.jinja_env.globals["csrf_meta_tag"] = csrf_meta_tag
