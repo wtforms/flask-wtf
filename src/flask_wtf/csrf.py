@@ -164,16 +164,16 @@ def _get_serializer(secret_key):
 
     :param secret_key: secret key used to sign the token
     """
-    serializer_kwargs = {
+    kwargs = {
         "salt": "wtf-csrf-token",
     }
-    digest_method = current_app.config.get("WTF_CSRF_SIGNER_DIGEST_METHOD")
-    if digest_method is not None:
-        serializer_kwargs["signer_kwargs"] = {"digest_method": digest_method}
-    return URLSafeTimedSerializer(
-        secret_key,
-        **serializer_kwargs,
-    )
+    if "WTF_CSRF_SIGNER" in current_app.config:
+        kwargs["signer"] = current_app.config["WTF_CSRF_SIGNER"]
+
+    if "WTF_CSRF_SIGNER_KWARGS" in current_app.config:
+        kwargs["signer_kwargs"] = current_app.config["WTF_CSRF_SIGNER_KWARGS"]
+
+    return URLSafeTimedSerializer(secret_key, **kwargs)
 
 
 class _FlaskFormCSRF(CSRF):
