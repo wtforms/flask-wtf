@@ -1,6 +1,9 @@
 Changes
 =======
 
+- Allow configuring the hash algorithm used by the CSRF signer using
+  ``WTF_CSRF_SIGNER_DIGEST_METHOD``
+
 Version 1.3.0
 -------------
 

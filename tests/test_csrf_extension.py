@@ -1,3 +1,5 @@
+import hashlib
+
 import pytest
 from flask import Blueprint
 from flask import g
@@ -269,3 +271,15 @@ def test_validate_error_logged(client, monkeypatch):
     client.post("/")
     assert len(messages) == 1
     assert messages[0] == "The CSRF token is missing."
+
+
+def test_csrf_config(app, req_ctx):
+    app.config["WTF_CSRF_SIGNER_DIGEST_METHOD"] = hashlib.sha1
+    sha1_token = generate_csrf()
+    assert len(sha1_token) == 91
+
+    # Reset global variable so the token is regenerated
+    g.pop(app.config["WTF_CSRF_FIELD_NAME"])
+    app.config["WTF_CSRF_SIGNER_DIGEST_METHOD"] = hashlib.sha256
+    sha256_token = generate_csrf()
+    assert len(sha256_token) == 107
