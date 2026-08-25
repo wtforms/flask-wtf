@@ -238,7 +238,8 @@ class CSRFProtect:
         app.config.setdefault("WTF_CSRF_META_NAME", "csrf-token")
         app.config.setdefault("WTF_CSRF_TIME_LIMIT", 3600)
         app.config.setdefault("WTF_CSRF_SSL_STRICT", True)
-        app.config.setdefault("WTF_CSRF_SIGNER_DIGEST_METHOD", None)
+        app.config.setdefault("WTF_CSRF_SIGNER", None)
+        app.config.setdefault("WTF_CSRF_SIGNER_KWARGS", None)
 
         app.jinja_env.globals["csrf_token"] = generate_csrf
         app.jinja_env.globals["csrf_meta_tag"] = csrf_meta_tag
