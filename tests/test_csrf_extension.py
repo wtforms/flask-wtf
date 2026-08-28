@@ -247,6 +247,22 @@ def test_exempt_nested_blueprint(app, csrf, client):
     assert response.status_code == 200
 
 
+def test_exempt_parent_covers_nested_blueprint(app, csrf, client):
+    parent = Blueprint("api", __name__, url_prefix="/api")
+    child = Blueprint("meta", __name__, url_prefix="/meta")
+    csrf.exempt(parent)
+
+    @child.route("/", methods=["POST"])
+    def index():
+        return "ok"
+
+    parent.register_blueprint(child)
+    app.register_blueprint(parent)
+
+    response = client.post("/api/meta/")
+    assert response.status_code == 200
+
+
 def test_error_handler(app, client):
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):

@@ -142,6 +142,8 @@ You can exclude all the views of a blueprint. ::
 
     csrf.exempt(account_blueprint)
 
+If that blueprint has nested children, they are exempt as well.
+
 You can disable CSRF protection in all views by default, by setting
 ``WTF_CSRF_CHECK_DEFAULT`` to ``False``, and selectively call
 :meth:`~flask_wtf.csrf.CSRFProtect.protect` only when you need. This also enables you to do some

@@ -300,8 +300,17 @@ class CSRFProtect:
         g.csrf_valid = True  # mark this request as CSRF valid
 
     def _is_exempt(self):
-        if current_app.blueprints.get(request.blueprint) in self._exempt_blueprints:
-            return True
+        bp_name = request.blueprint
+        if bp_name:
+            # Nested blueprints use dotted names (parent.child). Exempting a
+            # parent should also skip CSRF on its children.
+            name = bp_name
+            while True:
+                if current_app.blueprints.get(name) in self._exempt_blueprints:
+                    return True
+                if "." not in name:
+                    break
+                name = name.rsplit(".", 1)[0]
 
         view = current_app.view_functions.get(request.endpoint)
         if view is None:
@@ -325,6 +334,10 @@ class CSRFProtect:
             bp = Blueprint(...)
             csrf.exempt(bp)
 
+        Nested blueprints inherit exemption from a parent passed here.
+
+        .. versionchanged:: 1.3.1
+            Exempting a parent blueprint also exempts nested child blueprints.
         """
 
         if isinstance(view, Blueprint):
