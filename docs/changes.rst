@@ -1,6 +1,15 @@
 Changes
 =======
 
+Version 1.3.1
+-------------
+
+Unreleased
+
+- Replace ``hashlib.sha1(os.urandom(...))`` with ``secrets.token_hex(32)``
+  for CSRF raw-token generation, removing the deprecated SHA-1 dependency
+  and raising raw-token entropy from 160 to 256 bits.
+
 Version 1.3.0
 -------------
 

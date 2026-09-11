@@ -1,7 +1,6 @@
-import hashlib
 import hmac
 import logging
-import os
+import secrets
 from urllib.parse import urlparse
 
 from flask import Blueprint
@@ -52,12 +51,12 @@ def generate_csrf(secret_key=None, token_key=None):
         s = URLSafeTimedSerializer(secret_key, salt="wtf-csrf-token")
 
         if field_name not in session:
-            session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
+            session[field_name] = secrets.token_hex(32)
 
         try:
             token = s.dumps(session[field_name])
         except TypeError:
-            session[field_name] = hashlib.sha1(os.urandom(64)).hexdigest()
+            session[field_name] = secrets.token_hex(32)
             token = s.dumps(session[field_name])
 
         setattr(g, field_name, token)
